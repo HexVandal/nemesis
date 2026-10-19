@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="340" viewBox="0 0 1280 340" role="img" aria-label="nemesis — differential offensive security">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05070d"/>
+      <stop offset="0.55" stop-color="#080c14"/>
+      <stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+    <radialGradient id="glowRed" cx="0.18" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#ff4d4d" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#ff4d4d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowCyan" cx="0.85" cy="0.9" r="0.75">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff4d4d" stop-opacity="0.9"/>
+      <stop offset="0.45" stop-color="#ffb020" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1b2433" stroke-width="1" stroke-opacity="0.5"/>
+    </pattern>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="0.4"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="340" fill="url(#bg)"/>
+  <rect width="1280" height="340" fill="url(#grid)" opacity="0.55"/>
+  <rect width="1280" height="340" fill="url(#glowRed)"/>
+  <rect width="1280" height="340" fill="url(#glowCyan)"/>
+
+  <!-- wordmark -->
+  <g filter="url(#soft)">
+    <text x="64" y="132" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace"
+          font-size="74" font-weight="700" letter-spacing="-1" fill="#f0f6fc">nemesis</text>
+  </g>
+  <rect x="66" y="150" width="212" height="3" rx="1.5" fill="url(#rule)"/>
+
+  <text x="64" y="186" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace"
+        font-size="13" letter-spacing="4.2" fill="#ff6b6b">DIFFERENTIAL OFFENSIVE SECURITY</text>
+
+  <text x="64" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="17" fill="#9aa7b8">Every finding ships with the experiment that proves it.</text>
+
+  <!-- stat chips -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12">
+    <rect x="64" y="252" width="128" height="30" rx="15" fill="#101826" stroke="#22304a"/>
+    <text x="128" y="271" text-anchor="middle" fill="#7dd3fc">64 modules</text>
+
+    <rect x="202" y="252" width="176" height="30" rx="15" fill="#101826" stroke="#22304a"/>
+    <text x="290" y="271" text-anchor="middle" fill="#7dd3fc">102 capability areas</text>
+
+    <rect x="388" y="252" width="152" height="30" rx="15" fill="#101826" stroke="#22304a"/>
+    <text x="464" y="271" text-anchor="middle" fill="#7dd3fc">5 report formats</text>
+  </g>
+
+  <!-- terminal proof card -->
+  <g>
+    <rect x="700" y="56" width="516" height="228" rx="14" fill="#080d16" stroke="#1e293b"/>
+    <rect x="700" y="56" width="516" height="34" rx="14" fill="#0d1421"/>
+    <rect x="700" y="76" width="516" height="14" fill="#0d1421"/>
+    <circle cx="722" cy="73" r="4.5" fill="#ff5f56"/>
+    <circle cx="740" cy="73" r="4.5" fill="#ffbd2e"/>
+    <circle cx="758" cy="73" r="4.5" fill="#27c93f"/>
+    <text x="1180" y="77" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace"
+          font-size="10.5" fill="#475569">nemesis scan --profile web</text>
+
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5">
+      <text x="722" y="118" fill="#38bdf8">$</text>
+      <text x="740" y="118" fill="#cbd5e1">nemesis scan https://acme.test</text>
+
+      <text x="722" y="148" fill="#ff4d4d" font-weight="700">CRITICAL</text>
+      <text x="806" y="148" fill="#e6edf3">SQL injection in parameter 'q'</text>
+
+      <text x="722" y="174" fill="#64748b">PROOF</text>
+      <text x="786" y="174" fill="#94a3b8">baseline 200 / 48B  -&gt;  probe 500 / 233B</text>
+
+      <text x="722" y="200" fill="#64748b">DELTA</text>
+      <text x="786" y="200" fill="#fbbf24">status +300 &#183; length +185B (4.85x)</text>
+
+      <text x="722" y="226" fill="#64748b">CONF</text>
+      <text x="786" y="226" fill="#34d399">confirmed by reflected evidence</text>
+
+      <rect x="722" y="244" width="472" height="6" rx="3" fill="#111827"/>
+      <rect x="722" y="244" width="150" height="6" rx="3" fill="#ff4d4d"/>
+      <rect x="876" y="244" width="96" height="6" rx="3" fill="#fbbf24"/>
+      <rect x="976" y="244" width="218" height="6" rx="3" fill="#1f2937"/>
+    </g>
+  </g>
+
+  <text x="64" y="318" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10.5" fill="#3f4d63">
+    Apache-2.0  &#183;  Python 3.10+  &#183;  no browser, no daemon, no Docker  &#183;  scope is default-deny
+  </text>
+</svg>

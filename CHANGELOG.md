@@ -8,6 +8,44 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+**Release-readiness audit**
+- **The CI test job could never have passed.** The workflow ran
+  `pytest --timeout=300`, but `pytest-timeout` was not a dependency, so
+  every run died with `unrecognized arguments: --timeout=300` before a
+  single test ran. Added to the `dev` extra.
+- **Nine capability entries stored a string where a tuple belonged**, so
+  `prerequisites` and `tools` iterated character by character — a
+  `tools` value of `"a Windows host"` was displayed as
+  `a; ; W; i; n; d; o; w; s; ; h; o; s; t`. Fixed: `windows-internals`,
+  `sandbox-escapes`, `browser-exploitation`, `side-channel-attacks`,
+  `sdr-radio-security`, `rfid-nfc-security`, `chip-hardware-security`,
+  `side-channel-analysis`.
+- **The `render` extra advertised a playwright renderer that does not
+  exist.** Removed rather than left as a promise.
+- **`package-data` pointed at two directories that do not exist.** Now
+  ships `py.typed`, so downstream type checkers see the inline types.
+- **The research library had 27 capability areas with no resource**, so
+  `nemesis knowledge --area fuzzing` printed an empty table — which reads
+  as "there is nothing worth reading about this" rather than "the index
+  is incomplete". SQL injection, XSS, SSRF, request smuggling and
+  deserialisation were all among them. Added 59 resources; the library is
+  now **186 entries across 104 areas**, and a test asserts that no
+  capability area can be added without one.
+- **45 of the library's URLs were dead** (404, or pointing at hosts that
+  no longer resolve). Every URL was re-checked and the broken ones
+  replaced with verified equivalents. Duplicate entries and duplicate
+  URLs were merged.
+
+### Added
+
+- `assets/` — banner, logo and architecture diagram, as SVG with rendered
+  PNGs, so the README renders identically on GitHub and in a terminal.
+- `GITHUB_SETUP.md` — first-push instructions, including the placeholder
+  repository name that has to be replaced.
+- Two tests that make the knowledge layer's completeness a build failure
+  rather than a documentation bug.
+
+
 **Scan speed**
 - The **request-smuggling probe waited out the full client timeout**
   (15 s) for every candidate, because a smuggling probe is deliberately

@@ -118,3 +118,33 @@ def test_to_dict_is_serialisable():
     first = data["capabilities"][0]
     assert "maturity_label" in first
     assert "components" in first
+
+
+def test_every_capability_area_has_a_library_resource():
+    """The knowledge layer must not have holes.
+
+    `nemesis knowledge --area <id>` is a documented command. An area with no
+    resource prints an empty table, which reads as "there is nothing worth
+    reading about this", not "the index is missing". Every capability area
+    therefore has to name at least one resource.
+    """
+    from nemesis.knowledge.library import Library
+
+    covered = {resource.area for resource in Library().all()}
+    missing = sorted({c.id for c in CAPABILITY_REGISTRY.all()} - covered)
+    assert missing == [], f"capability areas with no library resource: {missing}"
+
+
+def test_library_entries_are_well_formed():
+    """Ids are unique, kinds are known, and every entry has a URL and a note."""
+    from nemesis.knowledge.library import KINDS, Library
+
+    resources = Library().all()
+    ids = [r.id for r in resources]
+    assert len(ids) == len(set(ids)), "duplicate resource id"
+
+    for resource in resources:
+        assert resource.kind in KINDS, f"{resource.id} has an unknown kind"
+        assert resource.url.startswith(("http://", "https://")), resource.id
+        assert resource.note, f"{resource.id} has no note explaining why it matters"
+        assert resource.hours >= 0, resource.id
