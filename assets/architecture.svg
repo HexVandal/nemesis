@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="560" viewBox="0 0 1180 560" role="img" aria-label="nemesis architecture">
+  <defs>
+    <linearGradient id="abg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05070d"/>
+      <stop offset="1" stop-color="#0a1220"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrowAccent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff4d4d"/>
+    </marker>
+    <filter id="aglow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="agrid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#16202e" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1180" height="560" fill="url(#abg)"/>
+  <rect width="1180" height="560" fill="url(#agrid)" opacity="0.5"/>
+
+  <text x="48" y="52" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12"
+        letter-spacing="4" fill="#64748b">ONE EGRESS POINT &#183; EVERY REQUEST SCOPE-CHECKED</text>
+
+  <!-- main pipeline -->
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+
+    <!-- Scope -->
+    <rect x="48" y="92" width="200" height="72" rx="10" fill="#0c1320" stroke="#1e293b"/>
+    <text x="148" y="122" text-anchor="middle" font-size="15" font-weight="600" fill="#e6edf3">Scope</text>
+    <text x="148" y="145" text-anchor="middle" font-size="11.5" fill="#64748b">default-deny, per hop</text>
+
+    <line x1="248" y1="128" x2="292" y2="128" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+    <!-- Crawler -->
+    <rect x="294" y="92" width="200" height="72" rx="10" fill="#0c1320" stroke="#1e293b"/>
+    <text x="394" y="122" text-anchor="middle" font-size="15" font-weight="600" fill="#e6edf3">Crawler</text>
+    <text x="394" y="145" text-anchor="middle" font-size="11.5" fill="#64748b">BFS, robots-aware</text>
+
+    <line x1="494" y1="128" x2="538" y2="128" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+    <!-- Fingerprint -->
+    <rect x="540" y="92" width="200" height="72" rx="10" fill="#0c1320" stroke="#1e293b"/>
+    <text x="640" y="122" text-anchor="middle" font-size="15" font-weight="600" fill="#e6edf3">Fingerprint</text>
+    <text x="640" y="145" text-anchor="middle" font-size="11.5" fill="#64748b">tech, versions, routes</text>
+
+    <line x1="740" y1="128" x2="784" y2="128" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+    <!-- Modules -->
+    <rect x="786" y="86" width="200" height="84" rx="10" fill="#101a2b" stroke="#2b3b55"/>
+    <text x="886" y="116" text-anchor="middle" font-size="15" font-weight="600" fill="#e6edf3">Modules</text>
+    <text x="886" y="139" text-anchor="middle" font-size="11.5" fill="#7dd3fc">web &#183; code &#183; deps</text>
+    <text x="886" y="156" text-anchor="middle" font-size="11.5" fill="#7dd3fc">ai &#183; chain &#183; host</text>
+
+    <line x1="986" y1="128" x2="1030" y2="128" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+    <!-- Verifier -->
+    <rect x="1032" y="92" width="100" height="72" rx="10" fill="#150d14" stroke="#4a2530"/>
+    <text x="1082" y="124" text-anchor="middle" font-size="14" font-weight="600" fill="#ff8a8a">Verify</text>
+    <text x="1082" y="145" text-anchor="middle" font-size="11" fill="#9a6b74">delta</text>
+  </g>
+
+  <!-- diff panel -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <rect x="48" y="200" width="1084" height="132" rx="12" fill="#070c14" stroke="#1b2637"/>
+    <text x="70" y="228" font-size="11" letter-spacing="3" fill="#475569">DIFFERENTIAL VERIFIER &#8212; WHY A FINDING IS BELIEVED</text>
+
+    <line x1="70" y1="244" x2="1110" y2="244" stroke="#152031"/>
+
+    <text x="70" y="272" font-size="12" fill="#64748b">baseline</text>
+    <text x="150" y="272" font-size="12" fill="#94a3b8">benign, length-matched, same endpoint</text>
+    <text x="640" y="272" font-size="12" fill="#34d399">200 &#183; 48B &#183; 0.00s</text>
+
+    <text x="70" y="296" font-size="12" fill="#64748b">payload</text>
+    <text x="150" y="296" font-size="12" fill="#94a3b8">'</text>
+    <text x="640" y="296" font-size="12" fill="#fbbf24">500 &#183; 233B &#183; 0.00s</text>
+
+    <text x="70" y="320" font-size="12" fill="#64748b">delta</text>
+    <text x="150" y="320" font-size="12" fill="#ff6b6b">status +300 &#183; length +185B (4.85x) &#183; payload reflected</text>
+    <text x="900" y="320" font-size="12" font-weight="700" fill="#ff4d4d">CONFIRMED</text>
+  </g>
+
+  <!-- outputs -->
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <line x1="420" y1="332" x2="420" y2="366" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+    <text x="432" y="354" font-size="10.5" fill="#475569" font-family="ui-monospace, Menlo, monospace">REPORTS</text>
+
+    <g font-size="12.5">
+      <rect x="48" y="372" width="160" height="52" rx="9" fill="#0c1320" stroke="#1e293b"/>
+      <text x="128" y="403" text-anchor="middle" fill="#cbd5e1">console</text>
+
+      <rect x="220" y="372" width="160" height="52" rx="9" fill="#0c1320" stroke="#1e293b"/>
+      <text x="300" y="403" text-anchor="middle" fill="#cbd5e1">json</text>
+
+      <rect x="392" y="372" width="160" height="52" rx="9" fill="#0c1320" stroke="#1e293b"/>
+      <text x="472" y="403" text-anchor="middle" fill="#cbd5e1">markdown</text>
+
+      <rect x="564" y="372" width="160" height="52" rx="9" fill="#0c1320" stroke="#1e293b"/>
+      <text x="644" y="403" text-anchor="middle" fill="#cbd5e1">html</text>
+
+      <rect x="736" y="372" width="160" height="52" rx="9" fill="#0c1320" stroke="#1e293b"/>
+      <text x="816" y="403" text-anchor="middle" fill="#cbd5e1">sarif</text>
+
+      <rect x="908" y="372" width="224" height="52" rx="9" fill="#101a2b" stroke="#2b3b55"/>
+      <text x="1020" y="403" text-anchor="middle" fill="#7dd3fc">github code scanning</text>
+    </g>
+
+    <!-- action layer -->
+    <line x1="420" y1="424" x2="420" y2="452" stroke="#334155" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+    <rect x="48" y="458" width="1084" height="60" rx="10" fill="#0b111c" stroke="#1b2637"/>
+    <text x="70" y="484" font-size="11" letter-spacing="3" fill="#475569">ACTION LAYER</text>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5" fill="#94a3b8">
+      <text x="70" y="505">triage</text>
+      <text x="150" y="505">yara</text>
+      <text x="212" y="505">sigma</text>
+      <text x="286" y="505">report</text>
+      <text x="364" y="505">writeup</text>
+      <text x="452" y="505">cvss</text>
+      <text x="510" y="505">knowledge</text>
+      <text x="600" y="505">lab</text>
+    </g>
+    <text x="1110" y="505" text-anchor="end" font-size="11.5" fill="#3f4d63">one binary, no daemon</text>
+  </g>
+</svg>

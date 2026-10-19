@@ -150,8 +150,8 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "tangled-web",
         "The Tangled Web",
-        KIND_BOOK,
-        "https://nostarch.com/tangled-web",
+        "book",
+        "https://nostarch.com/tangledweb",
         "browser-security",
         "How browsers actually enforce security, and why the enforcement "
         "keeps failing. The reference for browser security reasoning.",
@@ -161,12 +161,14 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "real-world-crypto",
         "Real-World Cryptography",
-        KIND_BOOK,
-        "https://www.real-world-crypto.com/",
+        "book",
+        "https://www.manning.com/books/real-world-cryptography",
         "crypto",
-        "Cryptography for people who ship software. Free online, and the "
-        "best explanation of why your library usage is wrong.",
+        "Cryptography for people who ship software. The clearest "
+        "explanation of why the way you are using your crypto library is "
+        "wrong.",
         hours=15,
+        access="paid",
     ),
     # -- Exploitation and binary ----------------------------------------
     Resource(
@@ -183,22 +185,23 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "practical-reverse-engineering",
-        "Practical Reverse Engineering",
-        KIND_BOOK,
-        "https://github.com/lmz/practical-re",
+        "Reverse Engineering for Beginners",
+        "book",
+        "https://beginners.re/",
         "assembly-language",
-        "Free, and the best practical introduction to reading binaries. "
-        "The x86 chapters alone are worth the time.",
+        "A free, complete book on reverse engineering, from x86 to ARM, "
+        "written to be read with a disassembler open.",
         hours=30,
+        access="free",
     ),
     Resource(
         "shellcoders-handbook",
-        "The Shellcoder's Handbook",
-        KIND_BOOK,
-        "https://www.wiley.com/en-us/The+Shellcoder%27s+Handbook%3A+Discovering+and+Exploiting+Security+Holes-p-9780470852898",
+        "Hacking: The Art of Exploitation",
+        "book",
+        "https://nostarch.com/hacking2.htm",
         "shellcode-development",
-        "The classic on writing shellcode and exploiting the stack. Old, "
-        "and still the clearest explanation of the technique.",
+        "The book that teaches exploitation from the machine up, with a "
+        "live CD that still runs. Read it before any modern exploit course.",
         hours=20,
         access="paid",
     ),
@@ -213,43 +216,39 @@ LIBRARY: tuple[Resource, ...] = (
         hours=1,
     ),
     Resource(
-        "return-of-the-rand",
-        "The Geometry of Innocent Flesh on the Bone: Return of the Rand",
-        KIND_PAPER,
-        "https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-ReturnOfTheRand.pdf",
-        "heap-exploitation",
-        "Metasploit's heap exploitation paper. The reference for unlink and "
-        "fastbin attacks.",
+        "shacham-return-into-libc",
+        "The Geometry of Innocent Flesh on the Bone",
+        "paper",
+        "https://hovav.net/ucsd/dist/geometry.pdf",
+        "buffer-overflow",
+        "The paper that named return-oriented programming, and still the "
+        "clearest explanation of why a stack canary does not stop a "
+        "determined attacker.",
         hours=4,
+        access="free",
     ),
     Resource(
-        "exploiting-the-hard-working-dwarf",
-        "Exploiting the Hard-working DWARF",
-        KIND_PAPER,
-        "https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-ExploitingTheHardWorkingDwarf.pdf",
+        "how2heap",
+        "how2heap",
+        "paper",
+        "https://github.com/shellphish/how2heap",
         "heap-exploitation",
-        "Tsai, 2017. Heap exploitation against modern allocators, with "
-        "working examples.",
+        "A living catalogue of heap techniques, each a compilable program "
+        "against a specific glibc version. The fastest way to watch tcache "
+        "poisoning work.",
         hours=6,
+        access="free",
     ),
     Resource(
         "how-to-write-shellcode",
-        "How to Write Shellcode",
-        KIND_PAPER,
-        "https://www.mammothcave.com/vft29999.pdf",
+        "Shellcoding for Linux and Windows",
+        "paper",
+        "https://www.vividmachines.com/shellcode/shellcode.html",
         "shellcode-development",
-        "Sherlock Holmes' 2003 paper. Still the clearest explanation of "
-        "how to get a shellcode payload past modern filters.",
+        "A classic, hand-assembled walkthrough of writing shellcode from "
+        "scratch. Dated, and still the right first exercise.",
         hours=3,
-    ),
-    Resource(
-        "rop",
-        "ROP:ROP Gadgets and the Art of Exploitation",
-        KIND_PAPER,
-        "https://www.cs.ucla.edu/~tribes/rop/rop.pdf",
-        "buffer-overflow",
-        "The paper that made return-oriented programming practical.",
-        hours=3,
+        access="free",
     ),
     Resource(
         "ropgadget",
@@ -263,11 +262,13 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "pwntools",
         "pwntools",
-        KIND_TOOL,
-        "https://github.com/pwntools/pwntools",
+        "tool",
+        "https://github.com/Gallopsled/pwntools",
         "buffer-overflow",
         "The Python framework for exploit development. If you are writing "
         "an exploit by hand, you are doing it wrong.",
+        hours=0,
+        access="free",
     ),
     Resource(
         "gdb",
@@ -291,31 +292,36 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "checksec",
         "checksec.sh",
-        KIND_TOOL,
-        "https://github.com/wagtail/wagtail-checksec",
+        "tool",
+        "https://github.com/slimm609/checksec.sh",
         "buffer-overflow",
         "Reports the exploit mitigations a binary has. The first command "
         "you run on a new target.",
+        hours=0,
+        access="free",
     ),
     Resource(
         "patch-diffing",
         "Diaphora / BinDiff",
-        KIND_TOOL,
-        "https://github.com/Diaphora/Diaphora",
+        "tool",
+        "https://github.com/joxeankoret/diaphora",
         "patch-diffing",
         "Binary diffing. The tool for finding what changed between two "
-        "builds of the same program - which is how you find the patch for "
-        "a vulnerability that has one.",
+        "builds of the same program - which is how you find the patch for a "
+        "vulnerability that has one.",
+        hours=0,
+        access="free",
     ),
     # -- Kernel and OS internals ----------------------------------------
     Resource(
         "kernel-exploitation-guide",
-        "A Guide to Kernel Exploitation: Exploiting the Kernel from Windows 7 to Windows 10",
-        KIND_BOOK,
-        "https://www.noobleet.com/our-projects/a-guide-to-kernel-exploitation/",
+        "Linux Kernel Exploitation",
+        "book",
+        "https://github.com/xairy/linux-kernel-exploitation",
         "kernel-exploitation",
-        "The most complete public treatment of Windows kernel exploitation. "
-        "Enormous, and worth it if that is your area.",
+        "A curated map of kernel exploitation maintained by Andrey "
+        "Konovalov: bug classes, mitigations, write-ups and tooling in one "
+        "place.",
         hours=60,
         access="paid",
     ),
@@ -361,21 +367,13 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "windows-internals-part1",
         "Windows Internals Part 1",
-        KIND_BOOK,
-        "https://learn.microsoft.com/en-us/sysinternals/downloads/windows-internals",
+        "book",
+        "https://learn.microsoft.com/en-us/sysinternals/resources/windows-internals",
         "windows-internals",
-        "System calls, objects, memory and the registry. The MS Press "
-        "book, and it is free.",
+        "System calls, objects, memory and the registry. The MS Press book, "
+        "and it is free.",
         hours=25,
-    ),
-    Resource(
-        "wininternals-cheatsheet",
-        "Windows Internals cheatsheet",
-        KIND_TOOL,
-        "https://github.com/cirosantilli/windows-internals",
-        "windows-internals",
-        "A dense reference for the structures and syscalls. Better than "
-        "the book for a quick lookup.",
+        access="free",
     ),
     Resource(
         "system-internals",
@@ -409,13 +407,15 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "containerd-cgroups",
-        "containerd cgroups escape",
-        KIND_PAPER,
-        "https://github.com/mattifestation/cgroups-escape",
+        "CVE-2022-0492: cgroups v1 release_agent escape",
+        "paper",
+        "https://unit42.paloaltonetworks.com/cve-2022-0492-cgroups/",
         "sandbox-escapes",
-        "The published cgroups escape. Reading a working escape is worth "
-        "more than reading about the concept.",
+        "The container escape that turns a privileged-enough container into "
+        "host root through a writable cgroup. The preconditions are the "
+        "lesson.",
         hours=2,
+        access="free",
     ),
     Resource(
         "boot-hole",
@@ -430,31 +430,35 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "thunderclap",
         "Thunderclap: a new attack against the Secure Boot chain",
-        KIND_PAPER,
-        "https://www.mitre.org/sites/default/files/publications/14-3309.pdf",
+        "paper",
+        "https://thunderclap.io/",
         "secure-boot-research",
         "The Thunderbolt and DMA attack against Secure Boot. The reference "
         "for pre-boot attack surface.",
         hours=3,
+        access="free",
     ),
     Resource(
         "chipwhisperer",
         "ChipWhisperer",
-        KIND_TOOL,
-        "https://github.com/ColinO'Flynn/ChipWhisperer",
+        "tool",
+        "https://github.com/newaetech/chipwhisperer",
         "jtag-uart",
-        "Side-channel capture and fault injection against embedded "
-        "targets. The tool that made hardware security research "
-        "accessible.",
+        "Side-channel capture and fault injection against embedded targets. "
+        "The tool that made hardware security research accessible.",
+        hours=0,
+        access="free",
     ),
     Resource(
         "jtagulator",
         "JTAGulator",
-        KIND_TOOL,
-        "https://github.com/GutFlip/jtagulator",
+        "tool",
+        "https://github.com/grandideastudio/jtagulator",
         "jtag-uart",
         "Finds JTAG and serial ports on an unconfigured board. The first "
         "tool you run when a device is a black box.",
+        hours=0,
+        access="free",
     ),
     Resource(
         "openocd",
@@ -476,16 +480,6 @@ LIBRARY: tuple[Resource, ...] = (
         access="paid",
     ),
     Resource(
-        "rfidsec",
-        "RFID hacking resources",
-        KIND_GUIDE,
-        "https://www.rfidsec.org/",
-        "rfid-nfc-security",
-        "The long-running RFIDsec community and its archive of talks on "
-        "clone, relay and spoof attacks.",
-        hours=0,
-    ),
-    Resource(
         "proxmark",
         "Proxmark3",
         KIND_TOOL,
@@ -498,51 +492,45 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "kocher-timing",
         "Timing Attacks on Cryptosystems",
-        KIND_PAPER,
-        "https://www.cs.cornell.edu/~kocher/timingattacks.pdf",
+        "paper",
+        "https://www.paulkocher.com/doc/TimingAttacks.pdf",
         "side-channel-analysis",
         "Kocher, 1996. The paper that made timing a first-class attack "
         "surface, and it is remarkably readable.",
         hours=3,
+        access="free",
     ),
     Resource(
         "spectre",
         "Spectre Attacks: Exploiting Speculative Execution",
-        KIND_PAPER,
-        "https://meltware.ca/meltdown/spectre-paper.pdf",
+        "paper",
+        "https://spectreattack.com/spectre.pdf",
         "side-channel-attacks",
         "Kocher et al. The paper that changed how every CPU is designed.",
         hours=4,
+        access="free",
     ),
     Resource(
         "meltdown",
         "Meltdown: Reading Kernel Memory from User Space",
-        KIND_PAPER,
-        "https://meltware.ca/meltdown/meltdown-paper.pdf",
+        "paper",
+        "https://meltdownattack.com/meltdown.pdf",
         "side-channel-attacks",
         "The companion paper. The clearest explanation of speculative "
         "execution anywhere.",
         hours=3,
+        access="free",
     ),
     Resource(
-        "hertzbleed",
-        "HertzBleed: A New Side-Channel Attack on Constant-Time Cryptography",
-        KIND_PAPER,
-        "https://doyensec.com/resources/DosenBontéSideChannel.pdf",
+        "percival-cache-timing",
+        "Cache Missing for Fun and Profit",
+        "paper",
+        "https://www.daemonology.net/papers/htt.pdf",
         "side-channel-analysis",
-        "Shows that constant-time code is not enough when the frequency "
-        "domain leaks too.",
+        "Percival's cache-timing paper: the clearest demonstration that a "
+        "timing signal in shared hardware is enough to recover a key.",
         hours=3,
-    ),
-    Resource(
-        "cachewarp",
-        "CacheWarp: Software-based Fault Injection",
-        KIND_PAPER,
-        "https://cachewarp.github.io/",
-        "side-channel-attacks",
-        "A software-only fault injection attack against a verified "
-        "system. The right shape of modern hardware research.",
-        hours=3,
+        access="free",
     ),
     # -- Network, wireless, radio -----------------------------------------
     Resource(
@@ -576,33 +564,37 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "blueborne",
-        "BlueBorne: A Lesson Learned",
-        KIND_PAPER,
-        "https://www.arm.com/security/blueborne",
+        "Ubertooth",
+        "paper",
+        "https://github.com/greatscottgadgets/ubertooth",
         "bluetooth-security",
-        "Nine vulnerabilities in Bluetooth implementations with no pairing "
-        "required. The reminder that the stack is the attack surface.",
+        "An open-source Bluetooth sniffer. Just enough radio to watch "
+        "pairing and BLE advertising happen, which is where the downgrade "
+        "bugs live.",
         hours=2,
+        access="free",
     ),
     Resource(
         "vpn-leak",
-        "VPNs and Leaky VPNs",
-        KIND_PAPER,
-        "https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/gola",
+        "The WireGuard protocol",
+        "paper",
+        "https://www.wireguard.com/protocol/",
         "vpn-security",
-        "The measurement study that showed commercial VPNs leaking "
-        "clients' real addresses. The evidence for distrusting the label.",
+        "A modern VPN protocol documented at the level of detail where its "
+        "security properties become checkable rather than advertised.",
         hours=3,
+        access="free",
     ),
     Resource(
         "vpnfilter",
         "VPNFilter",
-        KIND_PAPER,
-        "https://www.talosintelligence.com/vpnfilter/",
+        "paper",
+        "https://blog.talosintelligence.com/vpnfilter/",
         "vpn-security",
-        "A vulnerability in a widely deployed commercial VPN filter. A "
-        "case study in how much trust a VPN deserves.",
+        "A vulnerability in a widely deployed commercial VPN filter. A case "
+        "study in how much trust a VPN deserves.",
         hours=2,
+        access="free",
     ),
     Resource(
         "wireshark",
@@ -651,11 +643,12 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "hackrf",
         "HackRF One",
-        KIND_TOOL,
-        "https://www.greatscottgadgets.com/hackrf-one/",
+        "tool",
+        "https://greatscottgadgets.com/hackrf/one/",
         "sdr-radio-security",
         "A wideband radio transceiver. The affordable way to get into RF "
         "research.",
+        hours=0,
         access="paid",
     ),
     Resource(
@@ -682,13 +675,14 @@ LIBRARY: tuple[Resource, ...] = (
     # -- Cloud, supply chain, DevSecOps ------------------------------------
     Resource(
         "owasp-cloud",
-        "OWASP Cloud Security Cheat Sheet",
-        KIND_GUIDE,
-        "https://cheatsheetseries.owasp.org/cheatsheets/Cloud_Security_Cheat_Sheet.html",
+        "AWS Well-Architected: Security Pillar",
+        "guide",
+        "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html",
         "cloud-pentesting",
-        "Short, dense, and correct. The best single document on cloud "
-        "misconfiguration.",
+        "The vendor's own definition of a well-secured cloud account, which "
+        "is the baseline every cloud finding should be measured against.",
         hours=2,
+        access="free",
     ),
     Resource(
         "imdsv2",
@@ -823,12 +817,12 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "windows-mem-forensics",
-        "Windows Memory Forensics",
-        KIND_BOOK,
-        "https://www.wiley.com/en-us/Windows+Memory+Forensics%3A+Analysis+of+the+Ram+Residues+of+Windows+Systems-p-9781119884821",
+        "Volatility 3 documentation",
+        "book",
+        "https://volatility3.readthedocs.io/",
         "memory-forensics",
-        "Lenz and Zalewski. The reference for the artefacts a Windows "
-        "system leaves in memory.",
+        "The memory-forensics framework, and the reference for what is "
+        "actually recoverable from a Windows image and where it lives.",
         hours=30,
         access="paid",
     ),
@@ -844,11 +838,13 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "volatility-plugins",
         "Velociraptor",
-        KIND_TOOL,
-        "https://github.com/VelocideDetector/velociraptor",
+        "tool",
+        "https://github.com/Velocidex/velociraptor",
         "digital-evidence-analysis",
-        "An endpoint forensics tool built on Velociraptor's artefact "
-        "model. Good for live response, not just dead-disk analysis.",
+        "Endpoint visibility at scale: VQL queries over live and historical "
+        "host state, which is how a timeline gets built across a fleet.",
+        hours=0,
+        access="free",
     ),
     Resource(
         "dfir-training",
@@ -902,13 +898,15 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "edr-test",
-        "MITRE Engenuity ATT&CK Evaluations",
-        KIND_GUIDE,
-        "https://attackevals.mitre-engenuity.org/",
+        "Sysmon",
+        "guide",
+        "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
         "edr-xdr-research",
-        "Public, repeatable tests of endpoint products. The closest thing "
-        "to a public benchmark for EDR.",
+        "The Windows telemetry source most EDR products build on: process, "
+        "network and file events with the fields a detection actually "
+        "needs.",
         hours=0,
+        access="free",
     ),
     # -- AI, ML, blockchain ------------------------------------------------
     Resource(
@@ -924,12 +922,13 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "owasp-ml-top10",
         "OWASP Machine Learning Security Top 10",
-        KIND_GUIDE,
-        "https://owasp.org/www-project-machine-learning-security-top-10/",
+        "guide",
+        "https://mltop10.info/",
         "machine-learning-security",
         "The ML-specific risks: model poisoning, extraction, inversion and "
         "supply chain.",
         hours=2,
+        access="free",
     ),
     Resource(
         "prompt-injection-research",
@@ -1033,13 +1032,15 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "dasp",
-        "Damn Vulnerable DeFi (DASP)",
-        KIND_LAB,
-        "https://dasp.thestarknet.io/",
+        "Damn Vulnerable DeFi",
+        "lab",
+        "https://www.damnvulnerabledefi.xyz/",
         "defi-security",
-        "A DeFi-specific vulnerable set. The modern AMM and oracle bugs, "
-        "made exploitable on purpose.",
+        "Hands-on challenges that each isolate one DeFi failure mode. "
+        "Clearer than any checklist, because you have to actually drain the "
+        "contract.",
         hours=10,
+        access="free",
     ),
     Resource(
         "trail-of-bits",
@@ -1065,22 +1066,24 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "hackerone-standards",
         "HackerOne Standard Report",
-        KIND_GUIDE,
-        "https://docs.hackerone.com/reports/",
+        "guide",
+        "https://www.hackerone.com/",
         "hackerone-reports",
         "The report format HackerOne actually triages. Read it before you "
         "write your first report.",
         hours=1,
+        access="free",
     ),
     Resource(
         "bugcrowd-standards",
         "Bugcrowd Vulnerability Rating Matrix",
-        KIND_GUIDE,
-        "https://bugcrowd.com/vulnerability-rating-matrix",
+        "guide",
+        "https://bugcrowd.com/vulnerability-rating-taxonomy",
         "bugcrowd-reports",
         "How Bugcrowd converts an impact into a priority. The matrix that "
         "decides your payout tier.",
         hours=1,
+        access="free",
     ),
     Resource(
         "intigriti-standards",
@@ -1144,13 +1147,14 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "research-methods",
         "How to do security research",
-        KIND_GUIDE,
-        "https://github.com/0xdea/0xdea/blob/main/README.md",
+        "guide",
+        "https://github.com/0xdea",
         "original-research",
         "A practical guide to picking a research question, building a "
-        "corpus, and writing the result up so someone else can "
-        "reproduce it.",
+        "corpus, and writing the result up so someone else can reproduce "
+        "it.",
         hours=3,
+        access="free",
     ),
     Resource(
         "awesome-security",
@@ -1186,22 +1190,13 @@ LIBRARY: tuple[Resource, ...] = (
     Resource(
         "python-security",
         "Python security library reference",
-        KIND_GUIDE,
-        "https://docs.python.org/3/library/security.html",
+        "guide",
+        "https://docs.python.org/3/library/security_warnings.html",
         "python-for-hackers",
-        "The standard library's security primitives, documented "
-        "honestly - including the sharp edges in ssl, hashlib and hmac.",
+        "The standard library's security primitives, documented honestly - "
+        "including the sharp edges in ssl, hashlib and hmac.",
         hours=4,
-    ),
-    Resource(
-        "practical-secure-code",
-        "Python security best practices (OWASP)",
-        KIND_GUIDE,
-        "https://owasp.org/www-project-top-ten/",
-        "python-for-hackers",
-        "The Python-specific security guidance, including the "
-        "subprocess and deserialisation warnings.",
-        hours=1,
+        access="free",
     ),
     Resource(
         "modern-c",
@@ -1305,16 +1300,6 @@ LIBRARY: tuple[Resource, ...] = (
         hours=3,
     ),
     Resource(
-        "openssf-scorecard",
-        "OpenSSF Scorecard documentation",
-        KIND_GUIDE,
-        "https://github.com/ossf/scorecard",
-        "software-supply-chain-security",
-        "What each check in the scorecard actually tests, so you can fix "
-        "the right one.",
-        hours=1,
-    ),
-    Resource(
         "chaos-engineering",
         "Principles of Chaos Engineering",
         KIND_BOOK,
@@ -1337,35 +1322,37 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "pentest-reporting",
-        "The Pentest Report",
-        KIND_GUIDE,
-        "https://github.com/OWASP/wstg/blob/master/document/4-Web_Application_Security_Testing/05-Reporting",
+        "OWASP WSTG",
+        "guide",
+        "https://owasp.org/www-project-web-security-testing-guide/latest/",
         "security-report-writing",
-        "The OWASP reporting guidance. It is short and it is the "
-        "difference between a report that is read and one that is filed.",
+        "The testing guide, including the reporting chapter, which is the "
+        "part of a pentest most people under-invest in.",
         hours=2,
+        access="free",
     ),
     # -- The areas the catalogue claims the library covers ---------------
     Resource(
         "hardware-exploitation-readings",
-        "Hardware security and silicon exploitation readings",
-        KIND_PAPER,
-        "https://github.com/hardware-attacks",
+        "The Hardware Hacking Handbook",
+        "paper",
+        "https://nostarch.com/hardwarehacking",
         "hardware-exploitation",
-        "A curated index of papers on physical attacks on hardware: "
-        "side channels, fault injection and glitching. Start with the "
-        "ChipWhisperer and the fault injection surveys.",
+        "The practical route from a board on a bench to a firmware dump: "
+        "interfaces, glitching, side channels and what actually breaks.",
         hours=40,
+        access="free",
     ),
     Resource(
         "chip-security-whitepapers",
-        "Chip security vendor research",
-        KIND_PAPER,
-        "https://www.zaproxy.com/blog/",
+        "ChipWhisperer documentation",
+        "paper",
+        "https://chipwhisperer.readthedocs.io/",
         "chip-hardware-security",
-        "Vendor research on silicon-level security: secure boot, key "
-        "provenance and the trust chain below the operating system.",
+        "The reference hardware for power analysis and glitching, with the "
+        "tutorials that make the measurement technique concrete.",
         hours=8,
+        access="free",
     ),
     Resource(
         "technical-whitepapers-collection",
@@ -1379,14 +1366,15 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "security-books-reading-list",
-        "The security reading list",
-        KIND_BOOK,
-        "https://github.com/ossu/computer-security",
+        "Security Engineering, 3rd edition",
+        "book",
+        "https://www.cl.cam.ac.uk/~rja14/book.html",
         "security-books",
-        "A maintained, free and openly-licensed reading list for computer "
-        "security, ordered by level. It is the shortest route through the "
-        "books worth reading.",
+        "Ross Anderson's book, free online. The best explanation of why "
+        "security fails at the system level rather than the component "
+        "level.",
         hours=30,
+        access="free",
     ),
     Resource(
         "security-tool-development-readings",
@@ -1400,24 +1388,660 @@ LIBRARY: tuple[Resource, ...] = (
     ),
     Resource(
         "assembly-for-hackers-guides",
-        "Assembly and shellcode guides",
-        KIND_GUIDE,
-        "https://github.com/asmundgard/Assembly-Shellcode",
+        "Azeria Labs: ARM assembly",
+        "guide",
+        "https://azeria-labs.com/writing-arm-assembly-part-1/",
         "assembly-for-hackers",
-        "Aimed at exploit development rather than at compilers: what the "
-        "instruction set actually gives you, and how to write shellcode "
-        "that survives a modern stack.",
+        "A from-scratch ARM assembly course aimed at exploit developers, "
+        "which is a different emphasis from a compiler course.",
         hours=20,
+        access="free",
     ),
     Resource(
         "github-security-project-guides",
-        "Open security project blueprints",
-        KIND_PROJECT,
-        "https://github.com/ossf/scorecard",
+        "GitHub code security",
+        "project",
+        "https://docs.github.com/en/code-security",
         "github-security-projects",
-        "How open source projects measure and ship their own security "
-        "posture, and what a good project template looks like.",
+        "How a hosted project wires up code scanning, secret scanning and "
+        "dependency review, which is the baseline every public repository "
+        "should meet.",
         hours=6,
+        access="free",
+    ),
+
+    # -- Core web application ------------------------------------------
+    Resource(
+        "portswigger-sqli",
+        "PortSwigger: SQL injection labs",
+        "lab",
+        "https://portswigger.net/web-security/sql-injection",
+        "sql-injection",
+        "Nine labs that move from a UNION to a blind, time-based injection. "
+        "The fastest way to feel the difference between a payload that "
+        "works and one that is a coincidence.",
+        hours=14,
+        access="free",
+    ),
+    Resource(
+        "sqlmap",
+        "sqlmap",
+        "tool",
+        "https://sqlmap.org/",
+        "sql-injection",
+        "The reference implementation of SQL injection automation. Read its "
+        "tamper scripts even if you never run it; they are a catalogue of "
+        "the WAF-evasion tricks you will write yourself.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "owasp-xss-prevention",
+        "OWASP XSS Prevention Cheat Sheet",
+        "guide",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+        "cross-site-scripting",
+        "The contextual-output-encoding rules, written as rules rather than "
+        "examples. If a fix does not follow this page, the fix is "
+        "incomplete.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "portswigger-xss",
+        "PortSwigger: Cross-site scripting labs",
+        "lab",
+        "https://portswigger.net/web-security/cross-site-scripting",
+        "cross-site-scripting",
+        "Reflected, stored and DOM XSS, with the parsing traps that make a "
+        "payload work in one context and die in the next.",
+        hours=14,
+        access="free",
+    ),
+    Resource(
+        "dompurify",
+        "DOMPurify",
+        "tool",
+        "https://github.com/cure53/DOMPurify",
+        "cross-site-scripting",
+        "The sanitiser most JavaScript applications actually use. Knowing "
+        "its bypass history is knowing what clientside XSS still looks like "
+        "in 2026.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "portswigger-ssrf",
+        "PortSwigger: SSRF labs",
+        "lab",
+        "https://portswigger.net/web-security/ssrf",
+        "server-side-request-forgery",
+        "Loopback, back-end systems and cloud metadata, including the "
+        "blacklist bypasses that make an allowlist useless.",
+        hours=10,
+        access="free",
+    ),
+    Resource(
+        "owasp-ssrf",
+        "OWASP SSRF Prevention Cheat Sheet",
+        "guide",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "server-side-request-forgery",
+        "Why URL allowlists fail and what to do instead: resolve, pin, and "
+        "refuse to re-resolve.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "kettle-desync",
+        "James Kettle: HTTP Desync Attacks",
+        "paper",
+        "https://portswigger.net/research/http-desync-attacks-request-smuggling-reborn",
+        "request-smuggling",
+        "The paper that turned request smuggling from an obscure CTF trick "
+        "into a bug-bounty category. Read the CL.TE and TE.CL sections "
+        "twice.",
+        hours=8,
+        access="free",
+    ),
+    Resource(
+        "kettle-http2-smuggling",
+        "James Kettle: HTTP/2, the sequel is always worse",
+        "paper",
+        "https://portswigger.net/research/http2",
+        "request-smuggling",
+        "H2.CL, H2.TE and the downgrade bugs that appear when an HTTP/2 "
+        "front end speaks HTTP/1.1 to its back end.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "portswigger-smuggling",
+        "PortSwigger: Request smuggling labs",
+        "lab",
+        "https://portswigger.net/web-security/request-smuggling",
+        "request-smuggling",
+        "Where the theory meets a proxy that actually desynchronises. Every "
+        "lab here is a different framing disagreement.",
+        hours=12,
+        access="free",
+    ),
+    Resource(
+        "kettle-cache-poisoning",
+        "James Kettle: Practical Web Cache Poisoning",
+        "paper",
+        "https://portswigger.net/research/practical-web-cache-poisoning",
+        "web-cache-poisoning",
+        "The unkeyed-input model, which is the whole of cache poisoning in "
+        "one idea. Everything since is an application of it.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "kettle-cache-entanglement",
+        "James Kettle: Web Cache Entanglement",
+        "paper",
+        "https://portswigger.net/research/web-cache-entanglement",
+        "web-cache-poisoning",
+        "The follow-up that separates cache poisoning from cache deception, "
+        "and shows why the distinction changes the fix.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "portswigger-websockets",
+        "PortSwigger: WebSocket labs",
+        "lab",
+        "https://portswigger.net/web-security/websockets",
+        "websockets-security",
+        "Message manipulation and cross-site WebSocket hijacking, which is "
+        "the WebSocket version of CSRF and just as often missed.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "mdn-csp",
+        "MDN: Content Security Policy",
+        "guide",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP",
+        "content-security-policy",
+        "The reference for every directive and its fallback chain. A policy "
+        "is only as strong as the directive you did not think about.",
+        hours=5,
+        access="free",
+    ),
+    Resource(
+        "csp-evaluator",
+        "Google CSP Evaluator",
+        "tool",
+        "https://csp-evaluator.withgoogle.com/",
+        "content-security-policy",
+        "Paste a policy and find out what it actually permits. Useful as an "
+        "oracle when you are writing your own analysis.",
+        hours=1,
+        access="free",
+    ),
+    Resource(
+        "portswigger-deserialization",
+        "PortSwigger: Insecure deserialization labs",
+        "lab",
+        "https://portswigger.net/web-security/deserialization",
+        "deserialization-attacks",
+        "PHP, Java and Python object injection, with the gadget chains that "
+        "turn a serialised blob into remote code execution.",
+        hours=10,
+        access="free",
+    ),
+    Resource(
+        "ysoserial",
+        "ysoserial",
+        "tool",
+        "https://github.com/frohoff/ysoserial",
+        "deserialization-attacks",
+        "The Java gadget-chain generator. Its payload list is also a "
+        "reading list of every library that has ever been dangerous to "
+        "deserialise.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "marshalsec",
+        "marshalsec",
+        "tool",
+        "https://github.com/mbechler/marshalsec",
+        "deserialization-attacks",
+        "Systematic analysis of Java unmarshaller vulnerabilities across "
+        "libraries, with the JNDI tricks that made Log4Shell reachable.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "portswigger-file-upload",
+        "PortSwigger: File upload labs",
+        "lab",
+        "https://portswigger.net/web-security/file-upload",
+        "file-upload-vulnerabilities",
+        "Web shells, content-type confusion and the path-traversal "
+        "combinations that make an upload directory a code execution "
+        "primitive.",
+        hours=8,
+        access="free",
+    ),
+    Resource(
+        "owasp-file-upload",
+        "OWASP File Upload Cheat Sheet",
+        "guide",
+        "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "file-upload-vulnerabilities",
+        "The defensive counterpart: what a correct upload pipeline "
+        "validates, in order, and why the order matters.",
+        hours=3,
+        access="free",
+    ),
+    Resource(
+        "portswigger-logic-flaws",
+        "PortSwigger: Business logic vulnerabilities",
+        "lab",
+        "https://portswigger.net/web-security/logic-flaws",
+        "business-logic-vulnerabilities",
+        "The labs no scanner can auto-solve: trust in client-side controls, "
+        "flawed assumptions, and domain-specific rules that break under a "
+        "second request.",
+        hours=10,
+        access="free",
+    ),
+    Resource(
+        "portswigger-host-header",
+        "PortSwigger: HTTP Host header attacks",
+        "lab",
+        "https://portswigger.net/web-security/host-header",
+        "proxy-security",
+        "What happens when the application trusts the address it was "
+        "reached on, and what an intermediary does to it in transit.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "pwn-college",
+        "pwn.college",
+        "course",
+        "https://pwn.college/",
+        "browser-exploitation",
+        "A free, lab-driven course from memory corruption up through "
+        "browser exploitation. The module on JavaScript engines is the "
+        "honest starting point for V8 work.",
+        hours=120,
+        access="free",
+    ),
+    Resource(
+        "project-zero-blog",
+        "Google Project Zero blog",
+        "paper",
+        "https://googleprojectzero.blogspot.com/",
+        "browser-exploitation",
+        "Where the best browser-exploitation write-ups are published, with "
+        "the reasoning left in rather than edited out.",
+        hours=40,
+        access="free",
+    ),
+    Resource(
+        "phrack",
+        "Phrack",
+        "paper",
+        "https://phrack.org/",
+        "browser-exploitation",
+        "The zine that has published the primary sources for most of the "
+        "exploitation canon, from heap feng shui onwards.",
+        hours=30,
+        access="free",
+    ),
+    Resource(
+        "the-fuzzing-book",
+        "The Fuzzing Book",
+        "book",
+        "https://www.fuzzingbook.org/",
+        "fuzzing",
+        "A full course on fuzzing, from mutation to coverage guidance to "
+        "grammar-based generation, written by the people who formalised the "
+        "field.",
+        hours=30,
+        access="free",
+    ),
+    Resource(
+        "aflplusplus",
+        "AFL++",
+        "tool",
+        "https://github.com/AFLplusplus/AFLplusplus",
+        "fuzzing",
+        "The forkserver that most real coverage-guided fuzzing runs on. Its "
+        "documentation is a practical guide to instrumentation.",
+        hours=10,
+        access="free",
+    ),
+    Resource(
+        "oss-fuzz",
+        "OSS-Fuzz",
+        "project",
+        "https://github.com/google/oss-fuzz",
+        "fuzzing",
+        "The corpus and harness conventions that make a fuzzer find bugs "
+        "instead of time out. Worth reading even for a local target.",
+        hours=8,
+        access="free",
+    ),
+    Resource(
+        "gtfobins",
+        "GTFOBins",
+        "guide",
+        "https://gtfobins.github.io/",
+        "privilege-escalation",
+        "Every binary that can be abused for a shell, a file read or a file "
+        "write when you are allowed to run it as another user.",
+        hours=3,
+        access="free",
+    ),
+    Resource(
+        "lolbas",
+        "LOLBAS",
+        "guide",
+        "https://lolbas-project.github.io/",
+        "privilege-escalation",
+        "The Windows equivalent: signed binaries that download, execute or "
+        "bypass in ways their authors never intended.",
+        hours=3,
+        access="free",
+    ),
+    Resource(
+        "payloads-all-the-things",
+        "PayloadsAllTheThings",
+        "project",
+        "https://github.com/swisskyrepo/PayloadsAllTheThings",
+        "privilege-escalation",
+        "An organised corpus of payloads per vulnerability class. The "
+        "privilege-escalation and Linux sections are the useful ones here.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "tlpi",
+        "The Linux Programming Interface",
+        "book",
+        "https://man7.org/tlpi/",
+        "linux-internals",
+        "The system-call layer that privilege escalation lives in: "
+        "credentials, capabilities, namespaces and the exact semantics of "
+        "each call.",
+        hours=60,
+        access="paid",
+    ),
+    Resource(
+        "linux-insides",
+        "linux-insides",
+        "book",
+        "https://github.com/0xAX/linux-insides",
+        "linux-internals",
+        "A guided tour of kernel internals that assumes you want to "
+        "understand the implementation, not just the API.",
+        hours=40,
+        access="free",
+    ),
+    Resource(
+        "cis-benchmarks",
+        "CIS Benchmarks",
+        "standard",
+        "https://www.cisecurity.org/cis-benchmarks",
+        "infrastructure-misconfigurations",
+        "The consensus definition of a hardened host, container runtime and "
+        "cloud account. Every baseline check you write should trace back to "
+        "one of these.",
+        hours=20,
+        access="free",
+    ),
+    Resource(
+        "prowler",
+        "Prowler",
+        "tool",
+        "https://github.com/prowler-cloud/prowler",
+        "infrastructure-misconfigurations",
+        "Hundreds of implemented cloud checks mapped to CIS, HIPAA and PCI. "
+        "Read them before writing your own.",
+        hours=8,
+        access="free",
+    ),
+    Resource(
+        "scoutsuite",
+        "ScoutSuite",
+        "tool",
+        "https://github.com/nccgroup/ScoutSuite",
+        "infrastructure-misconfigurations",
+        "Multi-cloud posture assessment, and a useful map of what an "
+        "attacker enumerates first in a new account.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "checkov",
+        "Checkov",
+        "tool",
+        "https://github.com/bridgecrewio/checkov",
+        "infrastructure-as-code-security",
+        "Policy checks across Terraform, Kubernetes, CloudFormation and "
+        "more, with the rule IDs that make findings comparable across "
+        "tools.",
+        hours=8,
+        access="free",
+    ),
+    Resource(
+        "opa",
+        "Open Policy Agent",
+        "tool",
+        "https://www.openpolicyagent.org/docs/latest/",
+        "infrastructure-as-code-security",
+        "The policy language most IaC gates are written in. If you want "
+        "plans rejected before they merge, this is the mechanism.",
+        hours=10,
+        access="free",
+    ),
+    Resource(
+        "owasp-secrets",
+        "OWASP Secrets Management Cheat Sheet",
+        "guide",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+        "secrets-management",
+        "Storage, rotation, scoping and the difference between a secret "
+        "that is encrypted and a secret that is safe.",
+        hours=5,
+        access="free",
+    ),
+    Resource(
+        "trufflehog",
+        "TruffleHog",
+        "tool",
+        "https://github.com/trufflesecurity/trufflehog",
+        "secrets-management",
+        "Verified secret detection: it calls the provider to check whether "
+        "the key is live, which is the difference between a finding and a "
+        "guess.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "vault-docs",
+        "HashiCorp Vault documentation",
+        "guide",
+        "https://developer.hashicorp.com/vault/docs",
+        "secrets-management",
+        "The reference design for secrets management: leases, dynamic "
+        "credentials, and why a static secret in an env var is a design "
+        "smell.",
+        hours=12,
+        access="free",
+    ),
+    Resource(
+        "aws-ir-guide",
+        "AWS Security Incident Response Guide",
+        "whitepaper",
+        "https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/welcome.html",
+        "cloud-forensics",
+        "The cloud-specific incident workflow: what evidence survives in an "
+        "account, and how to capture it before it is gone.",
+        hours=8,
+        access="free",
+    ),
+    Resource(
+        "cloudtrail-guide",
+        "AWS CloudTrail User Guide",
+        "guide",
+        "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+        "cloud-forensics",
+        "The log every AWS investigation is built on. Reading the event "
+        "structure is the prerequisite for any cloud timeline.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "mastering-bitcoin",
+        "Mastering Bitcoin",
+        "book",
+        "https://github.com/bitcoinbook/bitcoinbook",
+        "blockchain-security",
+        "The mechanics underneath the security: keys, signatures, scripts "
+        "and the transaction model that most contract bugs assume.",
+        hours=40,
+        access="free",
+    ),
+    Resource(
+        "ethereum-security",
+        "Ethereum: Smart contract security",
+        "guide",
+        "https://ethereum.org/en/developers/docs/smart-contracts/security/",
+        "blockchain-security",
+        "The canonical list of contract-level failure modes, from "
+        "reentrancy to random-number misuse.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "birsan-depconfusion",
+        "Alex Birsan: Dependency Confusion",
+        "paper",
+        "https://medium.com/@alex.birsan/dependency-confusion-71e8664c4e4a",
+        "dependency-confusion-research",
+        "The original write-up: one trick, applied to Apple, Microsoft and "
+        "dozens of other companies, all through package resolution order.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "cyclonedx",
+        "CycloneDX",
+        "standard",
+        "https://cyclonedx.org/",
+        "supply-chain-security",
+        "The SBOM format with the widest tool support, and the one most CI "
+        "systems can emit without extra work.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "snort",
+        "Snort",
+        "tool",
+        "https://www.snort.org/",
+        "ids-ips",
+        "The rule language you will most often be asked to write in, and "
+        "still the most widely deployed IDS.",
+        hours=8,
+        access="free",
+    ),
+    Resource(
+        "suricata",
+        "Suricata",
+        "tool",
+        "https://suricata.io/",
+        "ids-ips",
+        "Multi-threaded IDS/IPS with protocol parsers. Its rule syntax is "
+        "close to Snort's, with better performance characteristics.",
+        hours=8,
+        access="free",
+    ),
+    Resource(
+        "zeek",
+        "Zeek",
+        "tool",
+        "https://zeek.org/",
+        "ids-ips",
+        "Network security monitoring that emits structured logs rather than "
+        "alerts, which is what you actually need for hunting.",
+        hours=12,
+        access="free",
+    ),
+    Resource(
+        "nist-800-61",
+        "NIST SP 800-61: Incident Handling Guide",
+        "standard",
+        "https://csrc.nist.gov/pubs/sp/800/61/r2/final",
+        "incident-handling",
+        "The four-phase incident lifecycle that most organisations' "
+        "procedures are a restatement of.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "project-zero-0day",
+        "Project Zero: 0day In the Wild",
+        "paper",
+        "https://googleprojectzero.blogspot.com/p/0day.html",
+        "public-vulnerability-writeups",
+        "A running index of exploited-in-the-wild vulnerabilities, each "
+        "with root-cause analysis. The best examples of what a real write- "
+        "up looks like.",
+        hours=20,
+        access="free",
+    ),
+    Resource(
+        "zettelkasten",
+        "Zettelkasten: a system for notes that compound",
+        "guide",
+        "https://zettelkasten.de/",
+        "personal-lab-notes",
+        "A note-taking method built for research that spans years, which is "
+        "what a security lab notebook is.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "obsidian",
+        "Obsidian",
+        "tool",
+        "https://obsidian.md/",
+        "personal-lab-notes",
+        "Plain-markdown notes with backlinks, stored as files you own. The "
+        "right shape for lab notes that must survive a decade.",
+        hours=2,
+        access="free",
+    ),
+    Resource(
+        "awesome-pentest",
+        "awesome-pentest",
+        "project",
+        "https://github.com/enaqx/awesome-pentest",
+        "security-portfolio",
+        "A maintained index of the field's tooling. Useful for finding the "
+        "gap that your own project fills.",
+        hours=2,
+        access="free",
+    ),
+    Resource(
+        "htb",
+        "Hack The Box",
+        "lab",
+        "https://www.hackthebox.com/",
+        "security-portfolio",
+        "Retired machines with public write-ups, which is how most people "
+        "build the portfolio that gets them hired.",
+        hours=60,
+        access="paid",
     ),
 )
 
