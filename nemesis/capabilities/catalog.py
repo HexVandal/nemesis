@@ -88,7 +88,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         modules=("binary_triage",),
         tools=("Process Hacker", "psexec"),
         artifacts=("binary triage",),
-        prerequisites=("a Windows host"),
+        prerequisites=(("a Windows host",)),
     ),
     Capability(
         id="linux-internals",
@@ -130,7 +130,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         modules=("iac_misconfiguration", "sandbox_escape",),
         tools=("nsjail", "firejail"),
         artifacts=("IaC misconfiguration report",),
-        prerequisites=("a container runtime to test against"),
+        prerequisites=(("a container runtime to test against",)),
     ),
     Capability(
         id="browser-exploitation",
@@ -145,7 +145,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         modules=("csp_analyzer", "headers_security"),
         artifacts=("browser security report",),
-        prerequisites=("a browser build and a fuzzing corpus"),
+        prerequisites=(("a browser build and a fuzzing corpus",)),
     ),
     Capability(
         id="shellcode-development",
@@ -249,7 +249,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         modules=(),
         tools=("dudect", "ctgrind"),
         artifacts=("timing measurements",),
-        prerequisites=("a quiet target and many samples"),
+        prerequisites=(("a quiet target and many samples",)),
         components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
@@ -600,7 +600,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "radio protocols. Requires SDR hardware."
         ),
         tools=("GNU Radio", "rtl_sdr", "inspectrum"),
-        prerequisites=("SDR hardware"),
+        prerequisites=(("SDR hardware",)),
         components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
@@ -612,8 +612,8 @@ CAPABILITIES: tuple[Capability, ...] = (
             "Tag and card protocol analysis, including cloning assessment "
             "and access control review. Needs an NFC reader."
         ),
-        tools=("proxmark3"),
-        prerequisites=("an NFC reader"),
+        tools=(("proxmark3",)),
+        prerequisites=(("an NFC reader",)),
         components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     # -- Firmware, hardware and physical --------------------------------
@@ -655,7 +655,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "contributes the measurement and reporting discipline."
         ),
         tools=("fault injection rigs",),
-        prerequisites=("hardware lab"),
+        prerequisites=(("hardware lab",)),
         components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
@@ -684,7 +684,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "the correlation pipeline."
         ),
         tools=("dudect", "tracesampler"),
-        prerequisites=("sampling hardware"),
+        prerequisites=(("sampling hardware",)),
         components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     # -- Cloud, DevSecOps and supply chain ------------------------------
