@@ -1,0 +1,37 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+.tox/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# nemesis output
+nemesis-report/
+*.sarif
+
+# Packaging metadata
+*.egg-info/
+.eggs/
