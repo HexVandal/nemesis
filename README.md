@@ -116,6 +116,7 @@ nemesis scan https://app.example.com --format sarif --output ./results
 | `code` | Static analysis and supply-chain review of a local checkout. |
 | `ai` | AI and LLM application security: endpoints, prompt injection, agent tools, models. |
 | `blockchain` | Smart contract auditing of a local Solidity tree. |
+| `forensics` | Memory images, crash dumps and packet captures. |
 | `recon` | Passive and low-impact discovery. No exploitation. |
 | `full` | Everything: web, host, source and dependency layers. |
 | `passive` | No requests beyond the crawl. Zero noise. |
@@ -151,6 +152,14 @@ nemesis writeup results/nemesis.json --author "you"
 
 # Score a CVSS vector and see what each metric does.
 nemesis cvss "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+
+# The research library: papers, courses, books, labs and tools, by area.
+nemesis knowledge --search "heap exploitation" --area heap-exploitation
+
+# The research workspace: notes, open findings, research, portfolio.
+nemesis lab init
+nemesis lab note "Testing the PNG parser against fuzzilli"
+nemesis lab finding "A race condition in the session cache"
 ```
 
 `nemesis triage` is the one that changes how a report is read. It scores
@@ -182,10 +191,29 @@ module which does not exist is a test failure, not a documentation bug.
 | `research` | Needs specialised hardware, a custom toolchain or a lab. |
 | `manual` | A practice rather than a tool: reviewing, writing, disclosing. |
 
-Currently 62 of the 102 are backed by shipped code (31 native, 21 partial).
-The other 40 are labelled with what they need — a lab bench, a disassembler,
-a person with a soldering iron — because a tool that claims to do kernel
-exploitation and does not is worse than a tool that says it does not.
+All 102 are backed by shipped code or a shipped component: **32 native, 40
+partial, 14 integration, 16 research**. A capability that is only *partly*
+covered says so, and the ones that need a lab bench, a disassembler or a
+person with a soldering iron say that too — because a tool that claims to
+do kernel exploitation and does not is worse than a tool that says it does
+not.
+
+Two components back the areas that are not scans:
+
+- **`nemesis knowledge`** — a curated index of 136 real papers, books,
+  courses, labs, standards and tools, mapped to the capability areas they
+  serve, with the reason each one is worth your time.
+- **`nemesis lab`** — a research workspace on disk. Lab notes, unsolved
+  vulnerabilities, original research and a portfolio, each with a structure
+  that makes it useful six months later.
+
+```bash
+nemesis knowledge --search "buffer overflow"
+nemesis knowledge --area fuzzing
+nemesis lab init
+nemesis lab note "Testing the PNG parser"
+nemesis lab finding "A race condition in the cache"
+```
 
 ---
 
@@ -198,6 +226,22 @@ exploitation and does not is worse than a tool that says it does not.
 **Source code** — hardcoded secrets (AWS, GCP, GitHub, GitLab, Slack, Stripe, private keys, JWTs, database URLs and more), command injection, `eval`, deserialisation, unsafe YAML, path traversal in code, weak crypto, privilege escalation patterns, and **logic bugs**: mutable default arguments, swallowed exceptions, float arithmetic on money, `== None`, unvalidated `assert` in production paths, off-by-one slice bugs, and more.
 
 **Patch regression** — compares the working tree against `HEAD~1` and reports the dangerous patterns a change *introduced* or *resurrected*. This is the check that stops a fix from being quietly undone.
+
+**Git history** — walks every revision of a repository and finds the credentials that were committed and then removed. Removing a secret from `HEAD` does not remove it from every clone, every fork or every CI cache that ever checked it out.
+
+**Containers** — reads Dockerfiles, Compose files and Kubernetes manifests for the configurations that turn a container into an escape: the Docker socket mounted in, `privileged: true`, a root user, a host namespace, an added capability.
+
+**Network evidence** — parses pcap and pcapng files directly, with no external dependency: cleartext credentials, DNS exfiltration in a long encoded label, plaintext protocols carrying sensitive traffic, and a bulk flow to a port nobody expected.
+
+**Memory forensics** — parses memory images and crash dumps directly: the process inventory, the command lines, the network connection table, the persistence keys, the regions that exist in memory but not on disk, and the secrets that were resident in a process when it was seized.
+
+**DeFi mechanics** — unchecked ERC-20 transfers, swaps with no `amountOutMin`, oracle reads with no staleness or round check, AMM pricing from the pool's own reserves, reachable token callbacks, and contracts that change state without emitting an event.
+
+**Browser posture** — the security headers as a set rather than one at a time: a CSP that permits `unsafe-inline`, `unsafe-eval` or `data:`, an HSTS `max-age` below a year, a `__Host-` cookie that breaks its own rules, and missing cross-origin isolation.
+
+**Fuzzing** — finds the functions that take a byte buffer, generates a libFuzzer harness for each, works out the project's build system, and writes a seed dictionary. A harness that only exists in a report is a harness nobody compiles, so this one is written to disk.
+
+**Proxy and IPv6** — whether the application takes the client address, the original host and the scheme from headers any client can set, and whether an address filter that accepts `127.0.0.1` also accepts `::ffff:127.0.0.1`.
 
 **Supply chain** — dependency confusion and typosquatting (a declared name compared against the popular packages of its ecosystem), CI/CD pipeline security (`pull_request_target` with untrusted checkout, unpinned third-party actions, expression injection into `run:` blocks, privileged containers, self-hosted runners), and infrastructure as code for Terraform, Kubernetes, Dockerfiles and CloudFormation.
 

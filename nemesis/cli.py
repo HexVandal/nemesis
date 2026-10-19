@@ -416,6 +416,12 @@ def explain(
 # ----------------------------------------------------------------------
 # Capability map
 # ----------------------------------------------------------------------
+def _component_label(spec: str) -> str:
+    """A short, readable name for a ``package.module:Attribute``."""
+    _, _, attribute = spec.partition(":")
+    return attribute or spec
+
+
 @app.command("capabilities")
 def list_capabilities(
     domain: str | None = typer.Option(None, "--domain", "-d", help="Filter by domain."),
@@ -467,11 +473,18 @@ def list_capabilities(
         table.add_column("Summary", max_width=60)
 
     for capability in capabilities:
+        # A capability can be backed by a module, by a component, or by
+        # a tool that does the work. Show whichever it actually is.
+        backed = ", ".join(capability.modules)
+        if not backed and capability.components:
+            backed = ", ".join(_component_label(c) for c in capability.components)
+        if not backed:
+            backed = ", ".join(capability.tools) or "-"
         row = [
             capability.name,
             capability.domain_label,
             capability.maturity_label,
-            ", ".join(capability.modules) or ", ".join(capability.tools) or "-",
+            backed,
         ]
         if detailed:
             row.append(capability.summary)
@@ -793,6 +806,119 @@ def triage_command(
         f"{plan['worklist_size']} work items "
         f"({plan['collapsed']} duplicate(s) folded in).[/dim]"
     )
+
+
+# ----------------------------------------------------------------------
+# The reference library
+# ----------------------------------------------------------------------
+@app.command("knowledge")
+def knowledge_command(
+    search: str | None = typer.Option(None, "--search", "-s", help="Search titles, notes and areas."),
+    area: str | None = typer.Option(None, "--area", "-a", help="Filter by capability area."),
+    kind: str | None = typer.Option(None, "--kind", "-k", help="Filter by kind: lab|course|paper|book|tool|project|standard|guide."),
+    limit: int = typer.Option(30, "--limit", "-n", help="Maximum results."),
+    as_json: bool = typer.Option(False, "--json", help="Emit JSON."),
+) -> None:
+    """Browse the research library: papers, courses, books, labs and tools."""
+    from rich.table import Table
+
+    from .knowledge.library import LIBRARY_INDEX
+
+    resources = LIBRARY_INDEX.all()
+    if search:
+        resources = LIBRARY_INDEX.search(search)
+    if area:
+        resources = [r for r in resources if r.area == area]
+    if kind:
+        resources = [r for r in resources if r.kind == kind]
+    resources = resources[:limit]
+
+    if as_json:
+        console.print_json(
+            json.dumps([r.to_dict() for r in resources], default=str)
+        )
+        return
+
+    table = Table(title="nemesis research library")
+    table.add_column("Resource", style="bold cyan", max_width=42)
+    table.add_column("Kind")
+    table.add_column("Area")
+    table.add_column("Why", max_width=52)
+
+    for resource in resources:
+        table.add_row(
+            resource.title,
+            resource.kind,
+            resource.area,
+            resource.note or resource.url,
+        )
+
+    console.print(table)
+    coverage = LIBRARY_INDEX.coverage()
+    console.print()
+    console.print(f"[dim]{coverage['total']} resources across {coverage['areas']} "
+                  f"capability areas.[/dim]")
+
+
+# ----------------------------------------------------------------------
+# The research workspace
+# ----------------------------------------------------------------------
+@app.command("lab")
+def lab_command(
+    action: str = typer.Argument(
+        "status",
+        help="init | note | finding | research | portfolio | status",
+    ),
+    title: str | None = typer.Argument(None, help="Title of the entry."),
+    path: str | None = typer.Option(
+        "./research-workspace", "--path", "-p", help="Workspace directory."
+    ),
+) -> None:
+    """Manage the research workspace: notes, findings, projects, portfolio."""
+    from .workspace import Workspace
+
+    workspace = Workspace(root=Path(path))
+    action = action.lower()
+
+    if action == "init":
+        created = workspace.create()
+        console.print(f"[green]workspace ready[/green] at {workspace.root}")
+        for item in created:
+            console.print(f"  {item}")
+
+    elif action in ("note", "finding", "research", "portfolio"):
+        if not title:
+            error_console.print("[red]A title is required.[/red]")
+            raise typer.Exit(code=2) from None
+        workspace.create()
+        if action == "note":
+            created = workspace.add_note(title)
+        elif action == "finding":
+            created = workspace.add_finding(title)
+        elif action == "research":
+            created = workspace.add_research(title)
+        else:
+            created = workspace.add_portfolio_entry(title)
+        console.print(f"[green]wrote[/green] {created}")
+
+    elif action == "status":
+        workspace.create()
+        inventory = workspace.inventory()
+        console.print(f"[bold]workspace[/bold] {inventory['root']}")
+        console.print()
+        for name, count in inventory["counts"].items():
+            console.print(f"  {name:<12} {count}")
+        console.print()
+        console.print(f"  {inventory['total']} entries in total")
+        if inventory["tags"]:
+            console.print(f"  tags: {', '.join(inventory['tags'])}")
+
+    else:
+        error_console.print(
+            f"[red]Unknown action '{action}'.[/red] "
+            f"Use init, note, finding, research, portfolio or status."
+        )
+        raise typer.Exit(code=2) from None
 
 
 def main() -> None:

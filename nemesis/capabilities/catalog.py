@@ -25,7 +25,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "and executable stack, and unprotected binaries. Writing the "
             "exploit itself needs a debugger and a target."
         ),
-        modules=("binary_exploit_primitives", "dangerous_patterns"),
+        modules=("binary_exploit_primitives", "dangerous_patterns",),
         tools=("gdb", "pwndbg", "checksec", "pwntools"),
         artifacts=("primitive report", "binary triage"),
         prerequisites=("a running target", "a debugger"),
@@ -43,6 +43,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         tools=("gdb", "patchelf", "glibc source", "heaptracer"),
         artifacts=("binary triage",),
         prerequisites=("a matching libc", "a fuzzing or exploit lab"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="kernel-exploitation",
@@ -55,7 +56,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "configuration and flags suspicious code patterns; exploitation "
             "requires a specific kernel build and a lab."
         ),
-        modules=("binary_triage",),
+        modules=("binary_triage", "binary_exploit_primitives",),
         tools=("gdb", "kgsl", "syzkaller"),
         artifacts=("binary triage",),
         prerequisites=("a vulnerable kernel", "a privileged lab"),
@@ -64,7 +65,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         id="linux-kernel-security",
         name="Linux Kernel Security",
         domain="internals",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Audits kernel hardening configuration - KASLR, SMEP, SMAP, "
             "stack protector, module signature enforcement - and matches a "
@@ -72,6 +73,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         tools=("sysctl", "kexec"),
         artifacts=("host posture report",),
+        modules=("privilege_escalation",),
     ),
     Capability(
         id="windows-internals",
@@ -97,7 +99,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "ELF parsing, SUID and file-capability analysis, namespace and "
             "cgroup escape primitives, and procfs hardening checks."
         ),
-        modules=("binary_triage", "privilege_escalation"),
+        modules=("binary_triage", "privilege_escalation",),
         artifacts=("binary triage",),
     ),
     Capability(
@@ -118,14 +120,14 @@ CAPABILITIES: tuple[Capability, ...] = (
         id="sandbox-escapes",
         name="Sandbox Escapes",
         domain="exploitation",
-        maturity="research",
+        maturity="partial",
         summary=(
             "Container and jail escape primitives: privileged mounts, "
             "host filesystem mounts, dangerous capabilities, and writable "
             "namespace targets. nemesis audits the configuration that makes "
             "an escape possible."
         ),
-        modules=("iac_misconfiguration",),
+        modules=("iac_misconfiguration", "sandbox_escape",),
         tools=("nsjail", "firejail"),
         artifacts=("IaC misconfiguration report",),
         prerequisites=("a container runtime to test against"),
@@ -149,7 +151,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         id="shellcode-development",
         name="Shellcode Development",
         domain="exploitation",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Nemesis can validate and test shellcode: check a payload for "
             "bad characters, verify an encoder round-trips through a "
@@ -158,12 +160,13 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         tools=("pwntools", "keystone", "msfvenom"),
         artifacts=("shellcode validation report",),
+        modules=("binary_exploit_primitives",),
     ),
     Capability(
         id="assembly-language",
         name="Assembly Language",
         domain="exploitation",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Disassembly-aware triage of binaries, annotation of suspicious "
             "call sites, and detection of hand-written or obfuscated code "
@@ -192,7 +195,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         id="fuzzing",
         name="Fuzzing",
         domain="offensive",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Nemesis emits structured corpora, dictionaries and seed inputs "
             "from a scan - parameter values, discovered endpoints, error "
@@ -200,6 +203,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "real shape rather than from nothing."
         ),
         artifacts=("fuzzing corpus", "payload dictionary", "seed endpoints"),
+        modules=("fuzz_harness", "fuzzing_readiness",),
     ),
     Capability(
         id="patch-diffing",
@@ -229,6 +233,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         components=(
             "nemesis.reporting.triage:TriageEngine",
         ),
+        modules=("patch_regression",),
     ),
     Capability(
         id="side-channel-attacks",
@@ -241,10 +246,11 @@ CAPABILITIES: tuple[Capability, ...] = (
             "meaningful difference, which is the measurement half of the "
             "problem."
         ),
-        modules=("sqli",),
+        modules=(),
         tools=("dudect", "ctgrind"),
         artifacts=("timing measurements",),
         prerequisites=("a quiet target and many samples"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="hardware-exploitation",
@@ -259,6 +265,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         tools=("binwalk", "flashrom"),
         artifacts=("firmware triage",),
         prerequisites=("physical access", "lab equipment"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     # -- Web application security ---------------------------------------
     Capability(
@@ -267,12 +274,9 @@ CAPABILITIES: tuple[Capability, ...] = (
         domain="web",
         maturity="partial",
         summary=(
-            "Looks for the weaknesses that a payload scanner cannot see: "
-            "client-controlled prices and quantities, missing state "
-            "validation between steps, replayable one-time actions, and "
-            "race-prone endpoints."
+            "Looks for the weaknesses that a payload scanner cannot see: client-controlled prices and quantities, missing state validation between steps, replayable one-time actions, missing CSRF protection, direct object references and open redirects."
         ),
-        modules=("business_logic",),
+        modules=("business_logic", "csrf_missing", "idor", "open_redirect",),
         artifacts=("workflow analysis",),
     ),
     Capability(
@@ -325,7 +329,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "conflicting framing headers and looking for the response to a "
             "spliced follow-up request to be answered out of order."
         ),
-        modules=("request_smuggling",),
+        modules=("request_smuggling", "http_method_probe",),
         artifacts=("smuggling proof",),
     ),
     Capability(
@@ -338,7 +342,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "endpoints for deserializer gadget behaviour, covering Java, "
             "PHP, Python, .NET and Ruby payloads."
         ),
-        modules=("insecure_deserialization", "dangerous_patterns"),
+        modules=("insecure_deserialization", "dangerous_patterns", "xml_external_entity",),
         artifacts=("gadget source evidence",),
     ),
     Capability(
@@ -391,7 +395,17 @@ CAPABILITIES: tuple[Capability, ...] = (
             "HSTS, frame protection, cross-origin isolation, permissions "
             "policy, cookie flags and mixed content."
         ),
-        modules=("headers_security", "csp_analyzer", "cookie_flags", "mixed_content"),
+        modules=(
+            "headers_security",
+            "csp_analyzer",
+            "cookie_flags",
+            "mixed_content",
+            "browser_security",
+            "clickjacking",
+            "cors_misconfig",
+            "csrf_missing",
+            "open_redirect",
+        ),
         artifacts=("browser security report",),
     ),
     Capability(
@@ -418,7 +432,16 @@ CAPABILITIES: tuple[Capability, ...] = (
             "and logic defects that no linter reports."
         ),
         modules=(
-            "secrets", "dangerous_patterns", "crypto_misuse", "logic_bugs",
+            "secrets",
+            "dangerous_patterns",
+            "crypto_misuse",
+            "logic_bugs",
+            "command_injection",
+            "info_disclosure",
+            "nosql_injection",
+            "path_traversal",
+            "template_injection",
+            "xml_external_entity",
         ),
         artifacts=("file and line level findings",),
     ),
@@ -433,7 +456,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "exact source line, and can be diffed between revisions to "
             "show what a change actually introduced."
         ),
-        modules=("patch_regression",),
+        modules=("patch_regression", "logic_bugs", "template_injection", "path_traversal",),
         artifacts=("review-ready findings", "regression diff"),
     ),
     # -- Network, wireless and radio -------------------------------------
@@ -451,6 +474,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         tools=("aircrack-ng", "wifite", "bettercap"),
         artifacts=("methodology",),
         prerequisites=("monitor mode hardware", "authorised test range"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="bluetooth-security",
@@ -463,25 +487,26 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         tools=("bluetoothctl", "btlejuice"),
         prerequisites=("a Bluetooth adapter", "a protocol analyser"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="vpn-security",
         name="VPN Security",
         domain="network",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Tests a VPN gateway reachable over the network: TLS posture, "
             "IKE and SSL VPN exposure, authentication behaviour and "
             "information disclosure in the handshake."
         ),
-        modules=("tls_configuration", "headers_security"),
+        modules=("tls_configuration", "headers_security",),
         artifacts=("gateway posture report",),
     ),
     Capability(
         id="firewall-evasion-research",
         name="Firewall Evasion Research",
         domain="network",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Measures where a middlebox changes the request: the scanner's "
             "own traffic is the probe, and the difference between what was "
@@ -489,30 +514,33 @@ CAPABILITIES: tuple[Capability, ...] = (
             "device."
         ),
         artifacts=("request/response transaction log",),
+        components=("nemesis.modules.web.proxy:ProxyTrustModule",),
     ),
     Capability(
         id="ids-ips",
         name="IDS/IPS",
         domain="network",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Detects inline inspection by measuring whether a payload "
             "changes the shape or timing of the response, and produces the "
             "normalised request corpus used to tune detection rules."
         ),
         artifacts=("bypass observations", "Sigma rules"),
+        components=("nemesis.reporting.sigma:SigmaRuleBuilder",),
     ),
     Capability(
         id="network-traffic-analysis",
         name="Network Traffic Analysis",
         domain="network",
-        maturity="integration",
+        maturity="native",
         summary=(
             "nemesis records every request and response it makes, which is "
             "enough to build a protocol map, a host inventory, and the "
             "transaction log a traffic review needs."
         ),
         artifacts=("transaction log", "host and endpoint inventory"),
+        modules=("pcap_analysis",),
     ),
     Capability(
         id="ipv6-security",
@@ -524,7 +552,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "including bracket notation and compressed addresses, and "
             "IPv4-mapped addresses are treated as the IPv4 host they are."
         ),
-        modules=("ssrf",),
+        modules=("ssrf", "ipv6_security",),
         artifacts=("host inventory",),
     ),
     Capability(
@@ -537,7 +565,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "the X-Forwarded-For and Host families, which are also the "
             "usual source of host-header and cache-poisoning bugs."
         ),
-        modules=("host_header_injection", "web_cache_poisoning"),
+        modules=("host_header_injection", "web_cache_poisoning", "proxy_security",),
         artifacts=("header routing findings",),
     ),
     Capability(
@@ -551,8 +579,14 @@ CAPABILITIES: tuple[Capability, ...] = (
             "records, TLS posture and exposed storage."
         ),
         modules=(
-            "iac_misconfiguration", "headers_security", "dns_posture",
-            "tls_configuration", "exposed_files",
+            "iac_misconfiguration",
+            "headers_security",
+            "dns_posture",
+            "tls_configuration",
+            "exposed_files",
+            "directory_listing",
+            "graphql_introspection",
+            "info_disclosure",
         ),
         artifacts=("misconfiguration report",),
     ),
@@ -567,6 +601,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         tools=("GNU Radio", "rtl_sdr", "inspectrum"),
         prerequisites=("SDR hardware"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="rfid-nfc-security",
@@ -579,13 +614,14 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         tools=("proxmark3"),
         prerequisites=("an NFC reader"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     # -- Firmware, hardware and physical --------------------------------
     Capability(
         id="uefi-bios-security",
         name="UEFI and BIOS Security",
         domain="internals",
-        maturity="integration",
+        maturity="research",
         summary=(
             "Firmware extraction and version fingerprinting, checks for "
             "known vulnerable firmware builds, and an assessment of the "
@@ -593,18 +629,20 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         tools=("binwalk", "flashrom"),
         artifacts=("firmware triage",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="secure-boot-research",
         name="Secure Boot Research",
         domain="internals",
-        maturity="integration",
+        maturity="research",
         summary=(
             "Analyses the Secure Boot chain: enrolled keys, the shim, and "
             "whether the platform actually enforces verification."
         ),
         tools=("sbverify", "efibootmgr"),
         artifacts=("firmware triage",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="chip-hardware-security",
@@ -618,12 +656,13 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         tools=("fault injection rigs",),
         prerequisites=("hardware lab"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="jtag-uart",
         name="JTAG and UART",
         domain="internals",
-        maturity="integration",
+        maturity="research",
         summary=(
             "Debug-port enumeration and UART baud-rate discovery produce a "
             "reproducible bring-up procedure for a device, and the "
@@ -632,6 +671,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         tools=("openocd", "minicom", "binwalk"),
         artifacts=("bring-up procedure", "firmware triage"),
         prerequisites=("physical access", "a debug adapter"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="side-channel-analysis",
@@ -645,6 +685,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         tools=("dudect", "tracesampler"),
         prerequisites=("sampling hardware"),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     # -- Cloud, DevSecOps and supply chain ------------------------------
     Capability(
@@ -674,8 +715,13 @@ CAPABILITIES: tuple[Capability, ...] = (
             "audit."
         ),
         modules=(
-            "dependency_vulnerabilities", "license_risk", "dependency_confusion",
-            "typosquatting", "cicd_pipeline_security",
+            "dependency_vulnerabilities",
+            "license_risk",
+            "dependency_confusion",
+            "typosquatting",
+            "cicd_pipeline_security",
+            "patch_regression",
+            "tech_outdated",
         ),
         artifacts=("advisory report", "confusion report"),
     ),
@@ -703,7 +749,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "binary, with provider-specific patterns and a high-entropy "
             "heuristic, while skipping test fixtures and vendor directories."
         ),
-        modules=("secrets", "binary_triage"),
+        modules=("secrets", "binary_triage", "git_history_secrets",),
         artifacts=("secret findings with fingerprints",),
     ),
     Capability(
@@ -717,20 +763,20 @@ CAPABILITIES: tuple[Capability, ...] = (
             "storage endpoints, metadata services, and management APIs "
             "leaking through the application."
         ),
-        modules=("iac_misconfiguration", "exposed_files", "ssrf"),
+        modules=("iac_misconfiguration", "exposed_files", "ssrf", "cloud_attack_surface",),
         artifacts=("cloud exposure report",),
     ),
     Capability(
         id="cloud-forensics",
         name="Cloud Forensics",
         domain="cloud",
-        maturity="integration",
+        maturity="partial",
         summary=(
-            "Evidence handling for cloud incidents: content hashing, chain "
-            "of custody records, and timelines assembled from the scan "
-            "transaction log and cloud audit exports."
+            "Evidence handling for cloud incidents: content hashing, chain of custody records, a triage worklist ranked by impact and evidence, and timelines assembled from the scan transaction log and the artefacts recovered from a seized instance."
         ),
         artifacts=("evidence manifest", "chain of custody", "timeline"),
+        components=("nemesis.reporting.triage:TriageEngine",),
+        modules=("memory_forensics", "memory_dump_triage",),
     ),
     Capability(
         id="devsecops",
@@ -807,14 +853,13 @@ CAPABILITIES: tuple[Capability, ...] = (
         id="memory-forensics",
         name="Memory Forensics",
         domain="detection",
-        maturity="integration",
+        maturity="partial",
         summary=(
-            "nemesis cannot dump a process's memory, but it can produce the "
-            "artefacts a memory triage depends on: a full request and "
-            "response history, the exact payloads used, and indicators "
-            "formatted for a volatility import."
+            "Parses memory images and crash dumps directly, with no external tool: the process inventory, the command lines, the network connection table, the persistence keys, the regions that exist in memory but not on disk, and the secrets that were resident in a process when it was seized."
         ),
         artifacts=("indicator set", "payload corpus"),
+        components=("nemesis.modules.infra.pcap:PcapAnalysisModule",),
+        modules=("memory_forensics", "memory_dump_triage",),
     ),
     Capability(
         id="incident-response",
@@ -854,59 +899,59 @@ CAPABILITIES: tuple[Capability, ...] = (
             "content in the two formats defenders actually use, with "
             "coverage gaps reported explicitly."
         ),
-        components=(
-            "nemesis.reporting.sigma:SigmaRuleBuilder",
-            "nemesis.reporting.yara:YaraRuleBuilder",
-        ),
+        components=("nemesis.reporting.sigma:SigmaRuleBuilder", "nemesis.reporting.yara:YaraRuleBuilder",),
         artifacts=("Sigma rules", "YARA rules", "coverage map"),
     ),
     Capability(
         id="edr-xdr-research",
         name="EDR and XDR Research",
         domain="detection",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Tests how endpoint and network sensors respond to a live "
             "attack, by measuring whether the payload the scanner sent "
             "produced a behavioural change the sensor would have caught."
         ),
         artifacts=("bypass observations",),
+        components=("nemesis.reporting.sigma:SigmaRuleBuilder",),
     ),
     Capability(
         id="anti-malware-research",
         name="Anti-Malware Research",
         domain="detection",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Extracts indicators from samples and malware-adjacent "
             "artefacts and emits them as detection rules, with the "
             "extraction reproducible from the recorded evidence."
         ),
         artifacts=("YARA rules", "indicator list"),
+        components=("nemesis.reporting.yara:YaraRuleBuilder",),
     ),
     Capability(
         id="ransomware-analysis",
         name="Ransomware Analysis",
         domain="detection",
-        maturity="integration",
+        maturity="partial",
         summary=(
             "Ransom-note and IOC extraction, plus detection content for the "
             "encryption and shadow-copy-deletion behaviours that precede "
             "the note."
         ),
         artifacts=("IOC list", "YARA rules"),
+        components=("nemesis.reporting.yara:YaraRuleBuilder",),
     ),
     Capability(
         id="digital-forensics",
         name="Digital Forensics",
         domain="detection",
-        maturity="integration",
+        maturity="partial",
         summary=(
-            "Evidence acquisition with hash verification and a chain of "
-            "custody record, so every artefact in a report can be traced "
-            "back to how it was collected."
+            "Evidence acquisition with hash verification and a chain of custody record, plus direct analysis of the two artefact types that carry the most truth: memory images and packet captures."
         ),
         artifacts=("evidence manifest", "chain of custody", "timeline"),
+        components=("nemesis.modules.infra.pcap:PcapAnalysisModule",),
+        modules=("memory_forensics", "memory_dump_triage",),
     ),
     Capability(
         id="software-supply-chain-security",
@@ -919,8 +964,12 @@ CAPABILITIES: tuple[Capability, ...] = (
             "typosquat risk, pipeline weakness, and copyleft obligations."
         ),
         modules=(
-            "dependency_vulnerabilities", "dependency_confusion", "typosquatting",
-            "cicd_pipeline_security", "license_risk",
+            "dependency_vulnerabilities",
+            "dependency_confusion",
+            "typosquatting",
+            "cicd_pipeline_security",
+            "license_risk",
+            "tech_outdated",
         ),
         artifacts=("supply chain report",),
     ),
@@ -935,7 +984,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "serialisation, inference endpoints found, model APIs "
             "discovered, and agent tool surfaces assessed."
         ),
-        modules=("ml_model_security", "llm_endpoint_detection", "agent_tool_security"),
+        modules=("ml_model_security", "llm_endpoint_detection", "agent_tool_security",),
         artifacts=("AI exposure report",),
     ),
     Capability(
@@ -948,7 +997,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "reflection, checks whether the system prompt leaks, and "
             "examines the safety controls a model exposes."
         ),
-        modules=("llm_endpoint_detection", "prompt_injection", "model_extraction"),
+        modules=("llm_endpoint_detection", "prompt_injection", "model_extraction", "agent_tool_security",),
         artifacts=("LLM findings with prompt evidence",),
     ),
     Capability(
@@ -961,7 +1010,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "model loaders, untrusted model downloads, and missing "
             "integrity checks on model files."
         ),
-        modules=("ml_model_security", "dangerous_patterns"),
+        modules=("ml_model_security", "dangerous_patterns",),
         artifacts=("model security findings",),
     ),
     Capability(
@@ -1004,7 +1053,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "Smart contract source analysis with the classic bug classes, "
             "and configuration review of deployment and signing material."
         ),
-        modules=("solidity_audit", "secrets"),
+        modules=("solidity_audit", "secrets", "defi_security",),
         artifacts=("contract findings with line numbers",),
     ),
     Capability(
@@ -1030,7 +1079,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "matter in finance: price and slippage assumptions, oracle "
             "trust, and liquidation thresholds."
         ),
-        modules=("solidity_audit", "business_logic"),
+        modules=("solidity_audit", "business_logic", "defi_security",),
         artifacts=("DeFi risk findings",),
     ),
     # -- Evidence, scoring and disclosure --------------------------------
@@ -1038,13 +1087,13 @@ CAPABILITIES: tuple[Capability, ...] = (
         id="digital-evidence-analysis",
         name="Digital Evidence Analysis",
         domain="detection",
-        maturity="integration",
+        maturity="partial",
         summary=(
-            "Content hashing, chain of custody and a merged timeline built "
-            "from every artefact a scan produced, so a report can be "
-            "defended as evidence rather than as opinion."
+            "Content hashing, chain of custody and a merged timeline built from every artefact a scan produced - memory images, packet captures and the scan transaction log - so a report can be defended as evidence rather than as opinion."
         ),
         artifacts=("evidence manifest", "chain of custody", "timeline"),
+        components=("nemesis.modules.infra.pcap:PcapAnalysisModule",),
+        modules=("memory_forensics", "memory_dump_triage",),
     ),
     Capability(
         id="incident-handling",
@@ -1160,18 +1209,19 @@ CAPABILITIES: tuple[Capability, ...] = (
         id="tryhackme",
         name="TryHackMe",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "A curated pointer to the rooms that match what nemesis has "
             "just taught you, so a finding leads straight to practice."
         ),
         artifacts=("curated learning paths",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="portswigger-web-security-academy",
         name="PortSwigger Web Security Academy",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "A curated pointer from each web module to the corresponding "
             "academy topic, because the module and the topic are the same "
@@ -1182,63 +1232,69 @@ CAPABILITIES: tuple[Capability, ...] = (
             "web_cache_poisoning", "websocket_security", "csp_analyzer",
         ),
         artifacts=("curated learning paths",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="research-papers",
         name="Research Papers",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "An index of the papers that matter for the techniques nemesis "
             "emits, with the finding each technique came from."
         ),
         artifacts=("paper index",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="technical-whitepapers",
         name="Technical Whitepapers",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "An index of vendor and standards documents - CVSS, OWASP, "
             "RFCs - that the methodology is built on."
         ),
         artifacts=("standards index",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="security-books",
         name="Security Books",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "A reading list organised by the area it serves, so a book "
             "recommendation is tied to something the user is actually "
             "trying to do."
         ),
         artifacts=("reading list",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="hacking-courses",
         name="Hacking Courses",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "A course index from beginner to exploit development, with the "
             "prerequisite chain made explicit."
         ),
         artifacts=("course index",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="open-source-security-tools",
         name="Open-Source Security Tools",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "The tools that cover what nemesis deliberately does not, "
             "mapped to the capability each one serves so the handover is "
             "explicit rather than a list of names."
         ),
         artifacts=("tool index",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="security-tool-development",
@@ -1250,135 +1306,146 @@ CAPABILITIES: tuple[Capability, ...] = (
             "finding is one object, and the registry does discovery, "
             "filtering, concurrency and timeouts for you."
         ),
-        components=("nemesis.modules.base:Module",),
+        components=("nemesis.modules.base:Module", "nemesis.knowledge.library:LIBRARY_INDEX",),
         artifacts=("plugin API", "example plugin"),
     ),
     Capability(
         id="python-for-hackers",
         name="Python for Hackers",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "The language nemesis is written in, with the security-relevant "
             "standard library - sockets, ssl, subprocess, pickle, hashlib - "
             "and the sharp edges in each."
         ),
         artifacts=("reference notes",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="c-cpp-for-exploit-development",
         name="C and C++ for Exploit Development",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "The languages exploits are written in, with the memory model "
             "and the standard library functions that make them exploitable."
         ),
         artifacts=("reference notes",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="assembly-for-hackers",
         name="Assembly for Hackers",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "Instruction-level reference for the architectures the triage "
             "output describes, connected to the binary triage results."
         ),
         modules=("binary_triage",),
         artifacts=("reference notes",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="go-for-security-tools",
         name="Go for Security Tools",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "The language to write concurrent scanners in, with the "
             "net/http and crypto packages that matter."
         ),
         artifacts=("reference notes",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="rust-for-security",
         name="Rust for Security",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "Memory safety as a default, and what that changes about how a "
             "security tool is written and audited."
         ),
         artifacts=("reference notes",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="bash-and-powershell",
         name="Bash and PowerShell",
         domain="learning",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "The two shells every incident responder ends up in, with the "
             "parsing quirks that turn a command into an execution."
         ),
         artifacts=("reference notes",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     # -- Practice and personal --------------------------------------------
     Capability(
         id="github-security-projects",
         name="GitHub Security Projects",
         domain="meta",
-        maturity="manual",
+        maturity="integration",
         summary=(
             "A running index of the security projects you maintain, with "
             "their open findings, their release state and their coverage."
         ),
         artifacts=("project index",),
+        components=("nemesis.knowledge.library:LIBRARY_INDEX",),
     ),
     Capability(
         id="personal-lab-notes",
         name="Personal Lab Notes",
         domain="meta",
-        maturity="manual",
+        maturity="partial",
         summary=(
             "A structured note format for lab work - hypothesis, setup, "
             "observations, dead ends - stored beside the evidence it "
             "refers to."
         ),
         artifacts=("lab note templates",),
+        components=("nemesis.workspace:Workspace",),
     ),
     Capability(
         id="unsolved-vulnerabilities",
         name="Unsolved Vulnerabilities",
         domain="meta",
-        maturity="manual",
+        maturity="partial",
         summary=(
             "A tracker for the things you have not solved yet, with the "
             "evidence gathered so far and the next step written down while "
             "it is still fresh."
         ),
         artifacts=("open research tracker",),
+        components=("nemesis.workspace:Workspace",),
     ),
     Capability(
         id="original-research",
         name="Original Research",
         domain="meta",
-        maturity="manual",
+        maturity="partial",
         summary=(
             "The infrastructure to publish: reproducible corpora, generated "
             "detection content, and write-ups that separate what you found "
             "from what you believe."
         ),
         artifacts=("reproducible corpora", "detection content", "write-ups"),
+        components=("nemesis.workspace:Workspace",),
     ),
     Capability(
         id="security-portfolio",
         name="Security Portfolio",
         domain="meta",
-        maturity="manual",
+        maturity="partial",
         summary=(
             "The evidence of competence assembled from everything above: "
             "findings with proof, published research, and detection "
             "content that works."
         ),
         artifacts=("portfolio summary",),
+        components=("nemesis.workspace:Workspace",),
     ),
 )
