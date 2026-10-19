@@ -6,6 +6,37 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+**Bugs found by writing the tests for the second wave**
+- The **Content-Security-Policy parser never split directives on
+  semicolons**, so every policy was parsed as a single directive with
+  every other directive's name as a source. `default-src 'none';
+  script-src 'self'` parsed as one `default-src` directive. Every CSP
+  check that asked "is this directive present" was therefore always
+  wrong, in both directions.
+- The **pcap parser crashed on every capture file**: it unpacked a
+  24-byte format from a 20-byte slice, so the global header could
+  never be read.
+- The **pcap DNS-exfiltration check applied a bytes pattern to a
+  string** and raised on the first DNS query it saw.
+- The **pcap Basic-authentication check base64-decoded the value with
+  the `Basic ` scheme still attached**, so it reported garbage instead
+  of the credential it had actually found.
+- The **DeFi module inherited a `_finding` with a different argument
+  order** from the Solidity module and raised `TypeError` on its first
+  finding, so it had never produced output at all.
+- The **fuzz-harness module generated harness source but never wrote
+  it**, so the harness only existed inside a report.
+- The **git-history secret scan skipped `config.py` and `settings.yml`**,
+  because the file filter only recognised a fixed list of extensions.
+- The **IPv6 module compared an address payload against a neutralised
+  string** rather than against the address it was equivalent to, so the
+  comparison was between two rejections and proved nothing.
+- The **`side-channel-attacks` capability claimed `sqli` as its
+  backing module**, and fifteen modules shipped without any capability
+  claiming them.
+
 ### Added
 
 **The capability map**
@@ -15,10 +46,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   maturity label: `native`, `partial`, `integration`, `research`, `manual`.
 - The registry is **validated against the real module registry**: a
   capability that names a module or a component which does not exist is a
-  test failure. 62 of the 102 are backed by shipped code today.
+  test failure. All 102 are backed by shipped code or a shipped component
+  today (32 native, 40 partial, 14 integration, 16 research), and no
+  module may ship without a capability that claims it.
 - `nemesis capabilities`, `nemesis capability <id>` — the map, on the CLI.
 
-**New modules — 20 added, 52 total**
+**New modules — 32 added, 64 total**
 - *Request-level*: `request_smuggling` (CL.TE / TE.CL), `file_upload`,
   `web_cache_poisoning`, `websocket_security`, `csp_analyzer` (with a real
   CSP parser), `business_logic` (price / quantity / role / state tampering).
@@ -34,6 +67,34 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `agent_tool_security`, `ml_model_security`.
 - *Blockchain*: `solidity_audit` (reentrancy, access control, `tx.origin`,
   unchecked return values, unprotected initialisers).
+
+**Second wave — 12 more modules, and the last of the 102 areas**
+- *Forensics*: `pcap_analysis` (a dependency-free pcap/pcapng parser:
+  cleartext credentials, DNS exfiltration, plaintext protocols, bulk flows)
+  and `memory_forensics` + `memory_dump_triage` (process inventory, command
+  lines, the connection table, persistence keys, injected regions and
+  resident secrets, read from both narrow and UTF-16LE strings).
+- *Code*: `git_history_secrets` (credentials that survive in the history
+  after being removed from `HEAD`), `sandbox_escape` (container escape
+  configuration), `fuzz_harness` (libFuzzer harness generation, written
+  to disk) and `fuzzing_readiness`.
+- *Web*: `proxy_security` (trusted-proxy lists, host poisoning, hop-by-hop
+  headers), `ipv6_security` (IPv4-mapped, long-form and zone-id
+  confusion) and `browser_security` (CSP depth, HSTS, `__Host-` cookie
+  prefixes, cross-origin isolation).
+- *Cloud and blockchain*: `cloud_attack_surface` (IMDS, storage hosts,
+  pre-signed URL lifetime) and `defi_security` (unchecked transfers,
+  slippage, oracle staleness, AMM pricing, token callbacks, missing
+  events).
+
+**The knowledge layer**
+- `nemesis/knowledge/library.py` — 136 curated resources (papers, books,
+  courses, labs, standards, tools) mapped to the capability areas they
+  serve, with the reason each one is worth your time.
+- `nemesis/workspace.py` — a research workspace on disk: lab notes,
+  unsolved vulnerabilities, original research and a portfolio, each with a
+  structure that makes it useful six months later.
+- `nemesis knowledge`, `nemesis lab` — the two, on the CLI.
 
 **The action layer**
 - `nemesis triage` — ranks findings on three independent axes (impact,

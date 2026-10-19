@@ -139,16 +139,34 @@ def parse_policy(header: str) -> CspPolicy:
 
 
 def _split_directives(header: str) -> list[str]:
-    """Split a policy on commas that are not inside a nonce or a hash."""
+    """Split a header into individual directives.
+
+    A Content-Security-Policy is a list of directives separated by
+    semicolons, and a header may carry several policies separated by
+    commas - the browser enforces all of them, so the effective rule is
+    the intersection. Neither separator counts when it is inside a
+    quoted nonce or hash.
+    """
+    directives: list[str] = []
+    for policy in _split_outside_quotes(header, ","):
+        for directive in _split_outside_quotes(policy, ";"):
+            directive = directive.strip()
+            if directive:
+                directives.append(directive)
+    return directives
+
+
+def _split_outside_quotes(text: str, separator: str) -> list[str]:
+    """Split *text* on *separator*, ignoring separators inside quotes."""
     chunks: list[str] = []
     current: list[str] = []
     in_quotes = False
-    for char in header:
+    for char in text:
         if char == "'":
             in_quotes = not in_quotes
             current.append(char)
             continue
-        if char == "," and not in_quotes:
+        if char == separator and not in_quotes:
             chunks.append("".join(current).strip())
             current = []
             continue

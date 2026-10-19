@@ -231,7 +231,7 @@ PROFILES: dict[str, dict[str, Any]] = {
     "web": {
         "description": "Full web application assessment: everything that speaks HTTP.",
         "include": [],
-        "exclude": ["code/*", "deps/*", "host/*"],
+        "exclude": ["code/*", "deps/*", "host/*", "forensics/*"],
         "crawl": {"max_pages": 300, "max_depth": 4},
     },
     "code": {
@@ -241,6 +241,15 @@ PROFILES: dict[str, dict[str, Any]] = {
             "ml_model_security",
         ],
         "exclude": [],
+        "crawl": {"max_pages": 0, "max_depth": 0},
+    },
+    "forensics": {
+        "description": (
+            "Forensics over local evidence: memory images, crash dumps and "
+            "packet captures."
+        ),
+        "include": ["forensics/*", "pcap_analysis", "host/dns_posture"],
+        "exclude": ["code/*", "deps/*", "blockchain/*"],
         "crawl": {"max_pages": 0, "max_depth": 0},
     },
     "ai": {
