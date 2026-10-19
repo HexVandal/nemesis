@@ -1,0 +1,66 @@
+# Normalise line endings everywhere.
+#
+# Without this, git guesses per-clone: a Windows user gets CRLF, a Linux or
+# macOS user gets LF, and a file that is LF in the repository can come back
+# as CRLF on disk. The contents are identical, but the diff is not -- an
+# otherwise innocent edit shows up as "every line changed", and tools that
+# are line-ending sensitive (linters, snapshot tests, shell scripts) start
+# failing for one contributor and not another.
+#
+# Pinning LF makes the working tree identical on every platform.
+* text=auto eol=lf
+
+# --- explicit text types -------------------------------------------------
+*.py       text eol=lf
+*.pyi      text eol=lf
+*.toml     text eol=lf
+*.cfg      text eol=lf
+*.ini      text eol=lf
+*.yaml     text eol=lf
+*.yml      text eol=lf
+*.json     text eol=lf
+*.md       text eol=lf
+*.txt      text eol=lf
+*.rst      text eol=lf
+*.sql      text eol=lf
+*.sh       text eol=lf
+*.bash     text eol=lf
+*.ps1      text eol=crlf
+*.bat      text eol=crlf
+*.cmd      text eol=crlf
+*.dockerfile text eol=lf
+Dockerfile   text eol=lf
+Makefile     text eol=lf
+.gitignore   text eol=lf
+.gitattributes text eol=lf
+
+# --- never touch these ---------------------------------------------------
+# Binary files must not be normalised; doing so corrupts them.
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.webp     binary
+*.ico      binary
+*.svg      text eol=lf
+*.pdf      binary
+*.zip      binary
+*.gz       binary
+*.whl      binary
+*.tar      binary
+*.pcap     binary
+*.pcapng   binary
+*.raw      binary
+*.dmp      binary
+*.mo       binary
+*.so       binary
+*.dylib    binary
+*.dll      binary
+*.exe      binary
+*.bin      binary
+
+# --- diffs ---------------------------------------------------------------
+# Treat generated files as generated, so they collapse in review.
+uv.lock       linguist-generated=true
+*.min.js      linguist-generated=true
+*.min.css     linguist-generated=true
