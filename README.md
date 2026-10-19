@@ -1,40 +1,49 @@
-<div align="center">
+<p align="center">
+  <img src="assets/banner-umbrella.png" alt="nemesis — differential offensive security" width="100%">
+</p>
 
-<img src="assets/banner.png" alt="nemesis — differential offensive security" width="100%">
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux">
+  <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows">
+  <img src="https://img.shields.io/badge/GNU%20Bash-4EAA25?style=for-the-badge&logo=GNU%20Bash&logoColor=white" alt="Bash">
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git">
+</p>
 
-<br>
+<p align="center">
+  <img src="https://img.shields.io/badge/Apache--2.0-D22128?style=for-the-badge&logo=apache&logoColor=white" alt="Apache 2.0">
+  <img src="https://img.shields.io/badge/SARIF-2.1.0-6E4C13?style=for-the-badge&logo=github&logoColor=white" alt="SARIF">
+  <img src="https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white" alt="Markdown">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="CI">
+</p>
 
-**Every finding ships with the experiment that proves it.**
+<p align="center">
+  <img src="https://img.shields.io/badge/modules-64-C1121F?style=for-the-badge" alt="64 modules">
+  <img src="https://img.shields.io/badge/capability%20areas-102-8B0000?style=for-the-badge" alt="102 capability areas">
+  <img src="https://img.shields.io/badge/tests-270%20passing-1B7F3B?style=for-the-badge" alt="270 tests">
+  <img src="https://img.shields.io/badge/scope-default--deny-B30000?style=for-the-badge" alt="default-deny scope">
+</p>
 
-[![CI](https://github.com/nemesis-sec/nemesis/actions/workflows/ci.yml/badge.svg)](https://github.com/nemesis-sec/nemesis/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
-[![Modules](https://img.shields.io/badge/modules-64-blueviolet)](nemesis/modules)
-[![Capabilities](https://img.shields.io/badge/capability%20areas-102%20mapped-ff69b4)](nemesis/capabilities/catalog.py)
-[![Tests](https://img.shields.io/badge/tests-270%20passing-brightgreen)](tests)
-[![SARIF](https://img.shields.io/badge/SARIF-2.1.0-informational)](nemesis/reporting/sarif.py)
-[![Offline](https://img.shields.io/badge/scans-offline%20capable-success)]()
-[![Scope](https://img.shields.io/badge/scope-default--deny-critical)](nemesis/scope.py)
-
-</div>
+<p align="center"><i>“Our business is life itself.”</i></p>
 
 ---
 
 ## The problem with scanners
 
-Almost every scanner answers a question nobody asked: **"did a pattern match?"**
+Almost every scanner answers a question nobody asked: **“did a pattern match?”**
 
-You get a list of template hits, a severity colour, and no way to tell the one real
-SQL injection from the two hundred false positives. Then you spend the afternoon
-triaging — which was the work the tool was supposed to do.
+You get a list of template hits, a severity colour, and no way to tell the one real SQL
+injection from the two hundred false positives. Then you spend the afternoon triaging —
+which was the work the tool was supposed to do.
 
-**nemesis answers a different question: *"did the server's behaviour change when I
-attacked it?"***
+**nemesis answers a different question: *“did the server’s behaviour change when I
+attacked it?”***
 
-Every active check is a **differential experiment**. It sends a benign request, sends
-a payload request to the *same* endpoint, and compares the two responses — status,
-body length, timing, headers, and where the payload came back. A finding is only as
-strong as the evidence that something changed.
+Every active check is a **differential experiment**. It sends a benign request, sends a
+payload request to the *same* endpoint, and compares the two responses — status, body
+length, timing, headers, and where the payload came back. A finding is only as strong as
+the evidence that something changed.
 
 That is why every active finding carries a **proof you can read**:
 
@@ -78,15 +87,15 @@ survives that.
 ### The two-axis model
 
 Most tools collapse severity and confidence into one number. That is how scanners lose
-people's trust.
+people’s trust.
 
-- **Severity** answers *"how bad is this if it is real?"*
-- **Confidence** answers *"how sure are you that it is real?"*
+- **Severity** answers *“how bad is this if it is real?”*
+- **Confidence** answers *“how sure are you that it is real?”*
 
 A critical finding with *medium* confidence is a completely different thing from a
 critical finding that was confirmed by reading `/etc/passwd` back out of the response.
-nemesis keeps them separate, and `nemesis triage` ranks on a third axis too: **effort
-to confirm and fix.**
+nemesis keeps them separate, and `nemesis triage` ranks on a third axis too: **effort to
+confirm and fix.**
 
 ---
 
@@ -95,13 +104,13 @@ to confirm and fix.**
 nemesis is not on PyPI yet. Install from source:
 
 ```bash
-git clone https://github.com/nemesis-sec/nemesis
+git clone https://github.com/<your-username>/nemesis
 cd nemesis
 python -m pip install -e ".[dev]"
 ```
 
 **Requirements:** Python 3.10+. No browser, no daemon, no Docker, no API keys.
-Hosted by nobody — it runs on your machine and talks only to the target you name.
+It runs on your machine and talks only to the target you name.
 
 ---
 
@@ -193,34 +202,34 @@ and the report says why.
 
 ## What it finds
 
-**Web application** — SQL injection (error-based, UNION, time-based blind), NoSQL injection,
-command injection, SSTI, XSS, XXE, insecure deserialization, path traversal, SSRF, open
-redirect, IDOR, CSRF, host-header injection, GraphQL introspection, exposed files,
-directory listing, stack traces, security headers, cookie flags, CORS misconfiguration,
-clickjacking, mixed content, outdated technology, unsafe HTTP methods.
+**Web application** — SQL injection (error-based, UNION, time-based blind), NoSQL
+injection, command injection, SSTI, XSS, XXE, insecure deserialization, path traversal,
+SSRF, open redirect, IDOR, CSRF, host-header injection, GraphQL introspection, exposed
+files, directory listing, stack traces, security headers, cookie flags, CORS
+misconfiguration, clickjacking, mixed content, outdated technology, unsafe HTTP methods.
 
 **Request-level** — CL.TE and TE.CL request smuggling, web cache poisoning, WebSocket
-origin validation, file-upload handling, business-logic tampering of price/quantity/role/
-state, and a real Content-Security-Policy parser that reports what the policy *actually
-permits* rather than whether the header exists.
+origin validation, file-upload handling, business-logic tampering of
+price/quantity/role/state, and a real Content-Security-Policy parser that reports what the
+policy *actually permits* rather than whether the header exists.
 
 **Source code** — hardcoded secrets (AWS, GCP, GitHub, GitLab, Slack, Stripe, private
-keys, JWTs, database URLs), command injection, `eval`, deserialisation, unsafe YAML,
-path traversal, weak crypto, privilege-escalation patterns, and **logic bugs**: mutable
-default arguments, swallowed exceptions, float arithmetic on money, `== None`,
-unvalidated `assert` on production paths, off-by-one slices.
+keys, JWTs, database URLs), command injection, `eval`, deserialisation, unsafe YAML, path
+traversal, weak crypto, privilege-escalation patterns, and **logic bugs**: mutable default
+arguments, swallowed exceptions, float arithmetic on money, `== None`, unvalidated
+`assert` on production paths, off-by-one slices.
 
 **Patch regression** — compares the working tree against `HEAD~1` and reports the
-dangerous patterns a change *introduced* or *resurrected*. This is the check that stops
-a fix from being quietly undone.
+dangerous patterns a change *introduced* or *resurrected*. This is the check that stops a
+fix from being quietly undone.
 
-**Git history** — walks every revision and finds credentials that were committed and
-then removed. Deleting a secret from `HEAD` does not remove it from every clone, fork
-or CI cache that ever checked it out.
+**Git history** — walks every revision and finds credentials that were committed and then
+removed. Deleting a secret from `HEAD` does not remove it from every clone, fork or CI
+cache that ever checked it out.
 
-**Containers** — Dockerfiles, Compose files and Kubernetes manifests for the settings
-that turn a container into an escape: the Docker socket mounted in, `privileged: true`,
-a root user, a host namespace, an added capability.
+**Containers** — Dockerfiles, Compose files and Kubernetes manifests for the settings that
+turn a container into an escape: the Docker socket mounted in, `privileged: true`, a root
+user, a host namespace, an added capability.
 
 **Network evidence** — parses pcap and pcapng directly, with no external dependency:
 cleartext credentials, DNS exfiltration in a long encoded label, plaintext protocols
@@ -230,31 +239,31 @@ carrying sensitive traffic, and a bulk flow to a port nobody expected.
 command lines, the network connection table, persistence keys, regions that exist in
 memory but not on disk, and secrets that were resident when the machine was seized.
 
-**DeFi mechanics** — unchecked ERC-20 transfers, swaps with no `amountOutMin`, oracle
-reads with no staleness or round check, AMM pricing from the pool's own reserves,
-reachable token callbacks, state changes with no event.
+**DeFi mechanics** — unchecked ERC-20 transfers, swaps with no `amountOutMin`, oracle reads
+with no staleness or round check, AMM pricing from the pool’s own reserves, reachable token
+callbacks, state changes with no event.
 
 **Browser posture** — headers as a set rather than one at a time: a CSP permitting
-`unsafe-inline` / `unsafe-eval` / `data:`, an HSTS `max-age` under a year, a `__Host-`
-cookie breaking its own rules, missing cross-origin isolation.
+`unsafe-inline` / `unsafe-eval` / `data:`, an HSTS `max-age` under a year, a `__Host-` cookie
+breaking its own rules, missing cross-origin isolation.
 
 **Fuzzing** — finds functions that take a byte buffer, generates a libFuzzer harness for
-each, works out the build system, writes a seed dictionary. A harness that only exists
-in a report is a harness nobody compiles, so this one is written to disk.
+each, works out the build system, writes a seed dictionary. A harness that only exists in a
+report is a harness nobody compiles, so this one is written to disk.
 
-**Proxy and IPv6** — whether the app takes the client address, original host and scheme
-from headers any client can set, and whether an address filter that accepts `127.0.0.1`
-also accepts `::ffff:127.0.0.1`.
+**Proxy and IPv6** — whether the app takes the client address, original host and scheme from
+headers any client can set, and whether an address filter that accepts `127.0.0.1` also
+accepts `::ffff:127.0.0.1`.
 
 **Supply chain** — dependency confusion and typosquatting, CI/CD pipeline security
-(`pull_request_target` with untrusted checkout, unpinned actions, expression injection
-into `run:`, privileged containers, self-hosted runners), and IaC for Terraform,
-Kubernetes, Dockerfiles and CloudFormation.
+(`pull_request_target` with untrusted checkout, unpinned actions, expression injection into
+`run:`, privileged containers, self-hosted runners), and IaC for Terraform, Kubernetes,
+Dockerfiles and CloudFormation.
 
-**Binaries** — a real ELF / PE / Mach-O parser: architecture, hardening posture
-(NX, PIE, RELRO, stack canary), dangerous imports, packer detection, embedded
-credentials. Extensionless executables are found by magic bytes, because that is what
-ends up in a container image.
+**Binaries** — a real ELF / PE / Mach-O parser: architecture, hardening posture (NX, PIE,
+RELRO, stack canary), dangerous imports, packer detection, embedded credentials.
+Extensionless executables are found by magic bytes, because that is what ends up in a
+container image.
 
 **AI and LLM** — model endpoint discovery and provider identification, prompt injection
 (gated on real evidence a model is present, so it does not degenerate into a second XSS
@@ -262,13 +271,13 @@ scanner), model extraction and system-prompt leakage, agent tool-listing exposur
 unsafe `torch.load` / `pickle.load`, PII in datasets, credentials in model cards.
 
 **Smart contracts** — reentrancy, missing access control, `tx.origin` authorisation,
-unchecked return values, unprotected initialisers, `ecrecover` without a zero-address
-check, block-timestamp dependence.
+unchecked return values, unprotected initialisers, `ecrecover` without a zero-address check,
+block-timestamp dependence.
 
 **Dependencies** — PyPI, npm, crates.io, Go, Maven, RubyGems and Packagist manifests and
 lockfiles, resolved against the live **OSV.dev** database, with CVSS scored locally.
-Advisories group per package, not per CVE, so one outdated Django release is one finding
-and not seventy-five.
+Advisories group per package, not per CVE, so one outdated Django release is one finding and
+not seventy-five.
 
 **Host posture** — legacy TLS, expired certificates, weak ciphers, missing SPF / DMARC /
 CAA, dangling CNAMEs.
@@ -277,9 +286,9 @@ CAA, dangling CNAMEs.
 
 ## Architecture
 
-<div align="center">
-<img src="assets/architecture.png" alt="nemesis architecture: scope, crawler, fingerprint, modules, differential verifier, reports, action layer" width="100%">
-</div>
+<p align="center">
+  <img src="assets/architecture.png" alt="nemesis architecture" width="100%">
+</p>
 
 ```
                     ┌──────────────┐
@@ -319,17 +328,17 @@ CAA, dangling CNAMEs.
 - **Default-deny scope.** No request leaves the process without passing a scope check.
   Redirects are followed manually and re-checked at every hop, because a redirect is the
   classic way to smuggle a request out of scope.
-- **One egress point.** Every request goes through a single client that owns rate
-  limiting, redirect handling, timeouts and secret redaction. There is no second path.
-- **Length-matched baselines.** A baseline uses a benign value of the *same length* as
-  the payload. Without this, a one-character payload looks like a huge behavioural change
-  simply because the echoed value got shorter — and the scanner reports an injection on
-  every parameter it touches.
+- **One egress point.** Every request goes through a single client that owns rate limiting,
+  redirect handling, timeouts and secret redaction. There is no second path.
+- **Length-matched baselines.** A baseline uses a benign value of the *same length* as the
+  payload. Without this, a one-character payload looks like a huge behavioural change simply
+  because the echoed value got shorter — and the scanner reports an injection on every
+  parameter it touches.
 - **Severity and confidence are orthogonal.** Neither is ever derived from the other.
 - **Secrets are redacted** from evidence before it reaches a report.
 - **Destructive modules are opt-in** via `--allow-destructive`.
 - **Polite by default.** 10 requests/second per host, configurable with `--rate`. A large
-  site takes minutes, not because the tool is slow but because hammering someone's
+  site takes minutes, not because the tool is slow but because hammering someone’s
   production server is not a feature.
 
 ---
@@ -366,8 +375,8 @@ disassembler or a soldering iron — they are labelled `research` because that i
   standards and tools across **104** areas, with the reason each one is worth your time.
   Every URL is checked; the ones that rot get replaced.
 - **`nemesis lab`** — a research workspace on disk. Lab notes, unsolved vulnerabilities,
-  original research and a portfolio, each with a structure that makes it useful six
-  months later.
+  original research and a portfolio, each with a structure that makes it useful six months
+  later.
 
 ```bash
 nemesis knowledge --search "buffer overflow"
@@ -430,7 +439,7 @@ penetration tests, bug bounties, CTFs, internal red teams, and defensive audits 
 you own.
 
 **Do not point it at systems you do not have permission to test.** It will find real
-vulnerabilities, and finding one on someone else's system without authorisation is a legal
+vulnerabilities, and finding one on someone else’s system without authorisation is a legal
 problem, not a technical one.
 
 - Scope is default-deny and must be widened explicitly.
@@ -443,9 +452,9 @@ problem, not a technical one.
 
 ## Contributing
 
-Issues and pull requests are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) —
-it explains the module contract and how to add a check without regressing the
-false-positive rate.
+Issues and pull requests are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) — it
+explains the module contract and how to add a check without regressing the false-positive
+rate.
 
 ```bash
 python -m pip install -e ".[dev]"
@@ -461,7 +470,7 @@ Current state: **270 tests**, ruff-clean, CI on Python 3.10–3.13.
 
 Apache-2.0. See [`LICENSE`](LICENSE).
 
-<div align="center">
-<br>
-<sub>Built for people who would rather read the experiment than trust the verdict.</sub>
-</div>
+<p align="center">
+  <br>
+  <sub>Built for people who would rather read the experiment than trust the verdict.</sub>
+</p>
