@@ -1,0 +1,91 @@
+# Example nemesis configuration.
+#
+#   nemesis scan https://app.example.com --config examples/nemesis.yaml
+#
+# Every value here can be overridden on the command line.
+
+target: https://app.example.com
+profile: full
+
+# Only these hosts and paths may be touched. Exclusions always win.
+scope:
+  - app.example.com
+  - "*.app.example.com"
+  - "app.example.com/api/*"
+
+exclude:
+  - app.example.com/logout
+  - "*.app.example.com/health"
+
+# Local source tree for the SAST and SCA layers.
+code_path: .
+
+# Reports
+output_dir: nemesis-report
+formats:
+  - console
+  - json
+  - markdown
+  - html
+  - sarif
+
+# Request behaviour
+rate:
+  requests_per_second: 10
+  global_concurrency: 12
+  burst: 20
+
+timeout: 15
+user_agent: "nemesis/0.1.0 (+https://github.com/nemesis-sec/nemesis)"
+
+# Modules: include wins by group, exclude removes individual modules.
+include_modules:
+  - headers/*
+  - injection/*
+  - traversal/*
+  - auth/*
+  - code/*
+  - deps/*
+
+exclude_modules:
+  - http_method_probe
+
+# Modules that change server state need this to be true.
+allow_destructive: false
+
+# Minimum severity to report.
+severity_min: low
+
+auth:
+  mode: none
+  # mode: bearer
+  # value: "eyJhbGciOi..."
+  # mode: basic
+  # username: scanner
+  # password: secret
+  # mode: cookie
+  # cookies:
+  #   session: "abc123"
+  extra_headers:
+    X-Forwarded-For: "127.0.0.1"
+
+crawl:
+  max_pages: 300
+  max_depth: 4
+  follow_robots: true
+  include_subdomains: false
+  skip_extensions:
+    - .png
+    - .jpg
+    - .jpeg
+    - .gif
+    - .svg
+    - .webp
+    - .ico
+    - .css
+    - .woff
+    - .woff2
+    - .zip
+    - .tar.gz
+    - .mp4
+    - .mp3
