@@ -39,9 +39,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.5"]
-render = ["playwright>=1.45"]
-all = ["nemesis[dev,render]"]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "pytest-timeout>=2.3", "ruff>=0.5"]
+all = ["nemesis[dev]"]
 
 [project.urls]
 Homepage = "https://github.com/nemesis-sec/nemesis"
@@ -54,7 +53,7 @@ nemesis = "nemesis.cli:main"
 include = ["nemesis*"]
 
 [tool.setuptools.package-data]
-nemesis = ["reporting/templates/*.html", "knowledge/data/*.json"]
+nemesis = ["py.typed"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
