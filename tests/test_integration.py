@@ -7,8 +7,8 @@ found - and that the noisy modules do not invent findings.
 
 from __future__ import annotations
 
+import http.server
 import socket
-import socketserver
 import threading
 import time
 
@@ -30,8 +30,9 @@ def _free_port() -> int:
 @pytest.fixture(scope="module")
 def target_url():
     port = _free_port()
-    socketserver.TCPServer.allow_reuse_address = True
-    httpd = socketserver.TCPServer(("127.0.0.1", port), Handler)
+    http.server.ThreadingHTTPServer.allow_reuse_address = True
+    http.server.ThreadingHTTPServer.daemon_threads = True
+    httpd = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
     thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     thread.start()
     time.sleep(0.3)

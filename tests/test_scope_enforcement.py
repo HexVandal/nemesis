@@ -8,8 +8,8 @@ exercise it directly rather than trusting the implementation.
 from __future__ import annotations
 
 import asyncio
+import http.server
 import socket
-import socketserver
 import threading
 import time
 
@@ -63,8 +63,9 @@ def two_hosts():
     servers = []
     CountingHandler.hits = []
     for port in ports:
-        socketserver.TCPServer.allow_reuse_address = True
-        server = socketserver.TCPServer(("127.0.0.1", port), CountingHandler)
+        http.server.ThreadingHTTPServer.allow_reuse_address = True
+        http.server.ThreadingHTTPServer.daemon_threads = True
+        server = http.server.ThreadingHTTPServer(("127.0.0.1", port), CountingHandler)
         threading.Thread(target=server.serve_forever, daemon=True).start()
         servers.append(server)
     time.sleep(0.3)

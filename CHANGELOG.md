@@ -8,6 +8,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+**Scan speed**
+- The **request-smuggling probe waited out the full client timeout**
+  (15 s) for every candidate, because a smuggling probe is deliberately
+  malformed and a timeout is the expected outcome rather than an
+  error. It now uses a 3 s probe timeout, which cut a 125-second scan
+  to 53 seconds and the test suite from 133 seconds to 61.
+- The **test fixture app was single-threaded**, so one deliberately
+  desynchronised connection blocked every later request. It is now
+  threaded, and it no longer prints a broken-pipe traceback when a
+  scanner closes a connection it does not need.
+
 **Bugs found by writing the tests for the second wave**
 - The **Content-Security-Policy parser never split directives on
   semicolons**, so every policy was parsed as a single directive with

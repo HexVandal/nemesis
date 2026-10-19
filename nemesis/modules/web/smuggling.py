@@ -64,6 +64,12 @@ class RequestSmugglingModule(Module):
     max_targets = 6
     #: How long to wait for an out-of-band response.
     linger_seconds = 2.0
+    #: How long to wait for the deliberately malformed request. A
+    #: smuggling probe is *supposed* to confuse the server, so a
+    #: timeout is an expected outcome rather than an error - and
+    #: waiting out the full client timeout for every candidate makes
+    #: the module the slowest thing in the scan.
+    probe_timeout = 3.0
 
     async def run(self, ctx: ScanContext) -> list[Finding]:
         findings: list[Finding] = []
@@ -163,6 +169,7 @@ class RequestSmugglingModule(Module):
                 content=body.encode(),
                 headers=headers,
                 follow_redirects=False,
+                timeout=self.probe_timeout,
             )
         except Exception:  # pragma: no cover - transport level
             return None
