@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-label="nemesis social preview">
+  <defs>
+    <linearGradient id="sbg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#05070d"/>
+      <stop offset="0.6" stop-color="#080d17"/>
+      <stop offset="1" stop-color="#0c1424"/>
+    </linearGradient>
+    <radialGradient id="sRed" cx="0.12" cy="0.15" r="0.75">
+      <stop offset="0" stop-color="#ff4d4d" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#ff4d4d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sCyan" cx="0.9" cy="0.95" r="0.7">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sMark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff6b6b"/>
+      <stop offset="0.5" stop-color="#ffb020"/>
+      <stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="sRule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff4d4d" stop-opacity="0.95"/>
+      <stop offset="0.5" stop-color="#ffb020" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="sGrid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M 44 0 L 0 0 0 44" fill="none" stroke="#17202f" stroke-width="1"/>
+    </pattern>
+    <filter id="sGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#sbg)"/>
+  <rect width="1280" height="640" fill="url(#sGrid)" opacity="0.45"/>
+  <rect width="1280" height="640" fill="url(#sRed)"/>
+  <rect width="1280" height="640" fill="url(#sCyan)"/>
+
+  <!-- mark -->
+  <g transform="translate(80, 92) scale(0.62)" filter="url(#sGlow)">
+    <path d="M128 40 L200 68 V132 C200 176 168 202 128 216 C88 202 56 176 56 132 V68 Z"
+          fill="none" stroke="url(#sMark)" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M128 90 L168 146 H88 Z" fill="url(#sMark)" opacity="0.95"/>
+    <path d="M128 158 L172 186 H84 Z" fill="url(#sMark)" opacity="0.55"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="228" y="182" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace"
+        font-size="76" font-weight="700" letter-spacing="-1.5" fill="#f0f6fc">nemesis</text>
+
+  <rect x="80" y="272" width="300" height="3" rx="1.5" fill="url(#sRule)"/>
+
+  <text x="80" y="316" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+        font-size="14" letter-spacing="5.5" fill="#ff6b6b">DIFFERENTIAL OFFENSIVE SECURITY</text>
+
+  <text x="80" y="382" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="30" font-weight="600" fill="#e6edf3">Every finding ships with the</text>
+  <text x="80" y="424" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="30" font-weight="600" fill="#e6edf3">experiment that proves it.</text>
+
+  <text x="80" y="478" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="16.5" fill="#8b98a9">Severity and confidence are two independent axes.</text>
+  <text x="80" y="504" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="16.5" fill="#8b98a9">Baseline vs. payload, always, and the delta is printed.</text>
+
+  <!-- proof card -->
+  <g>
+    <rect x="720" y="150" width="480" height="330" rx="14" fill="#070d16" stroke="#1e293b"/>
+    <rect x="720" y="150" width="480" height="32" rx="14" fill="#0d1421"/>
+    <rect x="720" y="168" width="480" height="14" fill="#0d1421"/>
+    <circle cx="741" cy="166" r="4.5" fill="#ff5f56"/>
+    <circle cx="759" cy="166" r="4.5" fill="#ffbd2e"/>
+    <circle cx="777" cy="166" r="4.5" fill="#27c93f"/>
+
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">
+      <text x="742" y="216" fill="#64748b">BASELINE</text>
+      <text x="850" y="216" fill="#34d399">200 &#183; 48B &#183; 0.00s</text>
+
+      <text x="742" y="248" fill="#64748b">PAYLOAD</text>
+      <text x="850" y="248" fill="#fbbf24">500 &#183; 233B &#183; 0.00s</text>
+
+      <line x1="742" y1="266" x2="1178" y2="266" stroke="#16202f"/>
+
+      <text x="742" y="296" fill="#64748b">DELTA</text>
+      <text x="850" y="296" fill="#ff6b6b">+300 status</text>
+      <text x="850" y="320" fill="#ff6b6b">+185B (4.85x)</text>
+      <text x="850" y="344" fill="#ff6b6b">payload reflected</text>
+
+      <rect x="742" y="370" width="436" height="1" fill="#16202f"/>
+
+      <text x="742" y="404" fill="#64748b">VERDICT</text>
+      <text x="850" y="404" fill="#ff4d4d" font-weight="700">CONFIRMED</text>
+
+      <text x="742" y="446" fill="#475569" font-size="12">read the experiment, not the verdict</text>
+    </g>
+  </g>
+
+  <text x="80" y="576" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" fill="#3f4d63">
+    Apache-2.0  &#183;  Python 3.10+  &#183;  no browser, no daemon, no Docker
+  </text>
+</svg>

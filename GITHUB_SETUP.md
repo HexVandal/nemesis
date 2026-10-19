@@ -64,7 +64,9 @@ The first run takes a few minutes. Every one of these jobs is green locally —
   red team. Every finding ships with the experiment that proves it.`
 - **Topics**: `security`, `pentest`, `scanner`, `vulnerability-scanner`,
   `bugbounty`, `sast`, `sca`, `red-team`, `offensive-security`, `python`
-- **Social preview** → upload `assets/banner.png`
+- **Social preview** → upload `assets/social-preview.png` (it is exactly
+  1280×640, which is the size GitHub wants; the banner is 1280×340 and will
+  letterbox)
 - Enable **Discussions** if you want a place for capability-map feedback
 - Enable **Private vulnerability reporting** under Settings → Security
 
