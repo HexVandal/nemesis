@@ -12,7 +12,6 @@ Run it with::
 from __future__ import annotations
 
 import http.server
-import socketserver
 import sys
 import urllib.parse
 
@@ -71,6 +70,19 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         if payload:
             self.wfile.write(payload)
+
+    def handle_one_request(self):
+        """Survive a client that hangs up mid-response.
+
+        A scanner closes connections it does not need - a request
+        smuggling probe does it deliberately. The fixture is a test
+        target, not a production server, so it prints nothing and
+        carries on.
+        """
+        try:
+            super().handle_one_request()
+        except (BrokenPipeError, ConnectionResetError):
+            self.close_connection = True
 
     def _params(self) -> dict:
         parsed = urllib.parse.urlparse(self.path)
@@ -203,8 +215,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 
 def serve(port: int = PORT) -> None:
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer((HOST, port), Handler) as httpd:
+    # Threaded: a scanner that desynchronises a connection on purpose
+    # must not be able to block every other request.
+    http.server.ThreadingHTTPServer.allow_reuse_address = True
+    http.server.ThreadingHTTPServer.daemon_threads = True
+    with http.server.ThreadingHTTPServer((HOST, port), Handler) as httpd:
         print(f"vulnerable test app on http://{HOST}:{port}", flush=True)
         httpd.serve_forever()
 
