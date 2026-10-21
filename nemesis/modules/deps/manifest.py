@@ -11,6 +11,11 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+try:  # Python 3.11+
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - exercised on 3.10 only
+    import tomli as tomllib  # type: ignore[no-redef]
+
 #: Manifest file name -> ecosystem name understood by OSV.dev.
 MANIFEST_ECOSYSTEMS: dict[str, str] = {
     "requirements.txt": "PyPI",
@@ -83,8 +88,6 @@ def _parse_requirements(text: str, source: str) -> list[Dependency]:
 def _parse_pyproject(text: str, source: str) -> list[Dependency]:
     deps: list[Dependency] = []
     try:
-        import tomllib
-
         data = tomllib.loads(text)
     except Exception:
         return deps
@@ -189,8 +192,6 @@ def _parse_package_lock(text: str, source: str) -> list[Dependency]:
 def _parse_cargo_toml(text: str, source: str) -> list[Dependency]:
     deps: list[Dependency] = []
     try:
-        import tomllib
-
         data = tomllib.loads(text)
     except Exception:
         return deps

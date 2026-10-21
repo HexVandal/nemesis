@@ -293,11 +293,18 @@ class ScanResult:
         return counts
 
     def confirmed(self) -> list[Finding]:
-        return [
-            f
-            for f in self.findings
-            if f.confidence in (Confidence.CONFIRMED, Confidence.HIGH)
-        ]
+        """Findings whose confidence is CONFIRMED.
+
+        HIGH is a different label and is deliberately excluded: a header
+        is observed with high confidence, but nothing was proven by an
+        experiment. Collapsing the two made every passive finding look
+        like it had been verified.
+        """
+        return [f for f in self.findings if f.confidence is Confidence.CONFIRMED]
+
+    def high_confidence(self) -> list[Finding]:
+        """Findings observed with high confidence but not proven."""
+        return [f for f in self.findings if f.confidence is Confidence.HIGH]
 
     def risk_score(self) -> float:
         """A 0-100 aggregate risk score weighted by severity and confidence.

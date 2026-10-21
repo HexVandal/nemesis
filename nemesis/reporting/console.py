@@ -72,7 +72,11 @@ def print_summary(console: Console, result: ScanResult) -> None:
     summary.add_row("Low", str(counts["LOW"]))
     summary.add_row("Info", str(counts["INFO"]))
     summary.add_row("Risk score", f"{result.risk_score()}/100")
-    summary.add_row("Confirmed", f"{len(result.confirmed())}/{len(result.findings)}")
+    summary.add_row(
+        "Confirmed", f"{len(result.confirmed())}/{len(result.findings)}"
+    )
+    if result.high_confidence():
+        summary.add_row("High conf.", str(len(result.high_confidence())))
     summary.add_row("Endpoints", str(len(result.endpoints)))
     summary.add_row("Forms", str(len(result.forms)))
     summary.add_row("Requests", str(result.stats.get("requests_sent", 0)))
@@ -116,9 +120,12 @@ def print_proofs(console: Console, result: ScanResult, limit: int = 5) -> None:
     console.print(
         Panel(
             Text(
-                "Every confirmed finding below was proven by differential "
-                "analysis: a benign request and a payload request were sent to "
-                "the same endpoint and the responses were compared.",
+                "Each finding below is shown with the evidence that produced "
+                "it. Active checks were proven by differential analysis: a "
+                "benign request and a payload request were sent to the same "
+                "endpoint and the responses were compared. Passive checks, "
+                "such as a missing header, are reported from the response "
+                "itself and are not differential experiments.",
                 style="dim",
             ),
             title="Proof of exploitability",

@@ -182,7 +182,10 @@ class PrivilegeEscalationModule(Module):
         writes anything.
         """
         findings: list[Finding] = []
-        if os.geteuid() != 0:
+        # This check is Linux-only: SUID bits and /etc/permissions have no
+        # Windows equivalent, and os.geteuid does not exist there. Raise
+        # nothing rather than crashing the whole scan on Windows.
+        if not hasattr(os, "geteuid") or os.geteuid() != 0:
             return findings
 
         for directory in _PATH_DIRS:

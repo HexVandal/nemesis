@@ -134,8 +134,12 @@ class Module:
         line_number = extra.pop("line", None)
         finding = Finding(
             title=title,
-            severity=severity or self.severity,
-            confidence=confidence or self.confidence,
+            # `severity or self.severity` is wrong: Severity.INFO has
+            # value 0, so an explicit INFO was falsy and got replaced by
+            # the module default. Every INFO finding was silently
+            # upgraded to whatever the module declared.
+            severity=self.severity if severity is None else severity,
+            confidence=self.confidence if confidence is None else confidence,
             description=description,
             target=target,
             module=self.id,
