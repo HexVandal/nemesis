@@ -15,29 +15,29 @@ Extract the archive, then:
 
 ```bash
 cd nemesis
-git remote add origin https://github.com/<your-username>/nemesis.git
+git remote add origin https://github.com/HexVandal/nemesis.git
 git push -u origin main
 ```
 
 If you use SSH:
 
 ```bash
-git remote add origin git@github.com:<your-username>/nemesis.git
+git remote add origin git@github.com:HexVandal/nemesis.git
 git push -u origin main
 ```
 
 ## 3. Replace the placeholder org name
 
-Every badge and link in the README points at `nemesis-sec/nemesis`, which is a
-placeholder. After you know your real repository path, replace it everywhere:
+Badges and links point at `HexVandal/nemesis`. If you rename the repository or move it
+to an organisation, replace it everywhere:
 
 ```bash
 # macOS
-sed -i '' 's|nemesis-sec/nemesis|<your-username>/nemesis|g' README.md
+sed -i '' 's|HexVandal/nemesis|<new-owner>/nemesis|g' README.md CONTRIBUTING.md pyproject.toml
 git commit -am "Point docs at the real repository" && git push
 
 # Linux
-sed -i 's|nemesis-sec/nemesis|<your-username>/nemesis|g' README.md
+sed -i 's|HexVandal/nemesis|<new-owner>/nemesis|g' README.md CONTRIBUTING.md pyproject.toml
 git commit -am "Point docs at the real repository" && git push
 ```
 

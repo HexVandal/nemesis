@@ -6,7 +6,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Security
+
+- **Path-scoped rules matched by string prefix**, so a rule for
+  `/admin` also granted `/administrator` and `/admin-secret`. The
+  comparison now lands on a segment boundary; an explicit glob tail
+  (`/admin/*`) remains the way to opt into prefix behaviour. Found in
+  an external technical audit.
+- **Dot segments were not resolved before the scope check**, so
+  `/admin/../secret` had the shape of the admin tree while resolving
+  to `/secret`. Paths are now normalised to what the server will
+  actually see, which is the path the check has to run on.
+
 ### Fixed
+
 
 **Release-readiness audit**
 - **The CI test job could never have passed.** The workflow ran
@@ -44,6 +57,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   repository name that has to be replaced.
 - Two tests that make the knowledge layer's completeness a build failure
   rather than a documentation bug.
+- Repository URLs are now consistent across the README, package metadata,
+  issue tracker, disclosure policy and the default User-Agent, which the
+  audit found pointing at two different non-existent organisations.
+- The comparison table no longer calls a Python package "one binary", and
+  the offline row names the OSV lookup as the one network dependency.
 
 
 **Scan speed**
@@ -231,5 +249,5 @@ differential experiment and reports the proof alongside the finding.
   deliberately vulnerable fixture application.
 - CI across Python 3.10 to 3.13, with lint, test and build gates.
 
-[Unreleased]: https://github.com/nemesis-sec/nemesis/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/nemesis-sec/nemesis/releases/tag/v0.1.0
+[Unreleased]: https://github.com/HexVandal/nemesis/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/HexVandal/nemesis/releases/tag/v0.1.0

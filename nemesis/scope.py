@@ -47,12 +47,18 @@ class ScopeRule:
         if self.host is not None and not self._host_matches(host):
             return False
         if self.path is not None:
-            # Path rules are prefix matches with glob support on the tail.
+            # A path rule grants its own path and everything beneath it,
+            # and the comparison has to land on a segment boundary.
+            #
+            # A plain string prefix is wrong: a rule for /admin would then
+            # also grant /administrator and /admin-secret, which are
+            # different resources. An explicit glob tail (/admin/*) is the
+            # opt-in for raw prefix behaviour.
             if self.path.endswith("*"):
                 prefix = self.path[:-1]
                 if not path.startswith(prefix):
                     return False
-            elif not path.startswith(self.path):
+            elif path != self.path and not path.startswith(self.path + "/"):
                 return False
         return True
 
@@ -63,6 +69,31 @@ class ScopeRule:
         if self.host.startswith("*"):
             return fnmatch.fnmatch(host, self.host)
         return host == self.host
+
+
+def _normalise_path(path: str) -> str:
+    """Resolve dot segments so scope is checked on the resolved path.
+
+    ``/admin/../secret`` is presented by a client that wants the admin
+    rule to match, and resolved by the server to ``/secret``. Both the
+    scanner and the server must be looking at the same string.
+    """
+    if not path:
+        return "/"
+    # Collapse duplicate slashes first, then walk the segments.
+    segments: list[str] = []
+    for segment in path.split("/"):
+        if segment in ("", "."):
+            continue
+        if segment == "..":
+            if segments:
+                segments.pop()
+            continue
+        segments.append(segment)
+    resolved = "/" + "/".join(segments)
+    if path.endswith("/") and resolved != "/":
+        resolved += "/"
+    return resolved
 
 
 def _default_ports(scheme: str) -> int:
@@ -158,7 +189,12 @@ class Scope:
         scheme = (parsed.scheme or "https").lower()
         host = (parsed.hostname or "").lower()
         port = parsed.port or _default_ports(scheme)
-        path = parsed.path or "/"
+
+        # Resolve "." and ".." before matching. A path such as
+        # /admin/../secret has the shape of the admin tree but resolves
+        # to /secret, and the server will do the same resolution. The
+        # check has to run on the path the server will actually see.
+        path = _normalise_path(parsed.path or "/")
 
         if not host:
             return False

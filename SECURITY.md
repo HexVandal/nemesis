@@ -7,7 +7,7 @@ public issue**.
 
 Report it privately through GitHub's security advisory form:
 
-**https://github.com/nemesis-sec/nemesis/security/advisories/new**
+**https://github.com/HexVandal/nemesis/security/advisories/new**
 
 Include:
 

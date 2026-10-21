@@ -23,7 +23,7 @@ from .models import Severity
 
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/124.0 Safari/537.36 nemesis/0.1 (+https://github.com/nemesis-sec/nemesis)"
+    "Chrome/124.0 Safari/537.36 nemesis/0.1 (+https://github.com/HexVandal/nemesis)"
 )
 
 #: Modules that mutate server state. They only run when explicitly enabled.

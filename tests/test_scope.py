@@ -62,3 +62,49 @@ class TestScopeRules:
     def test_describe(self):
         scope = Scope(rules=["example.com"], exclusions=["example.com/x"])
         assert "example.com" in scope.describe()
+
+
+class TestPathBoundaries:
+    """A path rule must stop at a segment boundary.
+
+    A plain string prefix lets /admin grant /administrator and
+    /admin-secret, which are different resources. This was a real defect
+    found in audit: the boundary is the whole point of a scope rule.
+    """
+
+    def test_exact_path_is_allowed(self):
+        scope = Scope(rules=["example.com/admin"])
+        assert scope.allows("https://example.com/admin")
+        assert scope.allows("https://example.com/admin/")
+
+    def test_descendants_are_allowed(self):
+        scope = Scope(rules=["example.com/admin"])
+        assert scope.allows("https://example.com/admin/users")
+        assert scope.allows("https://example.com/admin/users/1/edit")
+
+    def test_sibling_prefix_is_denied(self):
+        scope = Scope(rules=["example.com/admin"])
+        assert not scope.allows("https://example.com/administrator")
+        assert not scope.allows("https://example.com/admin-secret")
+        assert not scope.allows("https://example.com/administrator/login")
+
+    def test_dot_segments_are_resolved_before_matching(self):
+        scope = Scope(rules=["example.com/admin"])
+        # Resolves to /secret, so it is outside the rule.
+        assert not scope.allows("https://example.com/admin/../secret")
+        # Resolves to /admin/users, so it is inside.
+        assert scope.allows("https://example.com/admin/./users")
+
+    def test_duplicate_slashes_do_not_confuse_boundary(self):
+        scope = Scope(rules=["example.com/admin"])
+        assert scope.allows("https://example.com//admin//users")
+
+    def test_explicit_glob_keeps_prefix_behaviour(self):
+        scope = Scope(rules=["example.com/admin/*"])
+        assert scope.allows("https://example.com/admin/users")
+        assert not scope.allows("https://example.com/administrator")
+
+    def test_path_rule_denies_unrelated_path(self):
+        scope = Scope(rules=["example.com/admin"])
+        assert not scope.allows("https://example.com/other")
+        assert not scope.allows("https://example.com/")

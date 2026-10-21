@@ -13,7 +13,7 @@ is judged on that axis.
 ## Development setup
 
 ```bash
-git clone https://github.com/nemesis-sec/nemesis
+git clone https://github.com/HexVandal/nemesis
 cd nemesis
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"

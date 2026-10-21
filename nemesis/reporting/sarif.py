@@ -105,7 +105,7 @@ def write_sarif(result: ScanResult, path: str | Path) -> Path:
                 "tool": {
                     "driver": {
                         "name": "nemesis",
-                        "informationUri": "https://github.com/nemesis-sec/nemesis",
+                        "informationUri": "https://github.com/HexVandal/nemesis",
                         "version": "0.1.0",
                         "rules": list(rules.values()),
                     }
