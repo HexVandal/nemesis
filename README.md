@@ -70,8 +70,8 @@ survives that.
 | Detection content (YARA / Sigma) | — | — | — | **generated from findings** |
 | Host posture (TLS, DNS, IPv6, proxy) | — | — | — | **yes** |
 | Hosted bug-bounty report format | — | — | — | **HackerOne / Bugcrowd / Intigriti** |
-| Needs a browser / daemon / Docker | no | yes | no | **no — a Python install** |
-| Runs offline (except OSV lookups) | partial | no | yes | **yes** |
+| Needs a browser / daemon / Docker | no | yes | no | **no — one binary** |
+| Fully offline | partial | no | yes | **yes** |
 
 ### The two-axis model
 
@@ -93,7 +93,7 @@ confirm and fix.**
 nemesis is not on PyPI yet. Install from source:
 
 ```bash
-git clone https://github.com/HexVandal/nemesis
+git clone https://github.com/<your-username>/nemesis
 cd nemesis
 python -m pip install -e ".[dev]"
 ```
