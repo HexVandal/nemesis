@@ -130,4 +130,5 @@ test matters more.
 
 ## Reporting a security issue in nemesis itself
 
-Please do **not** open a public issue. See [SECURITY.md](SECURITY.md).
+Please do **not** open a public issue. Report it privately through
+[GitHub's security advisory form](https://github.com/HexVandal/nemesis/security/advisories/new).

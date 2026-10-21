@@ -72,8 +72,8 @@ The first run takes a few minutes. Every one of these jobs is green locally —
 
 ## 6. Before you point it at anything
 
-`nemesis` sends real attack payloads. Read `SECURITY.md` and the *Responsible
-use* section of the README. Scope is default-deny, but the responsibility for
+`nemesis` sends real attack payloads. Read the *Authorised use* section of
+the README. Scope is default-deny, but the responsibility for
 having authorisation is yours.
 
 ---
@@ -95,8 +95,7 @@ nemesis/
 ├── .github/workflows/   lint · test · build · publish
 ├── README.md
 ├── CHANGELOG.md
-├── CONTRIBUTING.md
-└── SECURITY.md
+└── CONTRIBUTING.md
 ```
 
 Build artifacts (`build/`, `dist/`, `*.egg-info`, caches) are deliberately
