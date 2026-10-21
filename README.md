@@ -1,28 +1,17 @@
 <p align="center">
-  <img src="assets/banner-umbrella.png" alt="nemesis — differential offensive security" width="100%">
+  <img src="assets/banner-umbrella.jpg" alt="nemesis — differential offensive security" width="100%">
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux">
   <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows">
-  <img src="https://img.shields.io/badge/GNU%20Bash-4EAA25?style=for-the-badge&logo=GNU%20Bash&logoColor=white" alt="Bash">
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Apache--2.0-D22128?style=for-the-badge&logo=apache&logoColor=white" alt="Apache 2.0">
-  <img src="https://img.shields.io/badge/SARIF-2.1.0-6E4C13?style=for-the-badge&logo=github&logoColor=white" alt="SARIF">
-  <img src="https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white" alt="Markdown">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="CI">
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/modules-64-C1121F?style=for-the-badge" alt="64 modules">
-  <img src="https://img.shields.io/badge/capability%20areas-102-8B0000?style=for-the-badge" alt="102 capability areas">
+  <img src="https://img.shields.io/badge/modules-64-B30000?style=for-the-badge" alt="64 modules">
+  <img src="https://img.shields.io/badge/capability%20areas-102-B30000?style=for-the-badge" alt="102 capability areas">
   <img src="https://img.shields.io/badge/tests-270%20passing-1B7F3B?style=for-the-badge" alt="270 tests">
-  <img src="https://img.shields.io/badge/scope-default--deny-B30000?style=for-the-badge" alt="default-deny scope">
+  <img src="https://img.shields.io/badge/scope-default--deny-6B0000?style=for-the-badge" alt="default-deny scope">
 </p>
 
 <p align="center"><i>“Our business is life itself.”</i></p>
@@ -284,6 +273,158 @@ CAA, dangling CNAMEs.
 
 ---
 
+## All 64 modules
+
+Every module is a class, addressable by its id. List them with `nemesis modules`,
+inspect one with `nemesis modules --detailed`, or run a subset with
+`nemesis scan <target> -i sqli,xss,idor`.
+
+### Injection — 7
+
+| id | Name |
+|---|---|
+| `sqli` | SQL Injection |
+| `nosql_injection` | NoSQL Injection |
+| `command_injection` | OS Command Injection |
+| `template_injection` | Server-Side Template Injection |
+| `xss` | Reflected Cross-Site Scripting |
+| `xml_external_entity` | XML External Entity (XXE) Injection |
+| `insecure_deserialization` | Insecure Deserialization |
+
+### Headers and browser — 9
+
+| id | Name |
+|---|---|
+| `headers_security` | Missing Security Headers |
+| `csp_analyzer` | Content Security Policy Analysis |
+| `cookie_flags` | Cookie Missing Security Attributes |
+| `cors_misconfig` | Permissive CORS Policy |
+| `clickjacking` | Missing Clickjacking Protection |
+| `mixed_content` | Mixed Content |
+| `browser_security` | Browser Security |
+| `proxy_security` | Proxy Trust and Header Confusion |
+| `ipv6_security` | IPv6 Security |
+
+### Authentication and access — 4
+
+| id | Name |
+|---|---|
+| `csrf_missing` | Missing CSRF Protection |
+| `idor` | Insecure Direct Object Reference |
+| `open_redirect` | Open Redirect |
+| `host_header_injection` | Host Header Injection |
+
+### Exposure and disclosure — 3
+
+| id | Name |
+|---|---|
+| `exposed_files` | Exposed Sensitive Files |
+| `graphql_introspection` | GraphQL Introspection Enabled |
+| `info_disclosure` | Information Disclosure |
+
+### Traversal and upload — 3
+
+| id | Name |
+|---|---|
+| `path_traversal` | Path Traversal / Local File Inclusion |
+| `directory_listing` | Directory Listing Enabled |
+| `file_upload` | File Upload Vulnerabilities |
+
+### Request-level — 3
+
+| id | Name |
+|---|---|
+| `request_smuggling` | HTTP Request Smuggling |
+| `web_cache_poisoning` | Web Cache Poisoning |
+| `websocket_security` | WebSocket Security |
+
+### Business logic — 1
+
+| id | Name |
+|---|---|
+| `business_logic` | Business Logic Vulnerabilities |
+
+### SSRF and cloud — 2
+
+| id | Name |
+|---|---|
+| `ssrf` | Server-Side Request Forgery |
+| `cloud_attack_surface` | Cloud Attack Surface |
+
+### HTTP methods — 1
+
+| id | Name |
+|---|---|
+| `http_method_probe` | Permissive HTTP Methods |
+
+### Source code — 13
+
+| id | Name |
+|---|---|
+| `secrets` | Hardcoded Secrets |
+| `git_history_secrets` | Git History Secrets |
+| `dangerous_patterns` | Dangerous Code Patterns |
+| `logic_bugs` | Correctness Bugs |
+| `crypto_misuse` | Cryptographic Misuse |
+| `patch_regression` | Patch Regression Detection |
+| `privilege_escalation` | Privilege Escalation Primitives |
+| `sandbox_escape` | Sandbox Escape Detection |
+| `iac_misconfiguration` | Infrastructure as Code Misconfiguration |
+| `binary_triage` | Binary Triage |
+| `binary_exploit_primitives` | Binary Exploit Primitives |
+| `fuzzing_readiness` | Fuzzing Readiness |
+| `fuzz_harness` | Fuzzing Harness Generation |
+
+### Dependencies — 4
+
+| id | Name |
+|---|---|
+| `dependency_vulnerabilities` | Vulnerable Dependencies |
+| `dependency_confusion` | Dependency Confusion |
+| `typosquatting` | Typosquatting Detection |
+| `license_risk` | Licence Risk |
+
+### Supply chain — 2
+
+| id | Name |
+|---|---|
+| `cicd_pipeline_security` | CI/CD Pipeline Security |
+| `tech_outdated` | Outdated Component Version |
+
+### AI and LLM — 5
+
+| id | Name |
+|---|---|
+| `llm_endpoint_detection` | LLM Endpoint Detection |
+| `prompt_injection` | Prompt Injection |
+| `agent_tool_security` | Agent Tool Security |
+| `model_extraction` | Model Extraction and Privacy |
+| `ml_model_security` | ML Model Security |
+
+### Blockchain — 2
+
+| id | Name |
+|---|---|
+| `solidity_audit` | Solidity Smart Contract Audit |
+| `defi_security` | DeFi Security |
+
+### Forensics — 2
+
+| id | Name |
+|---|---|
+| `memory_forensics` | Memory Forensics |
+| `memory_dump_triage` | Memory Dump Triage |
+
+### Host and network — 3
+
+| id | Name |
+|---|---|
+| `dns_posture` | DNS Posture |
+| `tls_configuration` | TLS Configuration Weakness |
+| `pcap_analysis` | Network Traffic Analysis |
+
+---
+
 ## Architecture
 
 <p align="center">
@@ -362,8 +503,7 @@ nemesis capability request-smuggling
 | `research` | Needs specialised hardware, a custom toolchain or a lab. | **16** |
 | `manual` | A practice rather than a tool: reviewing, writing, disclosing. | **0** |
 
-The registry is **validated against the real module registry**: a capability that names a
-module which does not exist is a *test failure*, not a documentation bug.
+The registry is **validated against the real module registry**: a module which does not exist is a *test failure*, not a documentation bug.
 
 That honesty is the point. A tool that claims to do kernel exploitation and does not is
 worse than a tool that says it does not. The 16 `research` areas need a bench, a
@@ -471,6 +611,6 @@ Current state: **270 tests**, ruff-clean, CI on Python 3.10–3.13.
 Apache-2.0. See [`LICENSE`](LICENSE).
 
 <p align="center">
-  <br>
+
   <sub>Built for people who would rather read the experiment than trust the verdict.</sub>
 </p>
