@@ -1527,6 +1527,28 @@ LIBRARY: tuple[Resource, ...] = (
         access="free",
     ),
     Resource(
+        "owasp-api-security",
+        "OWASP: API Security Top 10",
+        "guide",
+        "https://owasp.org/API-Security/editions/2023/en/0x11-t10/",
+        "api-surface",
+        "API8 and API9 are the ones this check speaks to: misconfiguration "
+        "and improper inventory management.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "mdn-sri",
+        "MDN: Subresource Integrity",
+        "guide",
+        "https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity",
+        "client-side-hygiene",
+        "How the integrity attribute pins an asset to a hash, and why "
+        "crossorigin is not optional when you use it.",
+        hours=1,
+        access="free",
+    ),
+    Resource(
         "owasp-auth-cheatsheet",
         "OWASP: Authentication Cheat Sheet",
         "guide",

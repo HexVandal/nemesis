@@ -8,9 +8,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/modules-71-8B0000?style=for-the-badge&labelColor=000000" alt="71 modules">
+  <img src="https://img.shields.io/badge/modules-79-8B0000?style=for-the-badge&labelColor=000000" alt="79 modules">
   <img src="https://img.shields.io/badge/capability%20areas-102-8B0000?style=for-the-badge&labelColor=000000" alt="102 capability areas">
-  <img src="https://img.shields.io/badge/tests-369%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="369 tests">
+  <img src="https://img.shields.io/badge/tests-383%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="383 tests">
   <img src="https://img.shields.io/badge/scope-default--deny-8B0000?style=for-the-badge&labelColor=000000" alt="default-deny scope">
 </p>
 
@@ -274,13 +274,13 @@ CAA, dangling CNAMEs.
 
 ---
 
-## All 71 modules
+## All 79 modules
 
 Every module is a class, addressable by its id. List them with `nemesis modules`,
 inspect one with `nemesis modules --detailed`, or run a subset with
 `nemesis scan <target> -i sqli,xss,idor`.
 
-### Injection — 8
+### Injection — 9
 
 | id | Name |
 |---|---|
@@ -292,8 +292,9 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `stored_xss` | Stored Cross-Site Scripting |
 | `xml_external_entity` | XML External Entity (XXE) Injection |
 | `insecure_deserialization` | Insecure Deserialization |
+| `ldap_injection` | LDAP Injection |
 
-### Headers and browser — 9
+### Headers and browser — 11
 
 | id | Name |
 |---|---|
@@ -306,8 +307,10 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `browser_security` | Browser Security |
 | `proxy_security` | Proxy Trust and Header Confusion |
 | `ipv6_security` | IPv6 Security |
+| `sri_missing` | Missing Subresource Integrity |
+| `reverse_tabnabbing` | Reverse Tabnabbing |
 
-### Authentication and access — 8
+### Authentication and access — 11
 
 | id | Name |
 |---|---|
@@ -319,14 +322,19 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `mass_assignment` | Mass Assignment |
 | `rate_limiting` | Missing Login Throttling |
 | `oauth_redirect_bypass` | OAuth redirect_uri Bypass |
+| `default_credentials` | Default Credentials |
+| `weak_password_policy` | Weak Password Policy |
+| `oauth_state_missing` | OAuth state Parameter Not Required |
 
-### Exposure and disclosure — 3
+### Exposure and disclosure — 5
 
 | id | Name |
 |---|---|
 | `exposed_files` | Exposed Sensitive Files |
 | `graphql_introspection` | GraphQL Introspection Enabled |
 | `info_disclosure` | Information Disclosure |
+| `api_schema_exposure` | Public API Schema |
+| `sensitive_data_in_url` | Sensitive Data in URL |
 
 ### Traversal and upload — 3
 
@@ -611,7 +619,7 @@ pytest -q
 ruff check nemesis tests
 ```
 
-Current state: **369 tests**, ruff-clean, CI on Python 3.10–3.13.
+Current state: **383 tests**, ruff-clean, CI on Python 3.10–3.13.
 
 ---
 

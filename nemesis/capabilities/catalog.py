@@ -299,6 +299,34 @@ CAPABILITIES: tuple[Capability, ...] = (
         artifacts=("token analysis", "privilege escalation proof"),
     ),
     Capability(
+        id="api-surface",
+        name="API Surface Exposure",
+        domain="web",
+        maturity="partial",
+        summary=(
+            "Maps what the application publishes about itself: an OpenAPI "
+            "document served to anonymous clients, a GraphQL schema that "
+            "answers introspection, credentials left in query strings."
+        ),
+        modules=(
+            "api_schema_exposure", "graphql_introspection", "sensitive_data_in_url",
+        ),
+        artifacts=("published schema", "credential in URL"),
+    ),
+    Capability(
+        id="client-side-hygiene",
+        name="Client-Side Hygiene",
+        domain="web",
+        maturity="native",
+        summary=(
+            "Reads the markup the way a browser would: third-party assets with "
+            "no integrity hash, links that hand the opener window to whatever "
+            "they load."
+        ),
+        modules=("sri_missing", "reverse_tabnabbing", "mixed_content"),
+        artifacts=("asset inventory", "link audit"),
+    ),
+    Capability(
         id="credential-abuse",
         name="Credential Abuse Resistance",
         domain="web",
@@ -308,7 +336,10 @@ CAPABILITIES: tuple[Capability, ...] = (
             "that never throttles, a token signed with a key from a wordlist. "
             "The answer is measured, not assumed."
         ),
-        modules=("rate_limiting", "jwt_weakness"),
+        modules=(
+            "rate_limiting", "jwt_weakness", "default_credentials",
+            "weak_password_policy", "oauth_state_missing",
+        ),
         artifacts=("throttling observation", "recovered signing key"),
     ),
     Capability(
@@ -337,7 +368,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "length-matched baseline, with database error signatures "
             "matched across PostgreSQL, MySQL, SQLite, MSSQL and Oracle."
         ),
-        modules=("sqli",),
+        modules=("sqli", "ldap_injection"),
         artifacts=("confirmed injection with proof",),
     ),
     Capability(

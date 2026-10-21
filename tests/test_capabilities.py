@@ -28,7 +28,7 @@ def test_catalogue_is_honest():
 
 def test_every_capability_is_unique_and_counted():
     capabilities = CAPABILITY_REGISTRY.all()
-    assert len(capabilities) == 105
+    assert len(capabilities) == 107
     ids = [c.id for c in capabilities]
     assert len(set(ids)) == len(ids), "duplicate capability id"
 
@@ -81,8 +81,8 @@ def test_by_domain_and_by_maturity():
 
 def test_coverage_reports_the_truth():
     coverage = CAPABILITY_REGISTRY.coverage()
-    assert coverage["total"] == 105
-    assert sum(coverage["by_maturity"].values()) == 105
+    assert coverage["total"] == 107
+    assert sum(coverage["by_maturity"].values()) == 107
     assert coverage["backed"] <= coverage["total"]
     # Every maturity level must appear in the breakdown.
     for level in MATURITY_ORDER:
