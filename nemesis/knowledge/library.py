@@ -1527,6 +1527,28 @@ LIBRARY: tuple[Resource, ...] = (
         access="free",
     ),
     Resource(
+        "owasp-auth-cheatsheet",
+        "OWASP: Authentication Cheat Sheet",
+        "guide",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+        "credential-abuse",
+        "The throttling and lockout section is the part most applications "
+        "skip, and the part this module measures.",
+        hours=3,
+        access="free",
+    ),
+    Resource(
+        "portswigger-oauth",
+        "PortSwigger: OAuth 2.0 authentication vulnerabilities",
+        "lab",
+        "https://portswigger.net/web-security/oauth",
+        "redirect-and-header-injection",
+        "redirect_uri validation, state handling and the implicit-flow leaks, "
+        "each with a lab that fails loudly.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
         "portswigger-jwt",
         "PortSwigger: JWT attacks",
         "lab",

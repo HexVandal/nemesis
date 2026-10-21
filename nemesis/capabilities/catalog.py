@@ -299,6 +299,35 @@ CAPABILITIES: tuple[Capability, ...] = (
         artifacts=("token analysis", "privilege escalation proof"),
     ),
     Capability(
+        id="credential-abuse",
+        name="Credential Abuse Resistance",
+        domain="web",
+        maturity="partial",
+        summary=(
+            "Asks how many guesses an application will accept: a login form "
+            "that never throttles, a token signed with a key from a wordlist. "
+            "The answer is measured, not assumed."
+        ),
+        modules=("rate_limiting", "jwt_weakness"),
+        artifacts=("throttling observation", "recovered signing key"),
+    ),
+    Capability(
+        id="redirect-and-header-injection",
+        name="Redirect and Header Injection",
+        domain="web",
+        maturity="partial",
+        summary=(
+            "Follows values into the places a response can be changed: CRLF "
+            "into a header line, a Host into a reset link, a redirect_uri out "
+            "of an OAuth flow, a Location to another origin."
+        ),
+        modules=(
+            "crlf_injection", "oauth_redirect_bypass", "host_header_injection",
+            "open_redirect",
+        ),
+        artifacts=("injected header", "off-site Location"),
+    ),
+    Capability(
         id="sql-injection",
         name="SQL Injection",
         domain="web",
@@ -322,7 +351,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "header. A payload only counts when it can actually break out "
             "of the context it landed in."
         ),
-        modules=("xss",),
+        modules=("xss", "stored_xss"),
         artifacts=("confirmed reflection with context",),
     ),
     Capability(
