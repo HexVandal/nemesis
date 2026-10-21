@@ -10,7 +10,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/modules-64-B30000?style=for-the-badge" alt="64 modules">
   <img src="https://img.shields.io/badge/capability%20areas-102-B30000?style=for-the-badge" alt="102 capability areas">
-  <img src="https://img.shields.io/badge/tests-270%20passing-1B7F3B?style=for-the-badge" alt="270 tests">
+  <img src="https://img.shields.io/badge/tests-277%20passing-1B7F3B?style=for-the-badge" alt="277 tests">
   <img src="https://img.shields.io/badge/scope-default--deny-6B0000?style=for-the-badge" alt="default-deny scope">
 </p>
 
@@ -70,8 +70,8 @@ survives that.
 | Detection content (YARA / Sigma) | — | — | — | **generated from findings** |
 | Host posture (TLS, DNS, IPv6, proxy) | — | — | — | **yes** |
 | Hosted bug-bounty report format | — | — | — | **HackerOne / Bugcrowd / Intigriti** |
-| Needs a browser / daemon / Docker | no | yes | no | **no — one binary** |
-| Fully offline | partial | no | yes | **yes** |
+| Needs a browser / daemon / Docker | no | yes | no | **no — a Python install** |
+| Runs offline (except OSV lookups) | partial | no | yes | **yes** |
 
 ### The two-axis model
 
@@ -93,13 +93,14 @@ confirm and fix.**
 nemesis is not on PyPI yet. Install from source:
 
 ```bash
-git clone https://github.com/<your-username>/nemesis
+git clone https://github.com/HexVandal/nemesis
 cd nemesis
 python -m pip install -e ".[dev]"
 ```
 
 **Requirements:** Python 3.10+. No browser, no daemon, no Docker, no API keys.
-It runs on your machine and talks only to the target you name.
+It runs on your machine and talks only to the target you name — plus `api.osv.dev`
+when it resolves dependency advisories, which only happens on a dependency scan.
 
 ---
 
@@ -586,7 +587,8 @@ problem, not a technical one.
 - `--allow-destructive` is required for anything that changes server state.
 - Rate limiting is on by default, per host.
 - Use `--profile passive` when you need reconnaissance without exploitation.
-- Read [`SECURITY.md`](SECURITY.md) before reporting a vulnerability in nemesis itself.
+- Report a vulnerability in nemesis itself through the private advisory form:
+  https://github.com/HexVandal/nemesis/security/advisories/new
 
 ---
 
@@ -602,7 +604,7 @@ pytest -q
 ruff check nemesis tests
 ```
 
-Current state: **270 tests**, ruff-clean, CI on Python 3.10–3.13.
+Current state: **277 tests**, ruff-clean, CI on Python 3.10–3.13.
 
 ---
 
