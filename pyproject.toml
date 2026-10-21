@@ -6,7 +6,6 @@ build-backend = "setuptools.build_meta"
 name = "nemesis"
 version = "0.1.0"
 description = "The offensive-security scanner that thinks like a red team. Crawls, fingerprints, exploits and verifies."
-readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
 authors = [{ name = "nemesis contributors" }]

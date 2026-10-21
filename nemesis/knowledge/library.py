@@ -1527,6 +1527,28 @@ LIBRARY: tuple[Resource, ...] = (
         access="free",
     ),
     Resource(
+        "portswigger-jwt",
+        "PortSwigger: JWT attacks",
+        "lab",
+        "https://portswigger.net/web-security/jwt",
+        "identity-and-session",
+        "The alg=none and weak-key labs, done by hand before trusting any "
+        "detector that reports the same thing.",
+        hours=6,
+        access="free",
+    ),
+    Resource(
+        "owasp-mass-assignment",
+        "OWASP: Mass Assignment Cheat Sheet",
+        "guide",
+        "https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html",
+        "identity-and-session",
+        "Why allowlisting request fields beats blocklisting privileged ones, "
+        "and why the blocklist always misses one.",
+        hours=2,
+        access="free",
+    ),
+    Resource(
         "kettle-cache-poisoning",
         "James Kettle: Practical Web Cache Poisoning",
         "paper",

@@ -282,6 +282,23 @@ CAPABILITIES: tuple[Capability, ...] = (
         artifacts=("workflow analysis",),
     ),
     Capability(
+        id="identity-and-session",
+        name="Identity and Session Security",
+        domain="web",
+        maturity="partial",
+        summary=(
+            "Decodes the tokens an application actually issues and reports the "
+            "ones an attacker could forge: unsigned JWTs, guessable HMAC keys, "
+            "kid headers used as paths, tokens that never expire. Also submits "
+            "account forms with the fields they do not offer - role, is_admin, "
+            "verified, balance - to prove whether the server binds them."
+        ),
+        modules=(
+            "jwt_weakness", "mass_assignment", "csrf_missing", "cookie_flags", "idor",
+        ),
+        artifacts=("token analysis", "privilege escalation proof"),
+    ),
+    Capability(
         id="sql-injection",
         name="SQL Injection",
         domain="web",

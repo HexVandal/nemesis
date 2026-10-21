@@ -514,6 +514,94 @@ def list_capabilities(
     )
 
 
+@app.command("coverage")
+def coverage_report(
+    verdict: str | None = typer.Option(
+        None, "--verdict", "-v",
+        help="Filter: http|code|host|artifact|manual|out-of-scope|self",
+    ),
+    covered: bool = typer.Option(
+        False, "--covered", help="Only families that have a module behind them."
+    ),
+    as_json: bool = typer.Option(False, "--json", help="Emit JSON."),
+) -> None:
+    """Show the taxonomy: 2,883 classes, and what is honestly reachable."""
+    from rich.table import Table
+
+    from .knowledge.taxonomy import (
+        CATEGORIES,
+        VERDICT_LABELS,
+        VERDICTS,
+        all_classes,
+        by_verdict,
+        coverage_ratio,
+    )
+
+    if verdict and verdict not in VERDICTS:
+        error_console.print(
+            f"[red]Unknown verdict '{verdict}'.[/red] Choose one of: {', '.join(VERDICTS)}"
+        )
+        raise typer.Exit(code=2)
+
+    families = [f for f in CATEGORIES if not verdict or f.verdict == verdict]
+    if covered:
+        families = [f for f in families if f.modules]
+
+    if as_json:
+        console.print_json(
+            json.dumps(
+                {
+                    "total_classes": all_classes(),
+                    "by_verdict": by_verdict(),
+                    "reachable_percent": coverage_ratio(),
+                    "families": [
+                        {
+                            "number": f.number,
+                            "name": f.name,
+                            "classes": f.count,
+                            "range": [f.first_class, f.last_class],
+                            "verdict": f.verdict,
+                            "verdict_label": VERDICT_LABELS[f.verdict],
+                            "modules": list(f.modules),
+                            "note": f.note,
+                        }
+                        for f in families
+                    ],
+                },
+                default=str,
+            )
+        )
+        return
+
+    table = Table(title=f"Taxonomy: {all_classes()} classes in {len(CATEGORIES)} families")
+    table.add_column("#", justify="right", style="dim")
+    table.add_column("Family")
+    table.add_column("Classes", justify="right")
+    table.add_column("Verdict")
+    table.add_column("Modules", justify="right", style="cyan")
+
+    for family in families:
+        table.add_row(
+            str(family.number),
+            family.name,
+            str(family.count),
+            VERDICT_LABELS[family.verdict],
+            str(len(family.modules)) or "-",
+        )
+    console.print(table)
+
+    counts = by_verdict()
+    summary = "  ".join(
+        f"{VERDICT_LABELS[v]}: {counts[v]}" for v in VERDICTS if counts[v]
+    )
+    console.print(f"\n[bold]{summary}[/bold]")
+    console.print(
+        f"[dim]{coverage_ratio()}% of the taxonomy is reachable at all by a "
+        f"tool of this kind; the rest needs physical access, kernel "
+        f"instrumentation or the application's intent.[/dim]"
+    )
+
+
 @app.command("capability")
 def show_capability(
     capability_id: str = typer.Argument(..., help="Capability id, e.g. request-smuggling."),
