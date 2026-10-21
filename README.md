@@ -8,10 +8,10 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/modules-64-C1121F?style=for-the-badge" alt="64 modules">
-  <img src="https://img.shields.io/badge/capability%20areas-102-8B0000?style=for-the-badge" alt="102 capability areas">
+  <img src="https://img.shields.io/badge/modules-64-B30000?style=for-the-badge" alt="64 modules">
+  <img src="https://img.shields.io/badge/capability%20areas-102-B30000?style=for-the-badge" alt="102 capability areas">
   <img src="https://img.shields.io/badge/tests-270%20passing-1B7F3B?style=for-the-badge" alt="270 tests">
-  <img src="https://img.shields.io/badge/scope-default--deny-B30000?style=for-the-badge" alt="default-deny scope">
+  <img src="https://img.shields.io/badge/scope-default--deny-6B0000?style=for-the-badge" alt="default-deny scope">
 </p>
 
 <p align="center"><i>“Our business is life itself.”</i></p>
