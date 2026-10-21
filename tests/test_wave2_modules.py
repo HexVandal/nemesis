@@ -672,7 +672,7 @@ def test_every_capability_area_is_backed():
 
     assert CAPABILITY_REGISTRY.validate() == [], "the capability map must be honest"
     coverage = CAPABILITY_REGISTRY.coverage()
-    assert coverage["backed"] == coverage["total"] == 110
+    assert coverage["backed"] == coverage["total"] == 113
 
 
 def test_no_module_is_an_orphan():

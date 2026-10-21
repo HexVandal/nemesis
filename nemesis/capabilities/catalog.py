@@ -279,6 +279,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         modules=(
             "business_logic", "price_tampering", "csrf_missing", "idor", "open_redirect",
             "coupon_reuse", "idempotency_key_absent", "pagination_boundary",
+            "race_condition",
         ),
         artifacts=("workflow analysis",),
     ),
@@ -312,7 +313,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         modules=(
             "backup_file_sweep", "vcs_metadata", "ci_metadata", "env_file_exposure",
             "actuator_endpoints", "debug_console", "directory_listing_deep",
-            "error_page_fingerprint",
+            "error_page_fingerprint", "csv_formula_injection",
         ),
         artifacts=("downloaded secret", "readable repository history"),
     ),
@@ -349,6 +350,51 @@ CAPABILITIES: tuple[Capability, ...] = (
         artifacts=("credential found in a bundle", "original source recovered"),
     ),
     Capability(
+        id="api-authorization",
+        name="API Authorization",
+        domain="web",
+        maturity="partial",
+        summary=(
+            "Whether the API enforces anything at all: an endpoint that answers "
+            "with the session stripped, an admin path that answers anonymously, "
+            "a login that says which accounts exist."
+        ),
+        modules=(
+            "api_unauthenticated_access", "function_level_authz", "account_enumeration",
+            "reset_token_entropy", "openapi_security_definition", "api_endpoint_bruteforce",
+        ),
+        artifacts=("anonymous data access", "account oracle"),
+    ),
+    Capability(
+        id="parser-edge-cases",
+        name="Parser and Input Edges",
+        domain="web",
+        maturity="partial",
+        summary=(
+            "Where a value stops being data: expression languages that evaluate "
+            "it, duplicate keys that disagree, pathological strings that make a "
+            "matcher backtrack, NUL bytes that truncate a filter."
+        ),
+        modules=(
+            "expression_language_injection", "http_parameter_pollution", "redos_probe",
+            "null_byte_handling", "unicode_normalization", "resource_exhaustion",
+            "rate_limit_bypass",
+        ),
+        artifacts=("evaluated expression", "latency curve"),
+    ),
+    Capability(
+        id="release-integrity",
+        name="Release Integrity",
+        domain="cloud",
+        maturity="native",
+        summary=(
+            "What a build carries with it: a lock that pins what was installed, a "
+            "bill of materials, and a signature that says who built it."
+        ),
+        modules=("lockfile_integrity", "sbom_presence", "artifact_provenance"),
+        artifacts=("lockfile", "SBOM", "attestation"),
+    ),
+    Capability(
         id="api-surface",
         name="API Surface Exposure",
         domain="web",
@@ -360,7 +406,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         modules=(
             "api_schema_exposure", "graphql_introspection", "sensitive_data_in_url",
-            "graphql_batching",
+            "graphql_batching", "graphql_depth_abuse",
         ),
         artifacts=("published schema", "credential in URL"),
     ),
@@ -374,7 +420,10 @@ CAPABILITIES: tuple[Capability, ...] = (
             "no integrity hash, links that hand the opener window to whatever "
             "they load."
         ),
-        modules=("sri_missing", "reverse_tabnabbing", "mixed_content"),
+        modules=(
+            "sri_missing", "reverse_tabnabbing", "mixed_content",
+            "sensitive_data_in_storage", "client_side_validation_bypass",
+        ),
         artifacts=("asset inventory", "link audit"),
     ),
     Capability(
@@ -406,7 +455,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         modules=(
             "crlf_injection", "oauth_redirect_bypass", "host_header_injection",
-            "open_redirect", "oauth_pkce_missing",
+            "open_redirect", "oauth_pkce_missing", "oauth_scope_escalation",
         ),
         artifacts=("injected header", "off-site Location"),
     ),
@@ -500,7 +549,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "unkeyed headers that reach the cache, and cache poisoning "
             "primitives where a poisoned response is served to other users."
         ),
-        modules=("web_cache_poisoning",),
+        modules=("web_cache_poisoning", "cache_deception", "cache_control_misconfig"),
         artifacts=("cache poisoning proof",),
     ),
     Capability(
@@ -720,6 +769,8 @@ CAPABILITIES: tuple[Capability, ...] = (
             "directory_listing",
             "graphql_introspection",
             "info_disclosure",
+            "subdomain_takeover",
+            "dangling_dns",
         ),
         artifacts=("misconfiguration report",),
     ),
@@ -1130,7 +1181,11 @@ CAPABILITIES: tuple[Capability, ...] = (
             "reflection, checks whether the system prompt leaks, and "
             "examines the safety controls a model exposes."
         ),
-        modules=("llm_endpoint_detection", "prompt_injection", "model_extraction", "agent_tool_security",),
+        modules=(
+            "llm_endpoint_detection", "prompt_injection", "model_extraction",
+            "agent_tool_security", "indirect_prompt_injection", "system_prompt_extraction",
+            "ai_endpoint_auth", "ai_endpoint_rate_limit",
+        ),
         artifacts=("LLM findings with prompt evidence",),
     ),
     Capability(

@@ -20,7 +20,7 @@ the code does not yet support.
 | packaging | sdist + wheel build clean |
 | malformed input | 3 parser crashes found, fixed |
 
-Source is 28,223 lines across 110 files; tests are 5,266 lines across 26 files.
+Source is 30,137 lines across 117 files; tests are 5,924 lines across 28 files.
 
 ## What is genuinely good
 
@@ -123,12 +123,12 @@ expose `by_maturity`, which is the honest view; the headline number is not.
 
 ## The honest arithmetic
 
-- 110 native modules, 21 groups, 5 output formats, 14 subcommands.
+- 140 native modules, 25 groups, 5 output formats, 14 subcommands.
 - Of the capabilities advertised, roughly two thirds are backed by a module
   that sends traffic; the rest are learning resources, manual procedure, or
   explicitly out of reach.
 - The 2,883-class taxonomy lives in `knowledge/taxonomy.py` and reports itself:
-  77.4 % of its classes are reachable by a tool of this kind at all. The
+  77.3 % of its classes are reachable by a tool of this kind at all. The
   rest need the hardware, the source, or a human.
   made per-module, not per-taxonomy.
 
@@ -148,9 +148,9 @@ expose `by_maturity`, which is the honest view; the headline number is not.
 | dimension | score | why |
 |---|---:|---|
 | core detection engine | 8.5 | length-matched differential, correct redirect policy |
-| breadth of checks | 7.5 | 110 modules, but some are shallow |
+| breadth of checks | 7.5 | 140 modules, but some are shallow |
 | evidence and reporting | 8.0 | redacted, reproducible, autoescaped HTML |
 | honesty of claims | 7.5 | out-of-scope declared; one module overstates itself |
-| test depth | 6.5 | 420 tests, 75 %, zero on CLI and console |
+| test depth | 6.5 | 469 tests, 77 %, zero on CLI and console |
 | blind/browser coverage | 3.0 | absent by design, and it is a real gap |
 | **overall** | **7.3** | strong engineering, narrower than advertised |

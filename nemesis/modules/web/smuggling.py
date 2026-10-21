@@ -47,7 +47,7 @@ class RequestSmugglingModule(Module):
     category = Category.CONFIG
     capability = Capability.HTTP
     cwe = "CWE-444"
-    owasp = "A00"
+    owasp = "A05"
     tags = ["http", "smuggling", "desync", "proxy"]
     remediation = (
         "Make the front end and the origin agree on request framing. "

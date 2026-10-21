@@ -63,7 +63,7 @@ class WebCachePoisoningModule(Module):
     category = Category.CONFIG
     capability = Capability.HTTP
     cwe = "CWE-525"
-    owasp = "A00"
+    owasp = "A05"
     tags = ["cache", "poisoning", "proxy", "cdn"]
     remediation = (
         "Include every request header that can change the response in the "

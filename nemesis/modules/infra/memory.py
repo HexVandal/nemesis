@@ -807,6 +807,7 @@ class MemoryDumpTriageModule(Module):
     confidence = Confidence.HIGH
     category = Category.INFO
     capability = Capability.CODE
+    cwe = "CWE-316"
     group = "forensics"
     remediation = "Preserve the original image and work on a copy."
     tags = ["forensics", "memory", "triage"]

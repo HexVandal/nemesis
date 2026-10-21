@@ -1560,6 +1560,39 @@ LIBRARY: tuple[Resource, ...] = (
         access="free",
     ),
     Resource(
+        "owasp-api-authz",
+        "OWASP API Security: BOLA and BFLA",
+        "guide",
+        "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/",
+        "api-authorization",
+        "The first two entries of the API Top 10, and the source of most real "
+        "API breaches. Compare every request against a lower-privileged one.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "owasp-regex-dos",
+        "OWASP: Regular expression Denial of Service",
+        "guide",
+        "https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS",
+        "parser-edge-cases",
+        "Why a 3,000-character string can cost seconds, and the shapes of "
+        "expression that cause it.",
+        hours=2,
+        access="free",
+    ),
+    Resource(
+        "slsa-provenance",
+        "SLSA: Build provenance",
+        "whitepaper",
+        "https://slsa.dev/provenance/v1",
+        "release-integrity",
+        "What an attestation has to contain before a consumer can tell who "
+        "built an artifact and from which commit.",
+        hours=3,
+        access="free",
+    ),
+    Resource(
         "owasp-api-security",
         "OWASP: API Security Top 10",
         "guide",
