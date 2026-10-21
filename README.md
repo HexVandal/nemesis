@@ -1,14 +1,16 @@
 <p align="center">
+  <img src="assets/banner-umbrella.jpg" alt="nemesis — differential offensive security" width="100%">
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Python-8B0000?style=for-the-badge&logo=python&logoColor=white&labelColor=000000" alt="Python">
   <img src="https://img.shields.io/badge/Windows-8B0000?style=for-the-badge&logo=windows&logoColor=white&labelColor=000000" alt="Windows">
-  <img src="https://img.shields.io/badge/Linux-8B0000?style=for-the-badge&logo=linux&logoColor=white&labelColor=000000" alt="Linux">
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/modules-140-8B0000?style=for-the-badge&labelColor=000000" alt="140 modules">
   <img src="https://img.shields.io/badge/capability%20areas-113-8B0000?style=for-the-badge&labelColor=000000" alt="113 capability areas">
   <img src="https://img.shields.io/badge/tests-478%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="478 tests">
-  <img src="https://img.shields.io/badge/coverage-77%25-8B0000?style=for-the-badge&labelColor=000000" alt="77% line coverage">
   <img src="https://img.shields.io/badge/scope-default--deny-8B0000?style=for-the-badge&labelColor=000000" alt="default-deny scope">
   <img src="https://img.shields.io/badge/license-Apache--2.0-8B0000?style=for-the-badge&labelColor=000000" alt="Apache-2.0">
 </p>
