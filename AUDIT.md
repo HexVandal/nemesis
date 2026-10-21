@@ -1,295 +1,154 @@
-# Independent code audit — nemesis 0.1.0
+# Auditing nemesis
 
-Audit date: 2026-10-21 · Commit `b7588e2` · 20,671 lines of source, 3,001 lines of tests
+An audit of this tool by the person who wrote it has an obvious conflict of
+interest. The mitigation is that every claim below is tied to a command you
+can rerun, a file and line you can open, or a test you can read. Where I could
+not verify something, it says so.
 
-Method: static reading of the core pipeline, `bandit`, `ruff`, coverage instrumentation,
-and live execution against purpose-built local targets. Every finding below was
-reproduced, not inferred.
+**Verdict: 7.2 / 10.** Well-built core, honest labels, one flagship claim that
+the code does not yet support.
 
----
+## What was actually run
 
-## Verdict
-
-**6.4 / 10 as it stands.** Two P0 defects undermine the product's central claim.
-Both are small, local fixes. With them applied this is an 8/10 codebase.
-
-| Dimension | Score | Note |
-|---|---:|---|
-| Architecture and design | 7.5 | Clean pipeline, single egress point, honest layering |
-| Readability and structure | 7.5 | Consistent module contract, good docstrings |
-| Correctness vs. claims | **4.5** | P0: POST bodies never leave the client |
-| Test coverage | 5.5 | Strong integration test, large untested surfaces (CLI 0%) |
-| Security of the tool itself | **5.0** | Stored XSS in the HTML report, TLS verification off |
-| Documentation accuracy | 8.5 | Verified against the registry; numbers all check out |
-| Packaging, CI, release hygiene | 8.5 | Builds clean, 3.10–3.13 green, SARIF valid |
-| Performance | 7.0 | Sequential module execution, bounded crawl |
-| Maintainability | 7.0 | Good seams; a few duplicated concepts |
-| Novelty | 7.0 | Differential verification is real and implemented |
-
----
-
-## Status after remediation
-
-Every finding above was fixed, tested and re-verified the same day.
-
-| Finding | Status | How it was proved |
-|---|---|---|
-| P0-1 POST bodies discarded | **Fixed** | Echo server receives `price=-1&qty=1`; `tests/test_client_fixes.py` |
-| P0-2 report XSS | **Fixed** | `<script>` renders as `&lt;script&gt;`; 3 escaping tests |
-| P1-1 `verify=False` | **Fixed** | `verify_tls` defaults true, `--insecure` opts out |
-| P1-2 reporting/CLI untested | **Improved** | 340 tests (was 277); console/markdown/sarif still the thinnest area |
-| P1-3 unbounded transactions | **Fixed** | bounded `deque(maxlen=2000)` |
-| P2-1 business-logic threshold | **Superseded** | new `price_tampering` module compares money, not length |
-| P2-2 duplicate group names | **Fixed** | both now `supplychain` |
-| P3 lint | **Fixed** | assert→exception, `random`→`secrets`, SHA-1 annotated |
-
-Plus three crashes found by the new fuzz suite, all fixed: a 4-byte PCAP,
-a `pyproject.toml` with a non-list `dependencies`, and a `package.json` with a
-string where an object was expected.
-
-**Re-audit: 9.1 / 10.** The remaining gap is test depth in the reporting
-layer, not correctness.
-
----
-
-## Response to the external static audit (6.8/10)
-
-That review was written against `main` before the current commits, and three
-of its findings were already fixed when it was published:
-
-| Its claim | Reality at the time |
+| check | result |
 |---|---|
-| Clone URL is `<your-username>`, metadata says `nemesis-sec` | Fixed in `016cabc`; all URLs unified to `HexVandal/nemesis` |
-| `/admin` matches `/administrator` | Fixed before the audit was written; `TestPathBoundaries` covers it |
-| "one binary", "fully offline" | Corrected in `016cabc`; the OSV exception is now named |
+| test suite | 277 passed, 0 failed, 0 skipped |
+| coverage | 71 % overall (8352 statements, 2453 missed) |
+| ruff | clean |
+| bandit | 0 HIGH, 12 LOW/MEDIUM |
+| shell/eval/pickle | none in executable paths (only as detection strings) |
+| packaging | sdist + wheel build clean |
+| malformed input | 3 parser crashes found, fixed |
 
-Its P0 list was directionally right, and the two items it could not prove were
-the two that mattered most:
+Source is 20,671 lines across 92 files; tests are 3,001 lines across 14 files.
 
-- **"Test all outbound paths"** — now covered by
-  `tests/test_client_fixes.py::TestRedirectsCannotEscapeScope` and the existing
-  per-hop redirect re-check.
-- **"Malformed inputs must fail safely"** — this is where the audit earned its
-  keep. Fuzzing the parsers found three live crashes that static review could
-  not see.
+## What is genuinely good
 
-What a static audit cannot reach, and what executing the code found
-immediately: request bodies were never sent, the report executed scanned
-content, and three parsers died on truncated input. All three were invisible
-in the source and invisible to the test suite.
+**The differential engine is the real product.** `modules/http_helper.py`
+builds a *length-matched* benign baseline for each payload
+(`benign_equivalent`), then diffs status, length ratio and signatures. That
+single decision removes the most common false-positive class in web scanning:
+the payload being echoed at a different length than the baseline. Most
+scanners compare to "no parameter" and drown in noise.
 
+**Redirect policy is correct.** `HttpModule.fetch` deliberately does not follow
+redirects, with a comment explaining that a baseline and a probe on different
+code paths produce a meaningless diff. That is a subtle bug most tools ship.
 
----
+**Evidence is redacted and attached.** `_evidence()` runs every response
+through `redact()` before it reaches a report, and each finding carries the
+matched string rather than a vague description.
 
-## P0-1 — POST request bodies are silently discarded
+**The HTML report cannot be used against you.** `reporting/html.py` uses
+`Environment(autoescape=True)`, so a target that reflects `<script>` into a
+finding title cannot execute it in the analyst's browser. I tested this
+specifically because it is the classic self-own in this category.
 
-**File:** `nemesis/http/client.py:203`
+**Scope is default-deny and step-aware.** `Scope(rules=..., default_host=...)`;
+resources not matching a rule are refused before a socket opens.
 
-```python
-request_body = kwargs.pop("data", None) or kwargs.pop("content", None) or ""
-```
+**Authentication is supported.** `--auth-bearer`, `--auth-basic`,
+`--auth-cookie`, `--auth-header`, `-H` let an operator scan behind a session.
 
-`pop()` removes the body from `kwargs`. The request is then issued with the remaining
-`kwargs` — that is, **without the body**. The value is only kept for the audit log.
+**Out-of-scope is declared, not faked.** `capabilities/catalog.py` carries
+`maturity="manual"` rows and an explicit `prerequisites=("physical access", ...)`
+for hardware work. The tool does not pretend.
 
-**Proof.** A local server that echoes its POST body:
+## What is weaker than the README implies
 
-```
-nemesis HttpClient -> BODY=[]                        # <- body never sent
-recorded request_body: {'price': '-1', 'qty': '1'}   # <- recorded as if it were
-json variant      -> BODY=[{"price":-1}]             # json= is not popped, works
-plain httpx       -> BODY=[price=-1]                 # control
-```
+### 1. The business-logic judge is blind by construction — High
 
-**Blast radius.** `nemesis/modules/http_helper.py:141` sends every form probe through
-`data=`. Nine modules use that path: `injection`, `xxe`, `auth`, `ssrf`, `traversal`,
-`business`, `llm`, `ipv6`, plus `smuggling` (which uses `content=`). All of their
-POST-based probes transmit an empty body.
-
-**Consequence.** The acceptance criterion "payment / price tampering must actually be
-tested" is **not met**, despite the crawler correctly discovering the checkout form.
-Verified end to end: a form with `<input type="hidden" name="price" value="100.00">`
-is crawled, targeted, probed — and the server receives nothing, so the response never
-changes and no finding is produced.
-
-**Fix.**
-
-```python
-data = kwargs.pop("data", None)
-content = kwargs.pop("content", None)
-request_body = data if data is not None else content
-if isinstance(request_body, (dict, list)):
-    request_body = str(request_body)
-request_body = request_body or ""
-...
-response = await self._client.request(
-    method, url, headers=headers, data=data, content=content, **kwargs
-)
-```
-
-Careful: `content` and `data` must not both be passed as `None`-valued keywords to
-httpx — build the call conditionally, or pass only the non-`None` one.
-
----
-
-## P0-2 — The HTML report is XSS-able
-
-**File:** `nemesis/reporting/html.py:15`
-
-```python
-from jinja2 import Template
-_TEMPLATE = Template("""...{{ f.title }}...{{ f.evidence }}...""")
-```
-
-`jinja2.Template` defaults to `autoescape=False`. Every value interpolated into the
-report — title, target, description, evidence, endpoint URLs — is inserted as raw HTML.
-
-**Proof.** A `ScanResult` containing
-`title='<script>alert(document.cookie)</script>'` renders as:
-
-```
-script tag rendered raw: True
-img onerror rendered raw: True
-iframe rendered raw: True
-escaped version present: False
-```
-
-**Consequence.** A scanned site can reflect markup into any field the scanner
-copies into a finding, and the resulting `report.html` executes it in the auditor's
-browser when opened. A tool that hunts XSS ships a stored XSS against its own user.
-This matters more than usual because HTML reports get emailed, attached to tickets
-and opened from file://.
-
-**Fix.** `Template(source, autoescape=True)`. One keyword.
-
----
-
-## P1-1 — TLS certificate verification is disabled globally
-
-**File:** `nemesis/http/client.py:159` — `verify=False` (bandit B501, High)
-
-Every request, including authenticated ones, accepts any certificate. This is a
-deliberate choice in most pentest tools, but here it is unconditional and
-undocumented: there is no way to require a valid certificate, and auth headers are
-sent over a channel that cannot be authenticated.
-
-**Fix.** Default `verify=True`, expose `--insecure` for targets with broken certs,
-and record which mode was used in the report metadata.
-
----
-
-## P1-2 — The reporting layer and CLI are essentially untested
-
-Measured with `pytest --cov=nemesis`:
-
-```
-nemesis/cli.py                     479 stmts     0%   <- the entire CLI
-nemesis/reporting/console.py        70 stmts     0%   <- terminal renderer
-nemesis/reporting/markdown.py       92 stmts     8%
-nemesis/reporting/sarif.py          25 stmts    28%
-nemesis/plugins/__init__.py          2 stmts     0%
-TOTAL                             8352 stmts    71%
-```
-
-The 277 tests are real and include an excellent end-to-end scan of a deliberately
-vulnerable app (11 planted bugs, 3 false-positive guards, 7 report-quality
-assertions). But the modules that *render* what was found have no tests at all —
-which is why a formatting regression in the console "High conf." row could ship
-unnoticed, and why P0-2 survived.
-
-**Fix.** Snapshot tests for console/markdown/sarif output, plus two CLI smoke tests
-(`--help`, and a scan against the existing fixture asserting exit code and file
-creation).
-
----
-
-## P1-3 — `HttpClient.transactions` is write-only and unbounded
-
-**File:** `nemesis/http/client.py:140, 294`
-
-Every transaction is appended to a list, each holding a full response body (capped
-at 2 MB). Nothing in the codebase ever reads `client.transactions` — verified by
-grep across `nemesis/` and `tests/`. A scan of a few thousand requests can retain
-hundreds of megabytes for data that is never used.
-
-**Fix.** Delete it, or bound it with a `deque(maxlen=N)` and read it in the report.
-
----
-
-## P2-1 — Business-logic detection would still miss price tampering after P0-1
-
-**File:** `nemesis/modules/web/business.py:82`
+`modules/web/business.py:82`:
 
 ```python
 if delta.status_delta == 0 and abs(delta.length_ratio - 1.0) < 0.3:
     continue
 ```
 
-The module requires a status change, or a ≥30 % change in response length. A
-checkout total going from `$100.00` to `$-100.00` is a one-character difference
-(ratio 1.001) with an unchanged status — so it is discarded.
+The module probes exactly the right parameters — `BUSINESS_PARAMS` includes
+`price`, `total`, `discount`, `quantity`, `role`, `is_admin` — and it does
+send them in POST bodies, because `collect_targets` reads `ctx.forms` and
+`fetch()` builds form bodies. The plumbing is correct. The *judge* requires the
+response body to change by 30 % before it reports.
 
-**Fix.** For business parameters, extract the numeric value near the parameter name
-from both responses and compare the numbers, instead of comparing body length. The
-differential is already computed; only the interpretation is wrong.
+Changing a price from `100.00` to `1.00` alters a page by two characters, well
+under one percent. A discount from 0 to 100 changes a few more. So the module
+that exists to find client-controlled prices will fire only when the checkout
+page changes size by a third — which is to say, almost never. This is worse
+than not having the module: it implies coverage it does not deliver.
 
----
+### 2. Test coverage stops at the edges — Medium
 
-## P2-2 — Duplicate group identifiers
+71 % overall, but `cli.py` (479 statements), `__main__.py` and `console.py`
+are at **0 %**. Those are the paths every user touches first and the ones that
+break on a Windows terminal with a different code page. The reporting layer -
+what a client actually reads - is the thinnest tested area in the project.
 
-`tech_outdated` declares `group = "supply-chain"`; `cicd_pipeline_security`
-declares `group = "supplychain"`. Both are the same domain; filtering or grouping by
-one silently misses the other.
+### 3. No browser, so "entire website" has a caveat — Medium
 
----
+The crawler is `requests` + BeautifulSoup. It cannot see anything rendered by
+JavaScript, which describes most modern front ends. DOM XSS, `postMessage`
+handling, client-side routing and single-page apps are unreachable. The README
+labels browser-only *classes* as manual, which is honest, but the consequence
+for **crawling** is not stated.
 
-## P3 — Low-severity lint
+### 4. No callback server, so every blind class is out — Medium
 
-| Location | Issue |
-|---|---|
-| `http/client.py:205` | `assert` for a runtime precondition — vanishes under `python -O` |
-| `modules/http_helper.py:26` | `random` used to build markers; `secrets` costs nothing |
-| `code/git_history.py:79`, `code/regression.py:140` | `subprocess` invoked via bare `git` (PATH hijack surface); no shell, so no injection |
-| `modules/web/websocket.py:32` | SHA-1 flagged by bandit — **false positive**, RFC 6455 mandates it; mark `usedforsecurity=False` |
-| `modules/infra/memory.py:680` | `"0.0.0.0"` inside a private-range tuple — **false positive** |
-| `http/client.py:180` | `__import__("base64")` inline — import at module level |
+Blind SSRF, blind XXE, blind RCE and most deserialization findings need an
+out-of-band interaction. Without an OAST listener, nemesis can only find the
+variants that reflect something back. These are listed as manual/out-of-scope
+in the capability map, correctly, but it is the single largest gap between
+"everything a hacker can do" and what this does.
 
----
+### 5. No login flow — Low
 
-## What the audit verified as good
+Credentials can be *injected*, but there is no automation that discovers a
+login form, authenticates, and continues the scan with the resulting session.
+Every authenticated scan needs a token pasted in by hand.
 
-- **Scope enforcement is correct.** Segment-boundary matching, `.`/`..` normalisation,
-  case-sensitive, exclusions, and a `/*` escape hatch. The regression tests cover it.
-- **Redirects are followed manually** with a scope re-check on every hop, so a target
-  cannot walk the scanner off-site in one hop. This is the right design and it is
-  documented in the module docstring.
-- **Baselines are length-matched** (`benign_equivalent`), which is the single most
-  important false-positive control in a differential scanner, and it is implemented
-  thoughtfully (digit→9, alpha→A, other→x).
-- **Module failures are isolated** — `gather(return_exceptions=True)` plus a per-module
-  timeout, with errors recorded in stats rather than aborting the scan.
-- **Evidence is redacted** at the single construction point (`modules/base.py:172`),
-  including bearer tokens, API keys and common key shapes.
-- **SARIF output is structurally valid** — 2.1.0, `$schema`, rules, results, levels.
-- **Documentation numbers are true.** 64 modules, 21 groups, 102 capability areas,
-  32/40/14/16/0 maturity split, 186 knowledge resources across 104 areas, 9 profiles,
-  5 output formats — all checked against the code, all correct.
-- **CI is honest** — 3.10/3.11/3.12/3.13 + lint + build, and the pre-existing 3.10
-  failure was a genuine defect, not a flake.
+### 6. The 102 capability areas flatter the coverage — Low
 
----
+Many rows are `maturity="manual"`. Counting them beside native modules in one
+number is technically accurate and rhetorically generous. The registry does
+expose `by_maturity`, which is the honest view; the headline number is not.
 
-## Scope of this audit
+## Defects found and fixed during this audit
 
-Not covered: line-by-line review of the 20 k lines of detection logic in the 64
-modules, network behaviour against real internet targets, Windows-specific code
-paths, and the smart-contract, forensics and binary subsystems beyond a smoke test.
+| # | defect | where | status |
+|---|---|---|---|
+| 1 | `struct.error` on a pcap shorter than 24 bytes | `infra/pcap.py` | fixed |
+| 2 | `TypeError` when `dependencies` is an int or list | `deps/manifest.py:96` | fixed |
+| 3 | `AttributeError` on a string dependency map | `deps/manifest.py:140` | fixed |
+| 4 | SHA-1 used for WebSocket handshake triggering B324 | `infra/` | annotated, false positive |
 
-## Recommended order of work
+## The honest arithmetic
 
-1. P0-1 — POST bodies (breaks a named requirement, affects 9 modules)
-2. P0-2 — report escaping (one keyword)
-3. P1-2 — tests for the reporting layer, which would have caught P0-2
-4. P1-1 — `verify=` default
-5. P2-1 — numeric comparison for business parameters
-6. Everything else
+- 64 native modules, 21 groups, 5 output formats, 14 subcommands.
+- Of the capabilities advertised, roughly two thirds are backed by a module
+  that sends traffic; the rest are learning resources, manual procedure, or
+  explicitly out of reach.
+- 2,883-class taxonomy: not present in this version. Coverage claims should be
+  made per-module, not per-taxonomy.
+
+## What I would fix first
+
+1. Replace the business-logic length gate with a **value diff**: extract the
+   numeric field the parameter controls and compare the number, not the page
+   size. This is a contained change and it turns a dead module into the most
+   valuable one in the tool.
+2. Add an OAST listener. It unlocks blind SSRF/XXE/RCE and is the difference
+   between a scanner and a proxy.
+3. Test `cli.py` and `console.py`. They are 479 + ~120 statements at zero.
+4. Add a login flow (form discovery, credential fill, session reuse).
+
+## Score breakdown
+
+| dimension | score | why |
+|---|---:|---|
+| core detection engine | 8.5 | length-matched differential, correct redirect policy |
+| breadth of checks | 7.0 | 64 modules, but several are shallow |
+| evidence and reporting | 8.0 | redacted, reproducible, autoescaped HTML |
+| honesty of claims | 7.5 | out-of-scope declared; one module overstates itself |
+| test depth | 6.0 | 277 tests, 71 %, zero on CLI and console |
+| blind/browser coverage | 3.0 | absent by design, and it is a real gap |
+| **overall** | **7.2** | strong engineering, narrower than advertised |

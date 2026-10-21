@@ -1527,6 +1527,28 @@ LIBRARY: tuple[Resource, ...] = (
         access="free",
     ),
     Resource(
+        "owasp-wstg-config",
+        "OWASP WSTG: Configuration and Deployment",
+        "guide",
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/",
+        "deployment-artifacts",
+        "The checklist this family automates: old files, backups, admin "
+        "interfaces, HTTP verbs and stack traces.",
+        hours=4,
+        access="free",
+    ),
+    Resource(
+        "rfc9110-semantics",
+        "RFC 9110: HTTP Semantics",
+        "whitepaper",
+        "https://www.rfc-editor.org/rfc/rfc9110",
+        "protocol-hardening",
+        "Sections 9 and 10 define what a method and a header are allowed to "
+        "mean. Most of the bugs in this family are violations of that text.",
+        hours=3,
+        access="free",
+    ),
+    Resource(
         "owasp-wstg-deployment",
         "OWASP Web Security Testing Guide",
         "guide",

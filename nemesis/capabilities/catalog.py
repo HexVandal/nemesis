@@ -278,6 +278,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         modules=(
             "business_logic", "price_tampering", "csrf_missing", "idor", "open_redirect",
+            "coupon_reuse", "idempotency_key_absent", "pagination_boundary",
         ),
         artifacts=("workflow analysis",),
     ),
@@ -297,6 +298,40 @@ CAPABILITIES: tuple[Capability, ...] = (
             "jwt_weakness", "mass_assignment", "csrf_missing", "cookie_flags", "idor",
         ),
         artifacts=("token analysis", "privilege escalation proof"),
+    ),
+    Capability(
+        id="deployment-artifacts",
+        name="Deployment Artifacts Left Behind",
+        domain="web",
+        maturity="native",
+        summary=(
+            "The files a deploy leaves in the web root: editor backups, "
+            "repository metadata, pipeline definitions, environment files, "
+            "management endpoints and debug consoles."
+        ),
+        modules=(
+            "backup_file_sweep", "vcs_metadata", "ci_metadata", "env_file_exposure",
+            "actuator_endpoints", "debug_console", "directory_listing_deep",
+            "error_page_fingerprint",
+        ),
+        artifacts=("downloaded secret", "readable repository history"),
+    ),
+    Capability(
+        id="protocol-hardening",
+        name="Protocol Handling",
+        domain="web",
+        maturity="partial",
+        summary=(
+            "How the server reads the request rather than the URL: verbs it was "
+            "never meant to accept, an override header that changes the verb, a "
+            "host header that reaches a cache, an old API version still alive, "
+            "an XML parser reachable through Accept."
+        ),
+        modules=(
+            "verb_tampering", "mass_endpoint_discovery", "http_method_override",
+            "host_header_cache_poison", "api_version_fallback", "accept_header_bypass",
+        ),
+        artifacts=("verb matrix", "cached poisoned response"),
     ),
     Capability(
         id="source-and-config-exposure",
@@ -355,6 +390,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         modules=(
             "rate_limiting", "jwt_weakness", "default_credentials",
             "weak_password_policy", "oauth_state_missing", "csrf_token_reuse",
+            "jwt_audience_missing", "jwt_lifetime_excessive",
         ),
         artifacts=("throttling observation", "recovered signing key"),
     ),
@@ -492,6 +528,8 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         modules=(
             "headers_security",
+            "cookie_scope_escape", "csp_report_only",
+            "permissions_policy_gaps", "cors_origin_reflection",
             "csp_analyzer",
             "cookie_flags",
             "mixed_content",

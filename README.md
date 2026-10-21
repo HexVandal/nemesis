@@ -8,9 +8,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/modules-87-8B0000?style=for-the-badge&labelColor=000000" alt="87 modules">
+  <img src="https://img.shields.io/badge/modules-110-8B0000?style=for-the-badge&labelColor=000000" alt="110 modules">
   <img src="https://img.shields.io/badge/capability%20areas-102-8B0000?style=for-the-badge&labelColor=000000" alt="102 capability areas">
-  <img src="https://img.shields.io/badge/tests-395%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="395 tests">
+  <img src="https://img.shields.io/badge/tests-420%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="420 tests">
   <img src="https://img.shields.io/badge/scope-default--deny-8B0000?style=for-the-badge&labelColor=000000" alt="default-deny scope">
 </p>
 
@@ -274,7 +274,7 @@ CAA, dangling CNAMEs.
 
 ---
 
-## All 87 modules
+## All 110 modules
 
 Every module is a class, addressable by its id. List them with `nemesis modules`,
 inspect one with `nemesis modules --detailed`, or run a subset with
@@ -296,7 +296,7 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `xpath_injection` | XPath Injection |
 | `ssi_injection` | Server-Side Includes Injection |
 
-### Headers and browser — 11
+### Headers and browser — 15
 
 | id | Name |
 |---|---|
@@ -311,8 +311,12 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `ipv6_security` | IPv6 Security |
 | `sri_missing` | Missing Subresource Integrity |
 | `reverse_tabnabbing` | Reverse Tabnabbing |
+| `cookie_scope_escape` | Cookie Scope Too Wide |
+| `csp_report_only` | CSP Is Report-Only |
+| `permissions_policy_gaps` | Permissions-Policy Missing or Permissive |
+| `cors_origin_reflection` | CORS Reflects Arbitrary Origin |
 
-### Authentication and access — 13
+### Authentication and access — 15
 
 | id | Name |
 |---|---|
@@ -329,8 +333,10 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `oauth_state_missing` | OAuth state Parameter Not Required |
 | `csrf_token_reuse` | CSRF Token Reuse |
 | `oauth_pkce_missing` | OAuth PKCE Not Used |
+| `jwt_audience_missing` | JWT Without Audience Claim |
+| `jwt_lifetime_excessive` | JWT Lifetime Excessive |
 
-### Exposure and disclosure — 8
+### Exposure and disclosure — 16
 
 | id | Name |
 |---|---|
@@ -342,6 +348,14 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `secrets_in_javascript` | Secrets in Client-Side JavaScript |
 | `source_map_exposure` | Source Map Exposed |
 | `robots_disclosure` | Sensitive Paths in robots.txt |
+| `backup_file_sweep` | Backup File Exposure |
+| `vcs_metadata` | Version Control Metadata |
+| `ci_metadata` | CI Configuration Exposure |
+| `env_file_exposure` | Environment File Exposure |
+| `actuator_endpoints` | Spring Actuator Endpoints |
+| `debug_console` | Debug Console Exposed |
+| `directory_listing_deep` | Directory Listing on Discovered Paths |
+| `error_page_fingerprint` | Framework Fingerprint in Error Pages |
 
 ### Traversal and upload — 3
 
@@ -351,7 +365,7 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `directory_listing` | Directory Listing Enabled |
 | `file_upload` | File Upload Vulnerabilities |
 
-### Request-level — 5
+### Request-level — 11
 
 | id | Name |
 |---|---|
@@ -360,13 +374,22 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `websocket_security` | WebSocket Security |
 | `crlf_injection` | CRLF / Response Header Injection |
 | `graphql_batching` | GraphQL Query Batching Enabled |
+| `verb_tampering` | HTTP Verb Tampering |
+| `mass_endpoint_discovery` | Verbs Advertised by OPTIONS |
+| `http_method_override` | HTTP Method Override Honoured |
+| `host_header_cache_poison` | Host Header Cache Poisoning |
+| `api_version_fallback` | Deprecated API Version Reachable |
+| `accept_header_bypass` | XML Reachable Through Accept Header |
 
-### Business logic — 2
+### Business logic — 5
 
 | id | Name |
 |---|---|
 | `business_logic` | Business Logic Vulnerabilities |
 | `price_tampering` | Price Tampering (cart, checkout, gateway) |
+| `coupon_reuse` | Coupon Reuse |
+| `idempotency_key_absent` | Missing Idempotency Control |
+| `pagination_boundary` | Unbounded Page Size |
 
 ### SSRF and cloud — 2
 
@@ -627,7 +650,7 @@ pytest -q
 ruff check nemesis tests
 ```
 
-Current state: **395 tests**, ruff-clean, CI on Python 3.10–3.13.
+Current state: **420 tests**, ruff-clean, CI on Python 3.10–3.13.
 
 ---
 
