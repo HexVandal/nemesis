@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner-umbrella.png" alt="nemesis — differential offensive security" width="100%">
+  <img src="assets/banner-umbrella.jpg" alt="nemesis — differential offensive security" width="100%">
 </p>
 
 <p align="center">
