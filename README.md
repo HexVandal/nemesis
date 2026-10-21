@@ -3,15 +3,15 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows">
+  <img src="https://img.shields.io/badge/Python-8B0000?style=for-the-badge&logo=python&logoColor=white&labelColor=000000" alt="Python">
+  <img src="https://img.shields.io/badge/Windows-8B0000?style=for-the-badge&logo=windows&logoColor=white&labelColor=000000" alt="Windows">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/modules-64-B30000?style=for-the-badge" alt="64 modules">
-  <img src="https://img.shields.io/badge/capability%20areas-102-B30000?style=for-the-badge" alt="102 capability areas">
-  <img src="https://img.shields.io/badge/tests-277%20passing-1B7F3B?style=for-the-badge" alt="277 tests">
-  <img src="https://img.shields.io/badge/scope-default--deny-6B0000?style=for-the-badge" alt="default-deny scope">
+  <img src="https://img.shields.io/badge/modules-64-8B0000?style=for-the-badge&labelColor=000000" alt="64 modules">
+  <img src="https://img.shields.io/badge/capability%20areas-102-8B0000?style=for-the-badge&labelColor=000000" alt="102 capability areas">
+  <img src="https://img.shields.io/badge/tests-277%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="277 tests">
+  <img src="https://img.shields.io/badge/scope-default--deny-8B0000?style=for-the-badge&labelColor=000000" alt="default-deny scope">
 </p>
 
 <p align="center"><i>“Our business is life itself.”</i></p>
