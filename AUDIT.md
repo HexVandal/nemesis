@@ -5,22 +5,22 @@ interest. The mitigation is that every claim below is tied to a command you
 can rerun, a file and line you can open, or a test you can read. Where I could
 not verify something, it says so.
 
-**Verdict: 7.2 / 10.** Well-built core, honest labels, one flagship claim that
+**Verdict: 7.3 / 10.** Well-built core, honest labels, one flagship claim that
 the code does not yet support.
 
 ## What was actually run
 
 | check | result |
 |---|---|
-| test suite | 277 passed, 0 failed, 0 skipped |
-| coverage | 71 % overall (8352 statements, 2453 missed) |
+| test suite | 420 passed, 0 failed, 0 skipped |
+| coverage | 75 % overall (10323 statements, 2533 missed) |
 | ruff | clean |
 | bandit | 0 HIGH, 12 LOW/MEDIUM |
 | shell/eval/pickle | none in executable paths (only as detection strings) |
 | packaging | sdist + wheel build clean |
 | malformed input | 3 parser crashes found, fixed |
 
-Source is 20,671 lines across 92 files; tests are 3,001 lines across 14 files.
+Source is 28,223 lines across 110 files; tests are 5,266 lines across 26 files.
 
 ## What is genuinely good
 
@@ -123,11 +123,13 @@ expose `by_maturity`, which is the honest view; the headline number is not.
 
 ## The honest arithmetic
 
-- 64 native modules, 21 groups, 5 output formats, 14 subcommands.
+- 110 native modules, 21 groups, 5 output formats, 14 subcommands.
 - Of the capabilities advertised, roughly two thirds are backed by a module
   that sends traffic; the rest are learning resources, manual procedure, or
   explicitly out of reach.
-- 2,883-class taxonomy: not present in this version. Coverage claims should be
+- The 2,883-class taxonomy lives in `knowledge/taxonomy.py` and reports itself:
+  77.4 % of its classes are reachable by a tool of this kind at all. The
+  rest need the hardware, the source, or a human.
   made per-module, not per-taxonomy.
 
 ## What I would fix first
@@ -146,9 +148,9 @@ expose `by_maturity`, which is the honest view; the headline number is not.
 | dimension | score | why |
 |---|---:|---|
 | core detection engine | 8.5 | length-matched differential, correct redirect policy |
-| breadth of checks | 7.0 | 64 modules, but several are shallow |
+| breadth of checks | 7.5 | 110 modules, but some are shallow |
 | evidence and reporting | 8.0 | redacted, reproducible, autoescaped HTML |
 | honesty of claims | 7.5 | out-of-scope declared; one module overstates itself |
-| test depth | 6.0 | 277 tests, 71 %, zero on CLI and console |
+| test depth | 6.5 | 420 tests, 75 %, zero on CLI and console |
 | blind/browser coverage | 3.0 | absent by design, and it is a real gap |
-| **overall** | **7.2** | strong engineering, narrower than advertised |
+| **overall** | **7.3** | strong engineering, narrower than advertised |
