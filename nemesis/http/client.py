@@ -245,28 +245,52 @@ class HttpClient:
         async with self._global_sem, sem:
             await limiter.acquire()
             started = time.monotonic()
-            try:
-                send: dict[str, Any] = {}
-                if data is not None:
-                    send["data"] = data
-                if content is not None:
-                    send["content"] = content
-                if json_body is not None:
-                    send["json"] = json_body
-                response = await self._client.request(
-                    method, url, headers=headers, **send, **kwargs
-                )
-            except httpx.TimeoutException as exc:
+            send: dict[str, Any] = {}
+            if data is not None:
+                send["data"] = data
+            if content is not None:
+                send["content"] = content
+            if json_body is not None:
+                send["json"] = json_body
+
+            # Retries are only ever spent on idempotent verbs. A scanner
+            # that repeats a POST because the connection blipped turns
+            # one race-condition probe into two carts.
+            idempotent = method.upper() in ("GET", "HEAD", "OPTIONS")
+            attempts = max(1, self.config.rate.max_retries + 1) if idempotent else 1
+            response: httpx.Response | None = None
+            error = ""
+            for attempt in range(attempts):
+                try:
+                    response = await self._client.request(
+                        method, url, headers=headers, **send, **kwargs
+                    )
+                    error = ""
+                except httpx.TimeoutException as exc:
+                    response, error = None, f"timeout: {exc}"
+                except Exception as exc:  # network errors are normal, not fatal
+                    response, error = None, f"{type(exc).__name__}: {exc}"
+
+                if attempt == attempts - 1:
+                    break
+                if response is None:
+                    delay = self.config.rate.backoff * (attempt + 1)
+                elif response.status_code in (429, 502, 503, 504):
+                    retry_after = response.headers.get("retry-after", "")
+                    delay = (
+                        float(retry_after)
+                        if retry_after.replace(".", "", 1).isdigit()
+                        else self.config.rate.backoff * (attempt + 1)
+                    )
+                else:
+                    break
+                await asyncio.sleep(min(delay, 5.0))
+
+            if response is None:
                 return Response(
                     url=url, status=0, headers={}, text="", content=b"",
                     elapsed=time.monotonic() - started, method=method,
-                    request_body=request_body, error=f"timeout: {exc}",
-                )
-            except Exception as exc:  # network errors are normal, not fatal
-                return Response(
-                    url=url, status=0, headers={}, text="", content=b"",
-                    elapsed=time.monotonic() - started, method=method,
-                    request_body=request_body, error=f"{type(exc).__name__}: {exc}",
+                    request_body=request_body, error=error,
                 )
 
         body = response.content
@@ -363,10 +387,3 @@ class HttpClient:
     async def post(self, url: str, **kwargs: Any) -> Response:
         return await self.request("POST", url, **kwargs)
 
-    async def request_with_cookies(
-        self, method: str, url: str, cookies: dict[str, str], **kwargs: Any
-    ) -> Response:
-        headers = dict(kwargs.pop("headers", None) or {})
-        if cookies:
-            headers["Cookie"] = "; ".join(f"{k}={v}" for k, v in cookies.items())
-        return await self.request(method, url, headers=headers, **kwargs)

@@ -446,8 +446,7 @@ class PcapAnalysisModule(Module):
             for label in labels:
                 if not self._is_data_label(label):
                     continue
-                if True:
-                    findings.append(
+                findings.append(
                     self._finding(
                         path,
                         Severity.HIGH,
@@ -461,9 +460,9 @@ class PcapAnalysisModule(Module):
                         f"label: {label[:80]}\n"
                         f"length: {len(label)}\n"
                         f"flow: {packet.src} -> {packet.dst}",
-                        )
                     )
-                    break
+                )
+                break
             else:
                 continue
             break

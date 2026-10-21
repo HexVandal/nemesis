@@ -57,6 +57,8 @@ def _rule_for(finding) -> dict:
         "properties": {
             "category": finding.category.value,
             "tags": [t for t in finding.tags if t] + ([cwe] if cwe else []),
+            # GitHub code scanning ranks alerts by this string.
+            "security-severity": f"{finding.cvss_score or 0.0:.1f}",
         },
     }
 

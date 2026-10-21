@@ -77,9 +77,19 @@ class BusinessLogicModule(HttpModule):
 
             for payload in NEGATIVE_VALUES + BOUNDARY_VALUES:
                 delta = await self.probe(ctx, target, payload)
-                if not delta.has_behaviour_change:
+                # A size gate misses the most common tampering shape: `1`
+                # replaced by `-1` leaves the page almost exactly the same
+                # length. If the injected value itself appears in the new
+                # body and not in the old one, the server is repeating
+                # attacker input back as its own number.
+                echoed = payload in delta.probe.text and payload not in delta.baseline.text
+                if not delta.has_behaviour_change and not echoed:
                     continue
-                if delta.status_delta == 0 and abs(delta.length_ratio - 1.0) < 0.3:
+                if (
+                    delta.status_delta == 0
+                    and abs(delta.length_ratio - 1.0) < 0.3
+                    and not echoed
+                ):
                     continue
 
                 reported.add(target.param.lower())

@@ -173,6 +173,12 @@ class Finding:
     def __post_init__(self) -> None:
         if not self.fingerprint:
             self.fingerprint = self.compute_fingerprint()
+        # A module may supply a real vector and score; otherwise the score
+        # falls back to the band for this severity. Leaving it None meant
+        # every report carried `cvss_score: null` while the fallback sat
+        # unused one class up.
+        if self.cvss_score is None and not self.cvss:
+            self.cvss_score = self.severity.to_cvss_base()
 
     def compute_fingerprint(self) -> str:
         """Stable identity for a finding, used to deduplicate across modules."""

@@ -243,6 +243,40 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   requires positive evidence that a model is present.
 - The write-up's severity counter raised `KeyError` on any finding set.
 
+### Changed
+
+- **CVSS scores are filled in.** `Severity.to_cvss_base()` has existed since
+  the first commit and was never called, so `cvss_score` was `null` in every
+  JSON, SARIF and HTML report. Findings without a vector now carry the band
+  for their severity; a real vector still wins. SARIF rules expose the value
+  as `security-severity`, which is what GitHub ranks alerts by.
+- **The HTTP client retries idempotent requests.** `rate.max_retries` and
+  `rate.backoff` were declared and read by nothing. GET, HEAD and OPTIONS now
+  retry transport errors and 429/502/503/504, honouring `Retry-After`.
+  POST, PUT, PATCH and DELETE never retry: repeating a cart request is how a
+  race-condition probe becomes two carts.
+
+### Fixed
+
+- **A business parameter that moves without the page moving is now caught.**
+  `1` to `-1` changes one byte, so the length gate discarded it. If the
+  injected value appears in the new body and not the old one, it is reported.
+- `pcap.py` carried an `if True:` scaffold with a misindented block under it.
+
+### Removed
+
+- Sixteen functions nothing called: `all_params`, `request_with_cookies`,
+  five `CspPolicy.allows_*` helpers, `Library.by_area`, `ScanContext.has_tech`
+  / `tech_version` / `interesting_params`, `limited_gather`, `_is_confusable`,
+  `price._fetch_original`, `print_finding`, `severity_badge`.
+- The `save_evidence` and `no_banner` config switches, which nothing read.
+- The `cryptography` and `validators` dependencies, which nothing imported.
+- `assets/` and `examples/`. Nothing referenced them after the README was
+  removed, and the demo could not run from an installed wheel because it
+  imported `tests.fixtures`.
+- The bundled plugin example is now `_example_plugin.py`. It used to load
+  into every scan as an undocumented 141st module that no capability listed.
+
 ## [0.1.0] - 2026-10-18
 
 The first release. A scanner that treats every active check as a

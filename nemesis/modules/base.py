@@ -51,29 +51,6 @@ class ScanContext:
     findings: list[Finding] = field(default_factory=list)
     stats: dict[str, Any] = field(default_factory=dict)
 
-    def has_tech(self, *names: str) -> bool:
-        lowered = {t.name.lower() for t in self.technologies}
-        return any(n.lower() in lowered for n in names)
-
-    def tech_version(self, name: str) -> str | None:
-        for tech in self.technologies:
-            if tech.name.lower() == name.lower():
-                return tech.version
-        return None
-
-    def interesting_params(self) -> list[str]:
-        """Parameter names that are historically worth attacking."""
-        from ..crawler.parser import INTERESTING_PARAMS
-
-        found: set[str] = set()
-        for endpoint in self.endpoints:
-            found.update(endpoint.params.keys())
-        for form in self.forms:
-            found.update(form.raw_fields)
-        ranked = [p for p in found if p.lower() in INTERESTING_PARAMS]
-        return sorted(ranked) or sorted(found)
-
-
 class Module:
     """Base class for every nemesis check.
 

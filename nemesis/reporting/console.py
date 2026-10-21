@@ -86,18 +86,6 @@ def print_summary(console: Console, result: ScanResult) -> None:
     console.print(Panel(summary, title="Summary", border_style="blue", expand=False))
 
 
-def print_finding(console: Console, finding) -> None:
-    """Print a single finding in detail."""
-    style = _SEVERITY_STYLE.get(finding.severity, "white")
-    console.print(
-        f"\n[{style}]{finding.severity.name}[/] [bold]{finding.title}[/]  "
-        f"[dim]{finding.target}[/dim]"
-    )
-    console.print(f"  {finding.description}")
-    if finding.remediation:
-        console.print(f"  [green]fix:[/green] {finding.remediation}")
-
-
 def print_proofs(console: Console, result: ScanResult, limit: int = 5) -> None:
     """Print the exploit transcript for the strongest findings.
 

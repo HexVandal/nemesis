@@ -32,9 +32,7 @@ dependencies = [
     "beautifulsoup4>=4.12",
     "lxml>=5.0",
     "pyyaml>=6.0",
-    "cryptography>=42.0",
     "dnspython>=2.6",
-    "validators>=0.30",
     # tomllib is stdlib from 3.11; 3.10 needs the backport or Cargo.toml
     # and pyproject.toml dependency parsing silently returns nothing.
     "tomli>=2.0; python_version < '3.11'",

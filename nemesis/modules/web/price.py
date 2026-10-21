@@ -288,13 +288,6 @@ class PriceTamperingModule(HttpModule):
         return ""
 
     # -- requests ---------------------------------------------------------
-    async def _fetch_original(self, ctx: ScanContext, target: ParamTarget):
-        """Send the page exactly as the browser would have sent it."""
-        original = self._original_value(target)
-        if original:
-            return await self._fetch(ctx, target, original)
-        return await self._fetch(ctx, target, "1")
-
     async def _fetch(self, ctx: ScanContext, target: ParamTarget, value: str):
         """One request with the parameter overridden, never following redirects."""
         try:

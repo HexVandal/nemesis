@@ -14,7 +14,7 @@ How 2,883 class names map onto modules, and what the next 41 are.
 | out of scope | 460 | kernel, hardware, physical |
 | scanner itself | 123 | applies to nemesis, not the target |
 
-2,230 of 2,883 are reachable at all — **77.4 %**. The other 653 cannot be
+2,230 of 2,883 are reachable at all — **77.3 %**. The other 653 cannot be
 reached by any tool that does not have hands on the hardware.
 
 ## What "covered" means

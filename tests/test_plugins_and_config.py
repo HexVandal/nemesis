@@ -38,11 +38,15 @@ class TestPluginLoading:
         registry.load_directory(tmp_path)
         assert any(m.id == "temp_plugin" for m in registry.all())
 
-    def test_bundled_plugin_is_registered(self):
+    def test_the_bundled_example_is_not_loaded_into_every_scan(self):
+        # The example used to sit in `plugins/` under a normal name, so every
+        # scan quietly ran a 141st module that no capability listed. It is a
+        # template now: it must stay out of the registry until copied.
         registry = ModuleRegistry(ScanConfig())
         registry.load_builtin()
         registry.load_directory(Path("nemesis/plugins"))
-        assert any(m.id == "verbose_server_banner" for m in registry.all())
+        assert not any(m.id == "verbose_server_banner" for m in registry.all())
+        assert (Path("nemesis/plugins") / "_example_plugin.py").exists()
 
     def test_files_starting_with_underscore_are_ignored(self, tmp_path):
         (tmp_path / "_private.py").write_text(PLUGIN_SOURCE, encoding="utf-8")

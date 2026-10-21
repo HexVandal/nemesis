@@ -343,6 +343,3 @@ class WriteupBuilder:
         )
 
 
-def severity_badge(finding: Finding) -> str:
-    """A short badge for a finding, for use in a summary table."""
-    return f"`{finding.severity.name}`"

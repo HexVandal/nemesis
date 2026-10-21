@@ -130,11 +130,9 @@ class ScanConfig:
 
     output_dir: str = "nemesis-report"
     formats: list[str] = field(default_factory=lambda: ["console", "json", "markdown"])
-    save_evidence: bool = True
     offline: bool = False
     seed_urls: list[str] = field(default_factory=list)
     no_crawl: bool = False
-    no_banner: bool = False
 
     # -- serialisation ----------------------------------------------------
     def __post_init__(self) -> None:

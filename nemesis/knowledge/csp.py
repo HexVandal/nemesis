@@ -53,26 +53,6 @@ class Directive:
     def purpose(self) -> str:
         return DIRECTIVE_PURPOSE.get(self.name, "")
 
-    @property
-    def allows_wildcard(self) -> bool:
-        return "*" in self.sources
-
-    @property
-    def allows_unsafe_inline(self) -> bool:
-        return "'unsafe-inline'" in self.sources
-
-    @property
-    def allows_unsafe_eval(self) -> bool:
-        return "'unsafe-eval'" in self.sources
-
-    @property
-    def allows_data(self) -> bool:
-        return "data:" in self.sources
-
-    @property
-    def allows_http(self) -> bool:
-        return "http:" in self.sources
-
     def to_dict(self) -> dict:
         return {
             "name": self.name,

@@ -100,10 +100,6 @@ class ParsedPage:
     has_json: bool = False
     word_count: int = 0
 
-    def all_params(self) -> list[str]:
-        return sorted(self.param_names)
-
-
 def _clean_url(base: str, href: str) -> str | None:
     if not href:
         return None

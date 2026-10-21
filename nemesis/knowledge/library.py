@@ -2207,9 +2207,6 @@ class Library:
     def get(self, resource_id: str) -> Resource | None:
         return self._by_id.get(resource_id)
 
-    def by_area(self, area: str) -> list[Resource]:
-        return [r for r in self._resources if r.area == area]
-
     def by_kind(self, kind: str) -> list[Resource]:
         return [r for r in self._resources if r.kind == kind]
 

@@ -7,7 +7,6 @@ centralises that loop so individual checks stay short and consistent.
 
 from __future__ import annotations
 
-import asyncio
 import secrets
 import string
 from collections.abc import AsyncIterator, Iterable
@@ -200,12 +199,3 @@ class HttpModule(Module):
             if stop_on_hit and delta.new_signatures:
                 return
 
-    async def limited_gather(self, coros: list) -> list:
-        """Run coroutines with a small concurrency window."""
-        semaphore = asyncio.Semaphore(6)
-
-        async def _run(coro):
-            async with semaphore:
-                return await coro
-
-        return await asyncio.gather(*(_run(c) for c in coros), return_exceptions=True)

@@ -26,7 +26,6 @@ application's address handling against the forms that confuse it.
 
 from __future__ import annotations
 
-import ipaddress
 import re
 import socket
 
@@ -204,14 +203,3 @@ class Ipv6SecurityModule(HttpModule):
             "fe80::1%25eth0",
         ]
 
-    def _is_confusable(self, literal: str) -> bool:
-        """Does this literal look like a loopback in some other form?"""
-        try:
-            address = ipaddress.ip_address(literal.split("%")[0])
-        except ValueError:
-            return False
-        if address.is_loopback:
-            return True
-        # An IPv4-mapped address that maps onto a loopback.
-        mapped = getattr(address, "ipv4_mapped", None)
-        return bool(mapped and mapped.is_loopback)
