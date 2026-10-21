@@ -8,7 +8,7 @@ centralises that loop so individual checks stay short and consistent.
 from __future__ import annotations
 
 import asyncio
-import random
+import secrets
 import string
 from collections.abc import AsyncIterator, Iterable
 from dataclasses import dataclass
@@ -23,7 +23,7 @@ from .base import Module, ScanContext
 #: A random marker makes it possible to prove that *our* input caused an
 #: effect, and to distinguish it from coincidental content.
 def make_marker(prefix: str = "nms") -> str:
-    token = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
+    token = "".join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(8))
     return f"{prefix}{token}"
 
 

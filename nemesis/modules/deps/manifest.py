@@ -66,6 +66,18 @@ _PEP508 = re.compile(
 )
 
 
+def _mapping(value: object) -> dict:
+    """A dict, or an empty one. Parsed manifests are untrusted input."""
+    return value if isinstance(value, dict) else {}
+
+
+def _string_list(value: object) -> list[str]:
+    """Only the strings in a list survive. ``dependencies = [1, 2]`` is a typo."""
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, str)]
+
+
 def _parse_requirements(text: str, source: str) -> list[Dependency]:
     deps: list[Dependency] = []
     for raw in text.splitlines():
@@ -92,8 +104,8 @@ def _parse_pyproject(text: str, source: str) -> list[Dependency]:
     except Exception:
         return deps
 
-    project = data.get("project", {})
-    for spec in project.get("dependencies", []) or []:
+    project = _mapping(data.get("project", {}))
+    for spec in _string_list(project.get("dependencies")):
         match = _PEP508.match(spec.strip())
         if match and match.group("op") == "==" and match.group("version"):
             deps.append(
@@ -105,8 +117,8 @@ def _parse_pyproject(text: str, source: str) -> list[Dependency]:
                 )
             )
 
-    for group, items in (project.get("optional-dependencies") or {}).items():
-        for spec in items or []:
+    for _group, items in _mapping(project.get("optional-dependencies")).items():
+        for spec in _string_list(items):
             match = _PEP508.match(spec.strip())
             if match and match.group("op") == "==" and match.group("version"):
                 deps.append(
@@ -137,13 +149,13 @@ def _parse_package_json(text: str, source: str) -> list[Dependency]:
     except json.JSONDecodeError:
         return []
     deps: list[Dependency] = []
-    for name, spec in (data.get("dependencies") or {}).items():
+    for name, spec in _mapping(data.get("dependencies")).items():
         version = str(spec).lstrip("^~>=< ")
         if version and version[0].isdigit():
             deps.append(
                 Dependency(name=name, version=version, ecosystem="npm", source_file=source)
             )
-    for name, spec in (data.get("devDependencies") or {}).items():
+    for name, spec in _mapping(data.get("devDependencies")).items():
         version = str(spec).lstrip("^~>=< ")
         if version and version[0].isdigit():
             deps.append(

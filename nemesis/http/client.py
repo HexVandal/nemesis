@@ -16,6 +16,7 @@ from __future__ import annotations
 import asyncio
 import re
 import time
+from collections import deque
 from dataclasses import dataclass, field
 from typing import Any
 from urllib.parse import urljoin, urlparse
@@ -137,7 +138,9 @@ class HttpClient:
         self._client: httpx.AsyncClient | None = None
         self._limiters: dict[str, RateLimiter] = {}
         self._global_sem = asyncio.Semaphore(max(1, config.rate.global_concurrency))
-        self.transactions: list[Transaction] = []
+        # Bounded: nothing reads this today, and an unbounded list of
+        # response bodies is a memory leak on a long crawl.
+        self.transactions: deque[Transaction] = deque(maxlen=2000)
         self.request_count = 0
         self.bytes_received = 0
         self._host_sems: dict[str, asyncio.Semaphore] = {}
@@ -156,7 +159,7 @@ class HttpClient:
             headers=headers,
             timeout=httpx.Timeout(self.config.timeout),
             follow_redirects=False,
-            verify=False,
+            verify=self.config.verify_tls,
             proxy=self.config.proxy,
             limits=httpx.Limits(
                 max_connections=max(4, self.config.rate.global_concurrency * 2),
@@ -202,14 +205,31 @@ class HttpClient:
     async def _raw_request(
         self, method: str, url: str, **kwargs: Any
     ) -> Response:
-        assert self._client is not None, "HttpClient used outside of its context manager"
+        if self._client is None:
+            raise RuntimeError(
+                "HttpClient used outside of its context manager: wrap the scan "
+                "in 'async with HttpClient(config, scope)'"
+            )
         host = (urlparse(url).hostname or "").lower()
         limiter = self._limiter(host)
         sem = self._host_sem(host)
 
-        request_body = kwargs.pop("data", None) or kwargs.pop("content", None) or ""
+        # Capture the body WITHOUT removing it from the request. An earlier
+        # version used kwargs.pop(), which silently stripped every form body
+        # and JSON payload before it was sent - so probes were recorded as if
+        # they had been delivered when the server received nothing at all.
+        data = kwargs.pop("data", None)
+        content = kwargs.pop("content", None)
+        json_body = kwargs.pop("json", None)
+        request_body: Any = (
+            data if data is not None
+            else content if content is not None
+            else json_body
+        )
         if isinstance(request_body, (dict, list)):
             request_body = str(request_body)
+        elif isinstance(request_body, bytes):
+            request_body = request_body.decode("utf-8", "replace")
         request_body = request_body or ""
 
         headers = dict(kwargs.pop("headers", None) or {})
@@ -226,8 +246,15 @@ class HttpClient:
             await limiter.acquire()
             started = time.monotonic()
             try:
+                send: dict[str, Any] = {}
+                if data is not None:
+                    send["data"] = data
+                if content is not None:
+                    send["content"] = content
+                if json_body is not None:
+                    send["json"] = json_body
                 response = await self._client.request(
-                    method, url, headers=headers, **kwargs
+                    method, url, headers=headers, **send, **kwargs
                 )
             except httpx.TimeoutException as exc:
                 return Response(
@@ -319,6 +346,8 @@ class HttpClient:
             chain.append(nxt)
             current = nxt
             if response.status in (301, 302, 303) and method.upper() != "HEAD":
+                # A 303 means "the work is done, fetch this instead": the
+                # body must not be replayed onto the next hop.
                 method = "GET"
                 kwargs.pop("data", None)
                 kwargs.pop("content", None)

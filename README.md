@@ -8,9 +8,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/modules-64-8B0000?style=for-the-badge&labelColor=000000" alt="64 modules">
+  <img src="https://img.shields.io/badge/modules-65-8B0000?style=for-the-badge&labelColor=000000" alt="65 modules">
   <img src="https://img.shields.io/badge/capability%20areas-102-8B0000?style=for-the-badge&labelColor=000000" alt="102 capability areas">
-  <img src="https://img.shields.io/badge/tests-277%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="277 tests">
+  <img src="https://img.shields.io/badge/tests-340%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="340 tests">
   <img src="https://img.shields.io/badge/scope-default--deny-8B0000?style=for-the-badge&labelColor=000000" alt="default-deny scope">
 </p>
 
@@ -274,7 +274,7 @@ CAA, dangling CNAMEs.
 
 ---
 
-## All 64 modules
+## All 65 modules
 
 Every module is a class, addressable by its id. List them with `nemesis modules`,
 inspect one with `nemesis modules --detailed`, or run a subset with
@@ -339,11 +339,12 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `web_cache_poisoning` | Web Cache Poisoning |
 | `websocket_security` | WebSocket Security |
 
-### Business logic — 1
+### Business logic — 2
 
 | id | Name |
 |---|---|
 | `business_logic` | Business Logic Vulnerabilities |
+| `price_tampering` | Price Tampering (cart, checkout, gateway) |
 
 ### SSRF and cloud — 2
 
@@ -604,7 +605,7 @@ pytest -q
 ruff check nemesis tests
 ```
 
-Current state: **277 tests**, ruff-clean, CI on Python 3.10–3.13.
+Current state: **340 tests**, ruff-clean, CI on Python 3.10–3.13.
 
 ---
 

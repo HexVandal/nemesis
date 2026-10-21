@@ -276,7 +276,9 @@ CAPABILITIES: tuple[Capability, ...] = (
         summary=(
             "Looks for the weaknesses that a payload scanner cannot see: client-controlled prices and quantities, missing state validation between steps, replayable one-time actions, missing CSRF protection, direct object references and open redirects."
         ),
-        modules=("business_logic", "csrf_missing", "idor", "open_redirect",),
+        modules=(
+            "business_logic", "price_tampering", "csrf_missing", "idor", "open_redirect",
+        ),
         artifacts=("workflow analysis",),
     ),
     Capability(

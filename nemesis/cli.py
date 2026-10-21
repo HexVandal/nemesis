@@ -143,6 +143,11 @@ def scan(
     no_crawl: bool = typer.Option(False, "--no-crawl", help="Do not crawl; test only known URLs."),
     no_robots: bool = typer.Option(False, "--no-robots", help="Ignore robots.txt."),
     verify: bool = typer.Option(True, "--verify/--no-verify", help="Run differential verification."),
+    insecure: bool = typer.Option(
+        False, "--insecure",
+        help="Do not validate the target's TLS certificate. Off by default: "
+             "disable it only for hosts you know have broken certificates.",
+    ),
     config_file: str | None = typer.Option(None, "--config", "-c", help="YAML/JSON config file."),
     plugin_dir: str | None = typer.Option(None, "--plugins", help="Directory of plugin modules."),
     json_stdout: bool = typer.Option(False, "--json", help="Print the JSON report to stdout."),
@@ -194,6 +199,8 @@ def scan(
         config.no_crawl = True
     if not verify:
         config.verify = False
+    if insecure:
+        config.verify_tls = False
     if no_robots:
         config.crawl.follow_robots = False
     if code_path:

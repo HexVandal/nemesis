@@ -29,7 +29,9 @@ def _handshake_key() -> str:
 
 def accept_value(key: str) -> str:
     """The Sec-WebSocket-Accept value for a given Sec-WebSocket-Key."""
-    digest = hashlib.sha1((key + WS_GUID).encode()).digest()
+    # RFC 6455 mandates SHA-1 here; it is a protocol handshake value,
+    # not a security primitive. usedforsecurity=False says so to tooling.
+    digest = hashlib.sha1((key + WS_GUID).encode(), usedforsecurity=False).digest()
     return base64.b64encode(digest).decode()
 
 

@@ -113,6 +113,10 @@ class PcapParser:
             self._parse_pcapng()
 
     def _parse_pcap(self) -> None:
+        # A file can be nothing but a magic number. The global header is
+        # 24 bytes; anything shorter is truncated garbage, not a crash.
+        if len(self.data) < 24:
+            return
         magic = self.data[:4]
         self.endian, self.nanoseconds = PCAP_MAGICS[magic]
         # Bytes 4..24 of the global header: version, timezone, sigfigs,

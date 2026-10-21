@@ -6,6 +6,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **`price_tampering` — a module for carts, payment gateways and product
+  pages.** It does not report a parameter because the response changed; it
+  reports when the server's own total moves to a number the attacker chose.
+  Three surfaces are covered: a price in the query string, hidden price and
+  quantity inputs in a POST form, and a JSON-only gateway that rejects form
+  encoding. Findings quote baseline total, tampered total and the encoding
+  used, and the fixed-price control in the test fixture proves the module
+  stays silent when the server is authoritative.
+- **65 modules** (was 64).
+
 ### Security
 
 - **Path-scoped rules matched by string prefix**, so a rule for
@@ -20,6 +32,45 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+**Defects found by executing the scanner against a live target**
+
+- **Every POST body was silently discarded.** `_raw_request` used
+  `kwargs.pop("data")` to capture the body for the audit log, which removed
+  it from the request that was actually sent. Form probes, XXE payloads and
+  smuggling payloads all left the client as an empty body while the
+  transaction log recorded the payload as if it had been delivered. Nine
+  modules were affected. Bodies are now captured without being removed, and
+  a regression test asserts that the server receives them.
+- **The HTML report executed whatever it scanned.** The report template used
+  `jinja2.Template`, whose default is `autoescape=False`, so a target that
+  reflected `<script>` into a page could get it into `report.html` and run it
+  in the analyst's browser. The environment now escapes by default.
+
+**Defects found by fuzzing the parsers**
+
+- **A 4-byte packet capture crashed the PCAP parser.** A file containing only
+  the magic number has no global header, and `struct.unpack` raised. Files
+  shorter than 24 bytes are now treated as truncated rather than fatal.
+- **A malformed `pyproject.toml` crashed dependency parsing.**
+  `dependencies = 5` raised `TypeError`, and a list of integers raised
+  `AttributeError`. Parsed manifests are untrusted input and are now
+  type-checked before use.
+- **A malformed `package.json` crashed dependency parsing.** A string where
+  an object was expected raised `AttributeError` on `.items()`.
+
+**Hardening**
+
+- **TLS verification was disabled for every request.** `verify=False` was
+  hardcoded. The default is now to validate the certificate, with
+  `--insecure` available for targets that genuinely have broken certificates.
+- **The transaction log grew without bound.** Every response body was kept in
+  a list nothing ever read. It is now a bounded deque.
+- **`assert` guarded a runtime precondition**, and would vanish under
+  `python -O`; it is now an explicit exception.
+- **Request markers were generated with `random`**; they now use `secrets`.
+- **`tech_outdated` declared `group = "supply-chain"`** while
+  `cicd_pipeline_security` declared `"supplychain"`, so filtering by group
+  silently missed one of them.
 
 **Release-readiness audit**
 - **The CI test job could never have passed.** The workflow ran

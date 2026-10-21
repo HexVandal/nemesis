@@ -116,7 +116,8 @@ class ScanConfig:
     auth: AuthConfig = field(default_factory=AuthConfig)
 
     code_path: str | None = None
-    verify: bool = True
+    verify: bool = True  # differential verification of findings
+    verify_tls: bool = True  # TLS certificate validation of the target
     allow_destructive: bool = False
     follow_redirects: bool = True
     max_redirects: int = 5

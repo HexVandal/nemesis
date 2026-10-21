@@ -231,7 +231,7 @@ class GraphqlIntrospectionModule(HttpModule):
 
 class TechOutdatedModule(Module):
     """Flag fingerprinted software running an obviously outdated version."""
-    group = "supply-chain"
+    group = "supplychain"
 
     id = "tech_outdated"
     name = "Outdated Component Version"
