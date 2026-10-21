@@ -66,7 +66,7 @@ class Resource:
 LIBRARY: tuple[Resource, ...] = (
     # -- Web application foundations ------------------------------------
     Resource(
-        "owasp-wstg",
+        "owasp-wstg-exposure",
         "OWASP Web Security Testing Guide",
         KIND_GUIDE,
         "https://owasp.org/www-project-web-security-testing-guide/",
@@ -1524,6 +1524,17 @@ LIBRARY: tuple[Resource, ...] = (
         "Where the theory meets a proxy that actually desynchronises. Every "
         "lab here is a different framing disagreement.",
         hours=12,
+        access="free",
+    ),
+    Resource(
+        "owasp-wstg-deployment",
+        "OWASP Web Security Testing Guide",
+        "guide",
+        "https://owasp.org/www-project-web-security-testing-guide/",
+        "source-and-config-exposure",
+        "The information-gathering chapter: what a deployment leaks before "
+        "anyone sends an attack.",
+        hours=5,
         access="free",
     ),
     Resource(

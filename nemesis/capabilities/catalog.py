@@ -299,6 +299,21 @@ CAPABILITIES: tuple[Capability, ...] = (
         artifacts=("token analysis", "privilege escalation proof"),
     ),
     Capability(
+        id="source-and-config-exposure",
+        name="Source and Configuration Exposure",
+        domain="web",
+        maturity="native",
+        summary=(
+            "Reads what the deployment left behind: a source map that "
+            "reconstructs the original tree, a bundle carrying a live key, a "
+            "robots file naming the paths that answer 200."
+        ),
+        modules=(
+            "secrets_in_javascript", "source_map_exposure", "robots_disclosure",
+        ),
+        artifacts=("credential found in a bundle", "original source recovered"),
+    ),
+    Capability(
         id="api-surface",
         name="API Surface Exposure",
         domain="web",
@@ -310,6 +325,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         modules=(
             "api_schema_exposure", "graphql_introspection", "sensitive_data_in_url",
+            "graphql_batching",
         ),
         artifacts=("published schema", "credential in URL"),
     ),
@@ -338,7 +354,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         modules=(
             "rate_limiting", "jwt_weakness", "default_credentials",
-            "weak_password_policy", "oauth_state_missing",
+            "weak_password_policy", "oauth_state_missing", "csrf_token_reuse",
         ),
         artifacts=("throttling observation", "recovered signing key"),
     ),
@@ -354,7 +370,7 @@ CAPABILITIES: tuple[Capability, ...] = (
         ),
         modules=(
             "crlf_injection", "oauth_redirect_bypass", "host_header_injection",
-            "open_redirect",
+            "open_redirect", "oauth_pkce_missing",
         ),
         artifacts=("injected header", "off-site Location"),
     ),
@@ -368,7 +384,7 @@ CAPABILITIES: tuple[Capability, ...] = (
             "length-matched baseline, with database error signatures "
             "matched across PostgreSQL, MySQL, SQLite, MSSQL and Oracle."
         ),
-        modules=("sqli", "ldap_injection"),
+        modules=("sqli", "ldap_injection", "xpath_injection", "ssi_injection"),
         artifacts=("confirmed injection with proof",),
     ),
     Capability(

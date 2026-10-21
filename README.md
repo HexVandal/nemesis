@@ -8,9 +8,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/modules-79-8B0000?style=for-the-badge&labelColor=000000" alt="79 modules">
+  <img src="https://img.shields.io/badge/modules-87-8B0000?style=for-the-badge&labelColor=000000" alt="87 modules">
   <img src="https://img.shields.io/badge/capability%20areas-102-8B0000?style=for-the-badge&labelColor=000000" alt="102 capability areas">
-  <img src="https://img.shields.io/badge/tests-383%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="383 tests">
+  <img src="https://img.shields.io/badge/tests-395%20passing-8B0000?style=for-the-badge&labelColor=000000" alt="395 tests">
   <img src="https://img.shields.io/badge/scope-default--deny-8B0000?style=for-the-badge&labelColor=000000" alt="default-deny scope">
 </p>
 
@@ -274,13 +274,13 @@ CAA, dangling CNAMEs.
 
 ---
 
-## All 79 modules
+## All 87 modules
 
 Every module is a class, addressable by its id. List them with `nemesis modules`,
 inspect one with `nemesis modules --detailed`, or run a subset with
 `nemesis scan <target> -i sqli,xss,idor`.
 
-### Injection — 9
+### Injection — 11
 
 | id | Name |
 |---|---|
@@ -293,6 +293,8 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `xml_external_entity` | XML External Entity (XXE) Injection |
 | `insecure_deserialization` | Insecure Deserialization |
 | `ldap_injection` | LDAP Injection |
+| `xpath_injection` | XPath Injection |
+| `ssi_injection` | Server-Side Includes Injection |
 
 ### Headers and browser — 11
 
@@ -310,7 +312,7 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `sri_missing` | Missing Subresource Integrity |
 | `reverse_tabnabbing` | Reverse Tabnabbing |
 
-### Authentication and access — 11
+### Authentication and access — 13
 
 | id | Name |
 |---|---|
@@ -325,8 +327,10 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `default_credentials` | Default Credentials |
 | `weak_password_policy` | Weak Password Policy |
 | `oauth_state_missing` | OAuth state Parameter Not Required |
+| `csrf_token_reuse` | CSRF Token Reuse |
+| `oauth_pkce_missing` | OAuth PKCE Not Used |
 
-### Exposure and disclosure — 5
+### Exposure and disclosure — 8
 
 | id | Name |
 |---|---|
@@ -335,6 +339,9 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `info_disclosure` | Information Disclosure |
 | `api_schema_exposure` | Public API Schema |
 | `sensitive_data_in_url` | Sensitive Data in URL |
+| `secrets_in_javascript` | Secrets in Client-Side JavaScript |
+| `source_map_exposure` | Source Map Exposed |
+| `robots_disclosure` | Sensitive Paths in robots.txt |
 
 ### Traversal and upload — 3
 
@@ -344,7 +351,7 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `directory_listing` | Directory Listing Enabled |
 | `file_upload` | File Upload Vulnerabilities |
 
-### Request-level — 4
+### Request-level — 5
 
 | id | Name |
 |---|---|
@@ -352,6 +359,7 @@ inspect one with `nemesis modules --detailed`, or run a subset with
 | `web_cache_poisoning` | Web Cache Poisoning |
 | `websocket_security` | WebSocket Security |
 | `crlf_injection` | CRLF / Response Header Injection |
+| `graphql_batching` | GraphQL Query Batching Enabled |
 
 ### Business logic — 2
 
@@ -619,7 +627,7 @@ pytest -q
 ruff check nemesis tests
 ```
 
-Current state: **383 tests**, ruff-clean, CI on Python 3.10–3.13.
+Current state: **395 tests**, ruff-clean, CI on Python 3.10–3.13.
 
 ---
 
