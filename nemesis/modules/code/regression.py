@@ -155,13 +155,10 @@ class PatchRegressionModule(Module):
             if line.startswith("+++ b/"):
                 current = line[6:]
                 changes.setdefault(current, ([], []))
-            elif line.startswith("+") and not line.startswith("+++"):
-                if current:
-                    changes[current][0].append(line[1:])
-            elif line.startswith("-") and not line.startswith("---"):
-                if current:
-                    changes[current][1].append(line[1:])
-
+            elif line.startswith("+") and not line.startswith("+++") and current:
+                changes[current][0].append(line[1:])
+            elif line.startswith("-") and not line.startswith("---") and current:
+                changes[current][1].append(line[1:])
         out: list[tuple[str, list[tuple[int, str]], list[tuple[int, str]]]] = []
         for path, (added, removed) in changes.items():
             if not path or path.startswith("dev/null"):
